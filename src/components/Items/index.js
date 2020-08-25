@@ -25,7 +25,7 @@ const bucketsToExcludeFromInstanceProgressDisplay = [
 function socketsUrl(itemHash, sockets, selectedSockets, socketIndex, plugHash) {
   if (!sockets?.length) {
     return {
-      url: `/inspect/${itemHash}`,
+      url: `/inspect/item/${itemHash}`,
       sockets: '',
     };
   }
@@ -36,7 +36,7 @@ function socketsUrl(itemHash, sockets, selectedSockets, socketIndex, plugHash) {
 
   // create strings
   return {
-    url: `/inspect/${itemHash}?sockets=${socketsString.join('/')}`,
+    url: `/inspect/item/${itemHash}?sockets=${socketsString.join('/')}`,
     sockets: socketsString.join('/'),
   };
 }
@@ -136,7 +136,7 @@ function Items({ member, items, handler, tooltips, order, noBorder, showQuantity
             />
           ) : null}
           {(showQuantity || item.quantity > 1) && !hideQuantity ? <div className={cx('quantity', { 'max-stack': definitionItem.inventory && definitionItem.inventory.maxStackSize === item.quantity })}>{displayValue(item.quantity || 0)}</div> : null}
-          {inspect ? <Link to={{ pathname: `/inspect/${item.itemHash}`, search: `?sockets=${socketsUrl(item.itemHash, item.sockets.sockets).sockets}`, state: { from: selfLinkFrom || location.pathname } }} /> : null}
+          {inspect ? <Link to={{ pathname: `/inspect/item/${item.itemHash}`, search: `?sockets=${socketsUrl(item.itemHash, item.sockets.sockets).sockets}`, state: { from: selfLinkFrom || location.pathname } }} /> : null}
         </li>
       ),
     };

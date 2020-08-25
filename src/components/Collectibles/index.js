@@ -178,7 +178,7 @@ class Collectibles extends React.Component {
                       <div className='name'>{definitionCollectible.displayProperties.name}</div>
                       {manifest.statistics.collections ? <div className='commonality'>{commonality(manifest.statistics.collections[definitionCollectible.hash]).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}%</div> : null}
                     </div>
-                    {!settings.developer.lists && inspect && definitionCollectible.itemHash ? <Link to={{ pathname: `/inspect/${definitionCollectible.itemHash}`, state: { from: selfLinkFrom } }} /> : null}
+                    {!settings.developer.lists && inspect && definitionCollectible.itemHash ? <Link to={{ pathname: `/inspect/item/${definitionCollectible.itemHash}`, state: { from: selfLinkFrom } }} /> : null}
                   </li>
                 ),
               });
@@ -290,7 +290,7 @@ class Collectibles extends React.Component {
                     <div className='name'>{definitionCollectible.displayProperties.name}</div>
                     {manifest.statistics.collections ? <div className='commonality'>{commonality(manifest.statistics.collections[definitionCollectible.hash]).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}%</div> : null}
                   </div>
-                  {!settings.developer.lists && inspect && definitionCollectible.itemHash ? <Link to={{ pathname: `/inspect/${definitionCollectible.itemHash}`, state: { from: selfLinkFrom } }} /> : null}
+                  {!settings.developer.lists && inspect && definitionCollectible.itemHash ? <Link to={{ pathname: `/inspect/item/${definitionCollectible.itemHash}`, state: { from: selfLinkFrom } }} /> : null}
                 </li>
               ),
             });
@@ -360,7 +360,7 @@ class Collectibles extends React.Component {
                 {manifest.statistics.collections ? <div className='commonality'>{commonality(manifest.statistics.collections[definitionCollectible.hash]).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}%</div> : null}
               </div>
               {!settings.developer.lists && link && selfLinkFrom && !inspect ? <ProfileLink to={{ pathname: link, state: { from: selfLinkFrom } }} /> : null}
-              {!settings.developer.lists && inspect && definitionCollectible.itemHash ? <Link to={{ pathname: `/inspect/${definitionCollectible.itemHash}`, state: { from: selfLinkFrom } }} /> : null}
+              {!settings.developer.lists && inspect && definitionCollectible.itemHash ? <Link to={{ pathname: `/inspect/item/${definitionCollectible.itemHash}`, state: { from: selfLinkFrom } }} /> : null}
             </li>
           ),
         });

@@ -78,10 +78,10 @@ class Legend extends React.Component {
   themes = {
     bnet: {
       name: 'Bungie.net',
-      description: t('In the modern though timeless style of Bungie.net itself'),
+      description: t('Legend.Themes.BungieNet.Description'),
       variants: [
         {
-          name: t('Destiny 2 colours'),
+          name: t('Legend.Themes.BungieNet.Destiny2.Name'),
           background: {
             src: '/static/images/legend/010A_0623_00.jpg'
           },
@@ -113,7 +113,7 @@ class Legend extends React.Component {
           ]
         },
         {
-          name: t('Destiny 1 colours'),
+          name: t('Legend.Themes.BungieNet.Destiny1.Name'),
           background: {
             src: '/static/images/legend/010A_0623_00.jpg'
           },
@@ -135,8 +135,8 @@ class Legend extends React.Component {
       ]
     },
     mono: {
-      name: t('Monotone'),
-      description: t('A single colour–or none–at various saturations and luminances'),
+      name: t('Legend.Themes.Monotone.Name'),
+      description: t('Legend.Themes.Monotone.Description'),
       variants: [
         {
           dyes: [
@@ -478,19 +478,19 @@ class Legend extends React.Component {
                               <li>
                                 <input key='rangeHue' type='range' min='0' max='359' step='1' value={this.state.theme.mono.hue} onChange={this.handler_setMonoHue} />
                                 <div className='info'>
-                                  <p>{t('Adjust the hue')}</p>
+                                  <p>{t('Legend.Themes.Monotone.Hue.Description')}</p>
                                 </div>
                               </li>
                               <li>
                                 <input key='rangeSat' type='range' min='-100' max='100' step='1' value={this.state.theme.mono.saturation} onChange={this.handler_setMonoSaturation} />
                                 <div className='info'>
-                                  <p>{t('Adjust the saturation')}</p>
+                                  <p>{t('Legend.Themes.Monotone.Saturation.Description')}</p>
                                 </div>
                               </li>
                               <li>
                                 <input key='rangeLum' type='range' min='-10' max='30' step='1' value={this.state.theme.mono.luminance} onChange={this.handler_setMonoLuminance} />
                                 <div className='info'>
-                                  <p>{t('Adjust the luminance')}</p>
+                                  <p>{t('Legend.Themes.Monotone.Luminance.Description')}</p>
                                 </div>
                               </li>
                             </React.Fragment>
@@ -515,9 +515,9 @@ class Legend extends React.Component {
               </div>
               <div className='row'>
                 <div className='col'>
-                  <Button action={this.handler_generate} text={t('Generate image')} />
+                  <Button action={this.handler_generate} text={t('Legend.Actions.Generate')} />
                   <a className={cx('button', { disabled: !this.state.blob })} href={this.state.blob || undefined} download={`Braytech-legend_${member.data.profile.profile.data.userInfo.displayName}_${time}.png`}>
-                    <div className='text'>{t('Download image')}</div>
+                    <div className='text'>{t('Legend.Actions.Download')}</div>
                   </a>
                 </div>
               </div>
@@ -791,7 +791,7 @@ class Legend extends React.Component {
   }
 }
 
-function mapStateToProps(state, ownProps) {
+function mapStateToProps(state) {
   return {
     member: state.member,
     viewport: state.viewport

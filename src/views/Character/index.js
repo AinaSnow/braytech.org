@@ -56,7 +56,7 @@ function itemsInBucket(inventory, bucketHash, equipped) {
   return inventory.filter((item) => item.bucketHash === bucketHash && (equipped ? enums.enumerateTransferStatus(item.transferStatus).ItemIsEquipped : !enums.enumerateTransferStatus(item.transferStatus).ItemIsEquipped));
 }
 
-const bucketsWeapons = [enums.DestinyInventoryBucket.KineticWeapons, enums.DestinyInventoryBucket.EnergyWeapons, enums.DestinyInventoryBucket.PowerWeapons];
+const bucketsWeapons = [enums.DestinyInventoryBucket.Subclass, enums.DestinyInventoryBucket.KineticWeapons, enums.DestinyInventoryBucket.EnergyWeapons, enums.DestinyInventoryBucket.PowerWeapons];
 const bucketsArmor = [enums.DestinyInventoryBucket.Helmet, enums.DestinyInventoryBucket.Gauntlets, enums.DestinyInventoryBucket.ChestArmor, enums.DestinyInventoryBucket.LegArmor, enums.DestinyInventoryBucket.ClassArmor];
 const bucketsAuxiliary = [enums.DestinyInventoryBucket.Ghost, enums.DestinyInventoryBucket.Vehicle, enums.DestinyInventoryBucket.Ships, enums.DestinyInventoryBucket.Emblems];
 
@@ -89,6 +89,18 @@ export default function Inventory(props) {
 
   const membership = { membershipType: member.membershipType, membershipId: member.membershipId, characterId: member.characterId };
 
+  const inventory = member.data.inventory.filter(item => item.characterId ? item.characterId === member.characterId : true);
+
+  const equippedSuper = itemsInBucket(inventory, enums.DestinyInventoryBucket.Subclass, true)[0];
+
+  console.log(equippedSuper)
+
+  
+
+
+
+
+
   return (
     <div className='view' id='inventory'>
       <div className='equipment'>
@@ -96,10 +108,10 @@ export default function Inventory(props) {
           {bucketsWeapons.map((bucketHash, b) => (
             <div key={b} className='bucket'>
               <ul className='list inventory-items equipped'>
-                <Items items={itemsInBucket(member.data.inventory, bucketHash, true)} />
+                <Items items={itemsInBucket(inventory, bucketHash, true)} />
               </ul>
               <ul className='list inventory-items'>
-                <Items items={itemsInBucket(member.data.inventory, bucketHash)} placeholders={slotsValue} handler={equipItem(membership)} />
+                <Items items={itemsInBucket(inventory, bucketHash)} placeholders={slotsValue} handler={equipItem(membership)} />
               </ul>
             </div>
           ))}
@@ -108,10 +120,10 @@ export default function Inventory(props) {
           {bucketsArmor.map((bucketHash, b) => (
             <div key={b} className='bucket'>
               <ul className='list inventory-items equipped'>
-                <Items items={itemsInBucket(member.data.inventory, bucketHash, true)} />
+                <Items items={itemsInBucket(inventory, bucketHash, true)} />
               </ul>
               <ul className='list inventory-items'>
-                <Items items={itemsInBucket(member.data.inventory, bucketHash)} placeholders={slotsValue} handler={equipItem(membership)} />
+                <Items items={itemsInBucket(inventory, bucketHash)} placeholders={slotsValue} handler={equipItem(membership)} />
               </ul>
             </div>
           ))}
@@ -120,10 +132,10 @@ export default function Inventory(props) {
           {bucketsAuxiliary.map((bucketHash, b) => (
             <div key={b} className='bucket'>
               <ul className='list inventory-items equipped'>
-                <Items items={itemsInBucket(member.data.inventory, bucketHash, true)} />
+                <Items items={itemsInBucket(inventory, bucketHash, true)} />
               </ul>
               <ul className='list inventory-items'>
-                <Items items={itemsInBucket(member.data.inventory, bucketHash)} placeholders={slotsValue} handler={equipItem(membership)} />
+                <Items items={itemsInBucket(inventory, bucketHash)} placeholders={slotsValue} handler={equipItem(membership)} />
               </ul>
             </div>
           ))}

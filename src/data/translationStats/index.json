@@ -1,110 +1,102 @@
 {
   "de": {
-    "translated": 694,
+    "translated": 698,
     "notTranslated": 87,
     "added": [],
     "removed": []
   },
   "debug": {
-    "translated": 781,
+    "translated": 785,
     "notTranslated": 0,
     "added": [],
     "removed": []
   },
   "en": {
-    "translated": 781,
+    "translated": 785,
     "notTranslated": 0,
     "added": [],
     "removed": []
   },
   "es-mx": {
-    "translated": 774,
-    "notTranslated": 7,
+    "translated": 785,
+    "notTranslated": 0,
     "added": [],
     "removed": []
   },
   "es": {
-    "translated": 774,
-    "notTranslated": 7,
+    "translated": 785,
+    "notTranslated": 0,
     "added": [],
     "removed": []
   },
   "fr": {
-    "translated": 622,
+    "translated": 626,
     "notTranslated": 159,
-    "added": [
-      "ContentVault.Header.Text",
-      "ContentVault.Info"
-    ],
-    "removed": [
-      "For convenience, only significant collectibles and records have been marked and sorted.",
-      "For more information on the _Destiny Content Vault_, please visit [Bungie.net](https://www.bungie.net/en/Guide/dcv)"
-    ]
+    "added": [],
+    "removed": []
   },
   "it": {
-    "translated": 779,
-    "notTranslated": 2,
+    "translated": 785,
+    "notTranslated": 0,
     "added": [],
     "removed": []
   },
   "ja": {
-    "translated": 569,
+    "translated": 573,
     "notTranslated": 212,
-    "added": [
-      "ContentVault.Header.Text",
-      "ContentVault.Info"
-    ],
-    "removed": [
-      "For convenience, only significant collectibles and records have been marked and sorted.",
-      "For more information on the _Destiny Content Vault_, please visit [Bungie.net](https://www.bungie.net/en/Guide/dcv)"
-    ]
+    "added": [],
+    "removed": []
   },
   "ko": {
-    "translated": 498,
+    "translated": 502,
     "notTranslated": 283,
-    "added": [
-      "ContentVault.Header.Text",
-      "ContentVault.Info"
-    ],
-    "removed": [
-      "For convenience, only significant collectibles and records have been marked and sorted.",
-      "For more information on the _Destiny Content Vault_, please visit [Bungie.net](https://www.bungie.net/en/Guide/dcv)"
-    ]
+    "added": [],
+    "removed": []
   },
   "pl": {
-    "translated": 333,
+    "translated": 337,
     "notTranslated": 448,
     "added": [
-      "ContentVault.Header.Text",
-      "ContentVault.Info"
+      "Landing.VOLUSPA.PlayedSeason.Description",
+      "Landing.VOLUSPA.TrackedPlayers.Description"
     ],
     "removed": [
-      "For convenience, only significant collectibles and records have been marked and sorted.",
-      "For more information on the _Destiny Content Vault_, please visit [Bungie.net](https://www.bungie.net/en/Guide/dcv)"
+      "Number of players VOLUSPA is tracking through their activities and accomplishments",
+      "Number of tracked players who've played this season"
     ]
   },
   "pt-br": {
-    "translated": 761,
+    "translated": 765,
     "notTranslated": 20,
     "added": [],
     "removed": []
   },
   "ru": {
-    "translated": 779,
-    "notTranslated": 2,
+    "translated": 785,
+    "notTranslated": 0,
     "added": [],
     "removed": []
   },
   "zh-chs": {
-    "translated": 604,
-    "notTranslated": 177,
-    "added": [],
-    "removed": []
+    "translated": 609,
+    "notTranslated": 176,
+    "added": [
+      "Landing.VOLUSPA.PlayedSeason.Description",
+      "Landing.VOLUSPA.TrackedPlayers.Description"
+    ],
+    "removed": [
+      "Number of players VOLUSPA is tracking through their activities and accomplishments",
+      "Number of tracked players who've played this season"
+    ]
   },
   "zh-cht": {
-    "translated": 620,
-    "notTranslated": 161,
-    "added": [],
-    "removed": []
+    "translated": 666,
+    "notTranslated": 119,
+    "added": [
+      "Landing.VOLUSPA.TrackedPlayers.Description"
+    ],
+    "removed": [
+      "Number of players VOLUSPA is tracking through their activities and accomplishments"
+    ]
   }
 }

@@ -822,3 +822,8 @@ div.highlight.major {
 div.highlight p {
   line-height: 1.4;
 }
+
+.wrapper.android #index .row.patreon,
+.wrapper.android #footer .wrapper ul li:last-child {
+  display: none;
+}

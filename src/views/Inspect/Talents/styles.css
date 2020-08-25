@@ -1,0 +1,17 @@
+.talent-grid {
+  width: auto;
+  height: 80vh;
+}
+
+.talent-node-xp {
+  fill: rgba(255, 255, 255, 0.1);
+  stroke: none;
+}
+
+.talent-node-best-rated-circle {
+  fill: rgba(0, 153, 255, 0.8);
+}
+
+.talent-node-activated .talent-node-xp {
+  fill: #4887ba;
+}

@@ -104,6 +104,8 @@ function CSSFeatureDetects() {
   }
 }
 
+const android = document.referrer.includes('android-app://');
+
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -290,6 +292,7 @@ class App extends React.Component {
                 'gay-it-up': this.props.settings.visual.gay,
                 standalone: window.matchMedia && window.matchMedia('(display-mode: standalone)').matches,
                 'service-worker-update': this.props.updateAvailable,
+                // android
               })}
             >
               <Route component={GoogleAnalytics.GoogleAnalytics} />
@@ -329,7 +332,7 @@ class App extends React.Component {
                         <SuspenseRoute path='/maps/:map?/:highlight?' component={Maps} />
                         <Route path='/clan-banner-builder/:decalBackgroundColorId?/:decalColorId?/:decalId?/:gonfalonColorId?/:gonfalonDetailColorId?/:gonfalonDetailId?/:gonfalonId?/' exact component={ClanBannerBuilder} />
                         {/* <Route path='/pgcr/:instanceId?' exact component={PGCR} /> */}
-                        <SuspenseRoute path='/inspect/:hash?' exact component={Inspect} />
+                        <SuspenseRoute path='/inspect/:type?/:itemHash?' exact component={Inspect} />
                         <Route path='/read/:kind?/:hash?' exact component={Read} />
                         <Route path='/compare/:object?' exact component={Compare} />
 
