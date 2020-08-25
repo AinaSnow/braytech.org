@@ -1,17 +1,157 @@
 .talent-grid {
-  width: auto;
-  height: 80vh;
+  position: relative;
+  width: 100vh;
+  height: 100vh;
+  --energy-solar: rgba(241, 101, 25, 0.5);
+  --energy-arc: rgba(121, 190, 232, 0.5);
+  --energy-void: rgba(167, 119, 197, 0.5);
 }
 
-.talent-node-xp {
-  fill: rgba(255, 255, 255, 0.1);
-  stroke: none;
+.talent-grid .node {
+  position: absolute;
+  width: 7.4%;
+  height: 7.4%;
+  z-index: 2;
+  transform: translate(-50%, -50%);
+  --selected: var(--energy-void);
 }
 
-.talent-node-best-rated-circle {
-  fill: rgba(0, 153, 255, 0.8);
+.talent-grid .group .border {
+  position: absolute;
+  width: 15%;
+  height: 15%;
+  transform: translate(-50%, -50%) rotate(45deg);
+  box-shadow: 0 0 0 5px rgba(255, 255, 255, 0.2);
 }
 
-.talent-node-activated .talent-node-xp {
-  fill: #4887ba;
+.talent-grid .group .node .border {
+  left: 50%;
+  top: 50%;
+  width: 96%;
+  height: 96%;
+  box-shadow: 0 0 0 6px rgba(255, 255, 255, 0.1);
+}
+
+.talent-grid .group .node {
+  width: 6%;
+  height: 6%;
+  transform: translate(-50%, -50%);
+}
+
+.talent-grid .node.super {
+  width: 18%;
+  height: 18%;
+  z-index: 1;
+  transform: translate(-50%, -50%);
+}
+
+.talent-grid .node.super .border {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 120%;
+  height: 120%;
+  transform: translate(-50%, -50%) rotate(45deg);
+  background-color: rgba(255, 255, 255, 0.05);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+  pointer-events: none;
+}
+
+.talent-grid .node.super .border::before {
+  content: ' ';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 270%;
+  height: 270%;
+  transform: translate(-50%, -50%);
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.2);
+  pointer-events: none;
+}
+
+.talent-grid .node.super .border-left {
+  position: absolute;
+  left: -82%;
+  top: -10%;
+  width: 130%;
+  height: 120%;
+  z-index: -5;
+  background-color: rgba(255, 255, 255, 0.025);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+  pointer-events: none;
+}
+
+.talent-grid .node.super .border-left::before {
+  content: ' ';
+  position: absolute;
+  left: 0%;
+  top: -4%;
+  width: 22%;
+  height: 108%;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+  pointer-events: none;
+}
+
+.talent-grid .node.super.selected .image {
+  transform: scale(0.98);
+}
+
+.talent-grid .node .button {
+  height: 100%;
+  width: 100%;
+  transform: rotate(45deg);
+}
+
+.talent-grid .node .button .shadow {
+  position: absolute;
+  left: 10%;
+  top: 10%;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.05);
+  pointer-events: none;
+}
+
+.talent-grid .node.super .button .shadow {
+  left: 4%;
+  top: 4%;
+}
+
+.talent-grid .node .image {
+  z-index: 2;
+  transform: scale(0.6);
+  pointer-events: none;
+}
+
+.talent-grid .node .image.dl {
+  opacity: 0.6;
+}
+
+.talent-grid .node.selected .image {
+  transform: scale(0.78);
+}
+
+.talent-grid .node.selected .image.dl {
+  opacity: 1;
+}
+
+.talent-grid .node .button {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+.talent-grid .node.selected .button {
+  background-color: var(--selected);
+}
+
+.talent-grid .node .button::before {
+  box-shadow: inset 0 0 0 1px rgba(214, 214, 214, 0.6);
+}
+
+.talent-grid .node.selected .button::before {
+  box-shadow: inset 0 0 0 1px rgba(214, 214, 214, 0.8);
+}
+
+.talent-grid .node .button:hover::before,
+.talent-grid .node.selected .button:hover::before {
+  box-shadow: inset 0 0 0 1px rgba(214, 214, 214, 1);
 }

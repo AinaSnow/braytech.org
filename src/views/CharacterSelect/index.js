@@ -41,7 +41,7 @@ class CharacterSelect extends React.Component {
   resultsListItems = (profiles) =>
     profiles.map((profile, p) => (
       <li key={p} className='linked' onClick={this.handler_clickProfile(profile.membershipType, profile.membershipId, profile.displayName)}>
-        <div className={cx('icon', `braytech-platform_${enums.platforms[profile.membershipType]}`)} />
+        <div className={cx('icon', `braytech-platform_${enums.PLATFORM_STRINGS[profile.membershipType]}`)} />
         <div className='displayName'>{profile.displayName}</div>
       </li>
     ));

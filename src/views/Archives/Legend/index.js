@@ -604,9 +604,9 @@ class Legend extends React.Component {
                   if (c.characterId) {                   
                     return (
                       <div key={i} className='col'>
-                        <div className={cx('class-bar', enums.classStrings[c.classType])}>
+                        <div className={cx('class-bar', enums.CLASS_STRINGS[c.classType])}>
                           <div className='icon'>
-                            <i className={`braytech-class_${enums.classStrings[c.classType]}`} />
+                            <i className={`braytech-class_${enums.CLASS_STRINGS[c.classType]}`} />
                           </div>
                           <div className='class'>{classHashToString(c.classHash)}</div>
                           <div className='light'>{c.light}</div>

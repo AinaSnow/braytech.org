@@ -1,144 +1,340 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import { useLocation, useParams } from 'react-router-dom';
+import { useLocation, useParams, Link } from 'react-router-dom';
 import cx from 'classnames';
+import queryString from 'query-string';
 
 import * as enums from '../../../utils/destinyEnums';
 import manifest from '../../../utils/manifest';
+import ObservedImage from '../../../components/ObservedImage';
+import { Miscellaneous } from '../../../svg';
 
 import './styles.css';
 
-function talentGrid(itemHash, itemComponents, itemInstanceId) {
+function talentGrid(itemHash, selectedNodes) {
   const definitionInventoryItem = manifest.DestinyInventoryItemDefinition[itemHash];
   const definitionTalentGrid = manifest.DestinyTalentGridDefinition[definitionInventoryItem?.talentGrid?.talentGridHash];
-  const itemInstance = itemComponents?.talentGrids.data[itemInstanceId];
 
   if (!definitionTalentGrid) return {};
 
-  const talentGridHash = itemInstance?.talentGridHash || definitionTalentGrid.hash;
-  const nodes = itemInstance?.nodes.filter((node) => !node.hidden) || definitionTalentGrid.nodes.filter((node, n) => definitionTalentGrid.independentNodeIndexes.includes(n));
+  const talentGridHash = definitionTalentGrid.hash;
+//  const nodes = .filter((node, n) => definitionTalentGrid.independentNodeIndexes.includes(n));
 
   return {
     talentGridHash,
-    nodes: nodes.map((node) => {
+    nodeCategories: definitionTalentGrid.nodeCategories.map(({ nodeHashes, ...category }) => ({ ...category, nodeIndexes: nodeHashes })),
+    nodes: definitionTalentGrid.nodes.map((node) => {
       const talentNodeGroup = definitionTalentGrid.nodes[node.nodeIndex];
       const step = talentNodeGroup.steps[0];
 
-      if (!step) {
-        return undefined;
-      }
-
-      // Filter out some weird bogus nodes
-      if (!step.displayProperties.name || talentNodeGroup.column < 0) {
-        return undefined;
-      }
-
-      // Only one node in this column can be selected (scopes, etc)
-      const exclusiveInColumn = Boolean(talentNodeGroup.exclusiveWithNodeHashes && talentNodeGroup.exclusiveWithNodeHashes.length > 0);
-
-      const activatedAtGridLevel = step.activationRequirement.gridLevel;
-
-      // There's a lot more here, but we're taking just what we need
       return {
         hash: step.nodeStepHash,
         groupHash: talentNodeGroup.groupHash,
+        layoutIdentifier: talentNodeGroup.layoutIdentifier,
         displayProperties: step.displayProperties,
-        // Position in the grid
-        column: talentNodeGroup.column / 8,
-        row: talentNodeGroup.row / 8,
-        // Is the node selected (lit up in the grid)
-        isActivated: node.isActivated,
-        // The item level at which this node can be unlocked
-        activatedAtGridLevel,
-        // Only one node in this column can be selected (scopes, etc)
-        exclusiveInColumn,
-        // Some nodes don't show up in the grid, like purchased ascend nodes
-        hidden: node.hidden,
+        hidden: node.hidden && true,
+        isActivated: selectedNodes.includes(step.nodeStepHash),
+        column: talentNodeGroup.column + 20,
+        row: talentNodeGroup.row + 12,
       };
     }),
   };
 }
 
 export default function Talents() {
-  const member = useSelector((state) => state.member);
+  // const member = useSelector((state) => state.member);
 
+  const location = useLocation();
   const params = useParams();
   const itemHash = params.itemHash && +params.itemHash;
 
-  const { itemInstanceId } = member.data.inventory?.find((item) => item.itemHash === itemHash) || {};
+  // const { itemInstanceId } = member.data.inventory?.find((item) => item.itemHash === itemHash) || {};
 
-  const { talentGridHash, nodes } = talentGrid(itemHash, member.data.profile?.itemComponents, itemInstanceId);
+  const query = queryString.parse(location.search);
+  const urlNodes = query.nodes?.split('/').map((node) => +node || false);
 
-  console.log(talentGridHash, nodes);
+  const { talentGridHash, nodeCategories, nodes } = talentGrid(itemHash, urlNodes);
 
-  const nodeSize = 40;
-  const nodePadding = 4;
-  const totalNodeSize = nodeSize + nodePadding;
+  console.log(talentGridHash, nodeCategories, nodes);
 
-  const numColumns = nodes
+  const maxColumns = nodes
     .filter((node) => !node.hidden)
     .reduce((max, node) => {
-      return Math.max(max, node.column + 1);
-    }, 0);
-  const numRows = nodes
-    .filter((node) => !node.hidden)
-    .reduce((max, node) => {
-      return Math.max(max, node.row + 1);
+      return Math.max(max, node.column);
     }, 0);
 
-  const groups = nodes.reduce((groups, node) => {
-    const group = groups.find((group) => group.groupHash === node.groupHash);
-
-    if (group) {
-      return [
-        ...groups.filter((g) => g.groupHash !== group.groupHash),
-        {
-          groupHash: group.groupHash,
-          nodes: [...group.nodes, node],
-        },
-      ];
-    } else {
-      return [
-        ...groups,
-        {
-          groupHash: node.groupHash,
-          nodes: [node],
-        },
-      ];
-    }
-  }, []);
+  // console.log(maxColumns)
 
   return (
     <div className='view' id='inspect'>
-      <svg preserveAspectRatio='xMaxYMin meet' viewBox={`0 0 ${numColumns * totalNodeSize - nodePadding} ${numRows * totalNodeSize - nodePadding + 1}`} className='talent-grid'>
-        {groups.map((group, g) =>
-          group.nodes.length > 1 ? (
-            <g key={g} className='group'>
-              {group.nodes.map((node, n) => (
-                <TalentGridNode key={n} node={node} totalNodeSize={totalNodeSize} isGrouped />
+      <div className='talent-grid'>
+        {nodeCategories.map((category, c) => {
+          const isSubclassPath = SUBCLASS_PATHS.find((path) => category.nodeIndexes.find((nodeIndex) => nodes[nodeIndex].hash === path.nodeStepHash));
+          const { columnAvg, rowAvg } = categoryAverage(category, nodes);
+
+          return isSubclassPath ? (
+            <div key={c} className='group'>
+              <div className='border' style={{ left: `${columnAvg}%`, top: `${rowAvg}%` }} />
+              {category.nodeIndexes.map((nodeIndex, n) => (
+                <TalentGridNode key={n} node={nodes[nodeIndex]} />
               ))}
-            </g>
+            </div>
           ) : (
-            group.nodes.map((node, n) => <TalentGridNode key={n} node={node} totalNodeSize={totalNodeSize} />)
-          )
-        )}
-      </svg>
+            category.nodeIndexes.map((nodeIndex, n) => <TalentGridNode key={n} node={nodes[nodeIndex]} />)
+          );
+        })}
+      </div>
     </div>
   );
 }
 
-function TalentGridNode({ node, totalNodeSize, isGrouped }) {
+function categoryAverage({ nodeIndexes }, nodes) {
+  const group = nodes.filter((node, n) => nodeIndexes.includes(n));
+
+  return {
+    columnAvg: group.reduce((sum, node) => sum + node.column, 0) / group.length,
+    rowAvg: group.reduce((sum, node) => sum + node.row, 0) / group.length,
+  }
+}
+
+function TalentGridNode({ node, to }) {
   return (
-    <g
-      transform={`translate(${node.column * totalNodeSize},${node.row * totalNodeSize})`}
-      className={cx('talent-node', {
-        'talent-node-activated': node.isActivated,
-        'talent-node-default': node.isActivated && !node.exclusiveInColumn && node.column < 1,
+    <div
+      className={cx('node', {
+        selected: node.isActivated,
+        default: node.isActivated && !node.exclusiveInColumn && node.column < 1,
+        super: node.layoutIdentifier === 'super',
       })}
+      style={{ left: `${node.column}%`, top: `${node.row}%` }}
     >
-      {isGrouped ? <rect x='-16' y='8' width='32' height='32' transform='rotate(-45)' className='talent-node-xp' /> : <rect x='-18' y='6' width='36' height='36' transform='rotate(-45)' className='talent-node-xp' />}
-      <image className='talent-node-img' href={`https://www.bungie.net${node.displayProperties.icon}`} x='20' y='20' height='96' width='96' transform='scale(0.25)' />
-      <title>{node.displayProperties.name}</title>
-    </g>
+      <div className='border' />
+      {node.layoutIdentifier === 'super' && <div className='border-left' />}
+      <div className='button'>
+        <div className='shadow' />
+        {to && <Link to={to} />}
+      </div>
+      <ObservedImage src={`https://www.bungie.net${node.displayProperties.icon}`} />
+    </div>
   );
 }
+
+const SUBCLASS_PATH_IDENTIFIERS = { First: 'FirstPath', Second: 'SecondPath', Third: 'ThirdPath' };
+
+const SUBCLASS_PATHS = [
+  {
+    classType: enums.DestinyClass.Titan,
+    damageType: enums.DestinyDamageType.Arc,
+    identifier: SUBCLASS_PATH_IDENTIFIERS.First,
+    nodeStepHash: 4099943028,
+    icon: '',
+    art: '01A3-0000112B',
+  },
+  {
+    classType: enums.DestinyClass.Titan,
+    damageType: enums.DestinyDamageType.Arc,
+    identifier: SUBCLASS_PATH_IDENTIFIERS.Second,
+    nodeStepHash: 4293830764,
+    icon: '',
+    art: '01A3-0000112B',
+  },
+  {
+    classType: enums.DestinyClass.Titan,
+    damageType: enums.DestinyDamageType.Arc,
+    identifier: SUBCLASS_PATH_IDENTIFIERS.Third,
+    nodeStepHash: 2795355746,
+    icon: '',
+    art: '01E3-00001598',
+  },
+  {
+    classType: enums.DestinyClass.Titan,
+    damageType: enums.DestinyDamageType.Solar,
+    identifier: SUBCLASS_PATH_IDENTIFIERS.First,
+    nodeStepHash: 3928207649,
+    icon: '',
+    art: '01A3-0000116E',
+  },
+  {
+    classType: enums.DestinyClass.Titan,
+    damageType: enums.DestinyDamageType.Solar,
+    identifier: SUBCLASS_PATH_IDENTIFIERS.Second,
+    nodeStepHash: 1236431642,
+    icon: '',
+    art: '01A3-0000116E',
+  },
+  {
+    classType: enums.DestinyClass.Titan,
+    damageType: enums.DestinyDamageType.Solar,
+    identifier: SUBCLASS_PATH_IDENTIFIERS.Third,
+    nodeStepHash: 1323416107,
+    icon: '',
+    art: '01E3-0000159D',
+  },
+  {
+    classType: enums.DestinyClass.Titan,
+    damageType: enums.DestinyDamageType.Void,
+    identifier: SUBCLASS_PATH_IDENTIFIERS.First,
+    nodeStepHash: 3806272138,
+    icon: '',
+    art: '01A3-00001179',
+  },
+  {
+    classType: enums.DestinyClass.Titan,
+    damageType: enums.DestinyDamageType.Void,
+    identifier: SUBCLASS_PATH_IDENTIFIERS.Second,
+    nodeStepHash: 1347995538,
+    icon: '',
+    art: '01A3-00001179',
+  },
+  {
+    classType: enums.DestinyClass.Titan,
+    damageType: enums.DestinyDamageType.Void,
+    identifier: SUBCLASS_PATH_IDENTIFIERS.Third,
+    nodeStepHash: 3504292102,
+    icon: '',
+    art: '01E3-0000159F',
+  },
+  {
+    classType: enums.DestinyClass.Hunter,
+    damageType: enums.DestinyDamageType.Arc,
+    identifier: SUBCLASS_PATH_IDENTIFIERS.First,
+    nodeStepHash: 1690891826,
+    icon: '',
+    art: '01A3-000010B4',
+  },
+  {
+    classType: enums.DestinyClass.Hunter,
+    damageType: enums.DestinyDamageType.Arc,
+    identifier: SUBCLASS_PATH_IDENTIFIERS.Second,
+    nodeStepHash: 313617030,
+    icon: '',
+    art: '01A3-000010B4',
+  },
+  {
+    classType: enums.DestinyClass.Hunter,
+    damageType: enums.DestinyDamageType.Arc,
+    identifier: SUBCLASS_PATH_IDENTIFIERS.Third,
+    nodeStepHash: 3006627468,
+    icon: '',
+    art: '01E3-00001593',
+  },
+  {
+    classType: enums.DestinyClass.Hunter,
+    damageType: enums.DestinyDamageType.Solar,
+    identifier: SUBCLASS_PATH_IDENTIFIERS.First,
+    nodeStepHash: 2242504056,
+    icon: '',
+    art: '01A3-000010F8',
+  },
+  {
+    classType: enums.DestinyClass.Hunter,
+    damageType: enums.DestinyDamageType.Solar,
+    identifier: SUBCLASS_PATH_IDENTIFIERS.Second,
+    nodeStepHash: 2805396803,
+    icon: '',
+    art: '01A3-000010F8',
+  },
+  {
+    classType: enums.DestinyClass.Hunter,
+    damageType: enums.DestinyDamageType.Solar,
+    identifier: SUBCLASS_PATH_IDENTIFIERS.Third,
+    nodeStepHash: 1590824323,
+    icon: '',
+    art: '01E3-00001595',
+  },
+  {
+    classType: enums.DestinyClass.Hunter,
+    damageType: enums.DestinyDamageType.Void,
+    identifier: SUBCLASS_PATH_IDENTIFIERS.First,
+    nodeStepHash: 277476372,
+    icon: '',
+    art: '01A3-00001107',
+  },
+  {
+    classType: enums.DestinyClass.Hunter,
+    damageType: enums.DestinyDamageType.Void,
+    identifier: SUBCLASS_PATH_IDENTIFIERS.Second,
+    nodeStepHash: 4025960910,
+    icon: '',
+    art: '01A3-00001107',
+  },
+  {
+    classType: enums.DestinyClass.Hunter,
+    damageType: enums.DestinyDamageType.Void,
+    identifier: SUBCLASS_PATH_IDENTIFIERS.Third,
+    nodeStepHash: 499823166,
+    icon: '',
+    art: '01E3-00001596',
+  },
+  {
+    classType: enums.DestinyClass.Warlock,
+    damageType: enums.DestinyDamageType.Arc,
+    identifier: SUBCLASS_PATH_IDENTIFIERS.First,
+    nodeStepHash: 487158888,
+    icon: '',
+    art: '01A3-000011A1',
+  },
+  {
+    classType: enums.DestinyClass.Warlock,
+    damageType: enums.DestinyDamageType.Arc,
+    identifier: SUBCLASS_PATH_IDENTIFIERS.Second,
+    nodeStepHash: 3297679786,
+    icon: '',
+    art: '01A3-000011A1',
+  },
+  {
+    classType: enums.DestinyClass.Warlock,
+    damageType: enums.DestinyDamageType.Arc,
+    identifier: SUBCLASS_PATH_IDENTIFIERS.Third,
+    nodeStepHash: 3882393894,
+    icon: '',
+    art: '01E3-000015A1',
+  },
+  {
+    classType: enums.DestinyClass.Warlock,
+    damageType: enums.DestinyDamageType.Solar,
+    identifier: SUBCLASS_PATH_IDENTIFIERS.First,
+    nodeStepHash: 1893159641,
+    icon: '',
+    art: '01A3-000011F1',
+  },
+  {
+    classType: enums.DestinyClass.Warlock,
+    damageType: enums.DestinyDamageType.Solar,
+    identifier: SUBCLASS_PATH_IDENTIFIERS.Second,
+    nodeStepHash: 966868917,
+    icon: '',
+    art: '01A3-000011F1',
+  },
+  {
+    classType: enums.DestinyClass.Warlock,
+    damageType: enums.DestinyDamageType.Solar,
+    identifier: SUBCLASS_PATH_IDENTIFIERS.Third,
+    nodeStepHash: 935376049,
+    icon: '',
+    art: '01E3-000015A2',
+  },
+  {
+    classType: enums.DestinyClass.Warlock,
+    damageType: enums.DestinyDamageType.Void,
+    identifier: SUBCLASS_PATH_IDENTIFIERS.First,
+    nodeStepHash: 2718724912,
+    icon: '',
+    art: '01A3-0000120D',
+  },
+  {
+    classType: enums.DestinyClass.Warlock,
+    damageType: enums.DestinyDamageType.Void,
+    identifier: SUBCLASS_PATH_IDENTIFIERS.Second,
+    nodeStepHash: 1389184794,
+    icon: '',
+    art: '01A3-0000120D',
+  },
+  {
+    classType: enums.DestinyClass.Warlock,
+    damageType: enums.DestinyDamageType.Void,
+    identifier: SUBCLASS_PATH_IDENTIFIERS.Third,
+    nodeStepHash: 194702279,
+    icon: '',
+    art: '01E3-000015A5',
+  },
+];

@@ -447,11 +447,11 @@ class RosterAdmin extends React.Component {
                 <li className='col member'>
                   <MemberLink type={m.destinyUserInfo.membershipType} id={m.destinyUserInfo.membershipId} groupId={m.destinyUserInfo.groupId} displayName={m.destinyUserInfo.LastSeenDisplayName || m.destinyUserInfo.displayName} hideEmblemIcon={!m.isOnline} />
                 </li>
-                <li className='col last-platform'>{<div className={cx('icon', `braytech-platform_${enums.platforms[lastPlatform]}`)} />}</li>
+                <li className='col last-platform'>{<div className={cx('icon', `braytech-platform_${enums.PLATFORM_STRINGS[lastPlatform]}`)} />}</li>
                 {!isPrivate ? (
                   <>
                     <li className='col last-character'>
-                      <div className={cx('icon', 'character', enums.classStrings[lastCharacter.classType])}>
+                      <div className={cx('icon', 'character', enums.CLASS_STRINGS[lastCharacter.classType])}>
                         <LastClassIcon />
                       </div>
                       <div className={cx('icon', 'light', { 'max-ish': lastCharacter.light >= 100, max: lastCharacter.light >= 1010 })}>{lastCharacter.light}</div>

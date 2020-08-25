@@ -44,7 +44,12 @@ export const manifestTableNames = [
   'DestinyEnemyRaceDefinition',
 ];
 
-export const platforms = {
+export const DestinyScope = {
+  Profile: 0,
+  Character: 1,
+};
+
+export const PLATFORM_STRINGS = {
   1: 'xbox',
   2: 'playstation',
   3: 'steam',
@@ -53,10 +58,31 @@ export const platforms = {
   6: 'nintendo',
 };
 
-export const classStrings = {
+export const CLASS_STRINGS = {
   0: 'titan',
   1: 'hunter',
   2: 'warlock',
+};
+
+export const DestinyGender = {
+  Male: 0,
+  Female: 1,
+  Unknown: 2,
+};
+
+export const DestinyClass = {
+  Titan: 0,
+  Hunter: 1,
+  Warlock: 2,
+  Unknown: 3,
+};
+
+export const DestinyDamageType = {
+  None: 0,
+  Kinetic: 1,
+  Arc: 2,
+  Solar: 3,
+  Void: 4,
 };
 
 export const DestinyTierType = {

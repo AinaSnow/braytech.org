@@ -297,7 +297,7 @@ export function BungieAuth() {
               {state.memberships.destinyMemberships.map((m) => {
                 return (
                   <li key={m.membershipId} className='linked'>
-                    <div className={cx('icon', `braytech-platform_${enums.platforms[m.membershipType]}`)} />
+                    <div className={cx('icon', `braytech-platform_${enums.PLATFORM_STRINGS[m.membershipType]}`)} />
                     <div className='displayName'>{state.memberships.bungieNetUser.blizzardDisplayName && m.membershipType === 4 ? state.memberships.bungieNetUser.blizzardDisplayName : m.displayName}</div>
                     {m.crossSaveOverride === m.membershipType ? (
                       <div className='cross-save'>
@@ -445,7 +445,7 @@ export function BungieAuthMini() {
               {state.memberships.destinyMemberships.map((m) => {
                 return (
                   <li key={m.membershipId} className='linked'>
-                    <div className={cx('icon', `braytech-platform_${enums.platforms[m.membershipType]}`)} />
+                    <div className={cx('icon', `braytech-platform_${enums.PLATFORM_STRINGS[m.membershipType]}`)} />
                     <div className='displayName'>{state.memberships.bungieNetUser.blizzardDisplayName && m.membershipType === 4 ? state.memberships.bungieNetUser.blizzardDisplayName : m.displayName}</div>
                     {m.crossSaveOverride === m.membershipType ? (
                       <div className='cross-save'>
@@ -645,7 +645,7 @@ export function DiffProfile({ inline }) {
                   {state.memberships.destinyMemberships.map((m) => {
                     return (
                       <li key={m.membershipId} className='linked'>
-                        <div className={cx('icon', `braytech-platform_${enums.platforms[m.membershipType]}`)} />
+                        <div className={cx('icon', `braytech-platform_${enums.PLATFORM_STRINGS[m.membershipType]}`)} />
                         <div className='displayName'>{state.memberships.bungieNetUser.blizzardDisplayName && m.membershipType === 4 ? state.memberships.bungieNetUser.blizzardDisplayName : m.displayName}</div>
                         {m.crossSaveOverride === m.membershipType ? (
                           <div className='cross-save'>

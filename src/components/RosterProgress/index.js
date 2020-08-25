@@ -139,7 +139,7 @@ class Roster extends React.Component {
               {!isPrivate ? (
                 <>
                   <li className='col last'>
-                    <div className={cx('icon', 'character', enums.classStrings[lastCharacter.classType])}>
+                    <div className={cx('icon', 'character', enums.CLASS_STRINGS[lastCharacter.classType])}>
                       <LastClassIcon />
                     </div>
                     <div className={cx('icon', 'light', { 'max-ish': lastCharacter.light >= 1000, max: lastCharacter.light >= 1010 })}>{lastCharacter.light}</div>

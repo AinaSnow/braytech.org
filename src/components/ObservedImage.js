@@ -92,7 +92,7 @@ class ObservedImageInner extends React.Component {
   }
 
   render() {
-    const { className = 'image', noConstraints, base64, ...attributes } = this.props;
+    const { src, className = 'image', noConstraints, base64, ...attributes } = this.props;
 
     return (
       <div

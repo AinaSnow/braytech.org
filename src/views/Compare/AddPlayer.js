@@ -52,7 +52,7 @@ class AddPlayer extends React.Component {
     
     return (
       <li key={i} className='linked'>
-        <div className={cx('icon', `braytech-platform_${enums.platforms[p.membershipType]}`)} />
+        <div className={cx('icon', `braytech-platform_${enums.PLATFORM_STRINGS[p.membershipType]}`)} />
         <div className='displayName'>{p.displayName}</div>
         <Link to={queryString ? `/compare/${object}?members=${queryString}` : `/compare/${object}`} />
       </li>

@@ -147,6 +147,7 @@ import { ReactComponent as Engram } from './miscellaneous/engram.svg';
 import { ReactComponent as Playlists } from './miscellaneous/playlists.svg';
 import { ReactComponent as Past } from './miscellaneous/past.svg';
 import { ReactComponent as Story } from './miscellaneous/story.svg';
+import { ReactComponent as SubclassSelected } from './miscellaneous/subclass-selected.svg';
 
 import { ReactComponent as GrimoireIcon } from './grimoire/grimoire.svg';
 import { ReactComponent as GrimoireActivities } from './grimoire/activities.svg';
@@ -266,6 +267,7 @@ const Miscellaneous = {
   WarmindHalf,
   TrialsOfOsirisDevice,
   CurseCycle,
+  SubclassSelected,
 };
 
 const Tooltips = {

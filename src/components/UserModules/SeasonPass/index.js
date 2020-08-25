@@ -5,7 +5,7 @@ import cx from 'classnames';
 import { t } from '../../../utils/i18n';
 import manifest from '../../../utils/manifest';
 import actions from '../../../store/actions';
-import { classStrings, enumerateProgressionRewardItemState } from '../../../utils/destinyEnums';
+import { CLASS_STRINGS, enumerateProgressionRewardItemState } from '../../../utils/destinyEnums';
 import { progressionSeasonRank } from '../../../utils/destinyUtils';
 import Button from '../../UI/Button';
 import ProgressBar from '../../UI/ProgressBar';
@@ -153,7 +153,7 @@ export default function SeasonPass() {
           }
           // if it's not a shader, it might be an armour ornament in which case we only want the one matching our current class
           else if (definitionItem.plug?.plugCategoryIdentifier) {
-            const classString = classStrings[character.classType];
+            const classString = CLASS_STRINGS[character.classType];
 
             if (definitionItem.plug.plugCategoryIdentifier.indexOf(classString) > -1) {
               return true;
