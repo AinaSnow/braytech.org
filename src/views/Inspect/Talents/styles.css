@@ -1,10 +1,17 @@
 .talent-grid {
   position: relative;
-  width: 100vh;
-  height: 100vh;
+  --dimensions: 100vh;
+  width: var(--dimensions);
+  height: var(--dimensions);
   --energy-solar: rgba(241, 101, 25, 0.5);
   --energy-arc: rgba(121, 190, 232, 0.5);
   --energy-void: rgba(167, 119, 197, 0.5);
+}
+
+@media (orientation: portrait) {
+  .talent-grid {
+    --dimensions: 100vw;
+  }
 }
 
 .talent-grid .node {
@@ -16,12 +23,29 @@
   --selected: var(--energy-void);
 }
 
+.group .path {
+  position: absolute;
+  width: 25%;
+  height: 25%;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  transition: opacity 0.5s;
+}
+
+.group .path svg {
+  pointer-events: none;
+}
+
+.group .path.selected {
+  opacity: 0.1;
+}
+
 .talent-grid .group .border {
   position: absolute;
   width: 15%;
   height: 15%;
   transform: translate(-50%, -50%) rotate(45deg);
-  box-shadow: 0 0 0 5px rgba(255, 255, 255, 0.2);
+  box-shadow: 0 0 0 5px rgba(255, 255, 255, 0.3);
 }
 
 .talent-grid .group .node .border {
@@ -62,8 +86,8 @@
   position: absolute;
   left: 50%;
   top: 50%;
-  width: 270%;
-  height: 270%;
+  width: 274%;
+  height: 274%;
   transform: translate(-50%, -50%);
   box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.2);
   pointer-events: none;
@@ -71,10 +95,10 @@
 
 .talent-grid .node.super .border-left {
   position: absolute;
-  left: -82%;
-  top: -10%;
+  left: -84%;
+  top: -12%;
   width: 130%;
-  height: 120%;
+  height: 124%;
   z-index: -5;
   background-color: rgba(255, 255, 255, 0.025);
   box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1);
@@ -102,6 +126,14 @@
   transform: rotate(45deg);
 }
 
+.talent-grid .node .button a {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+}
+
 .talent-grid .node .button .shadow {
   position: absolute;
   left: 10%;
@@ -120,6 +152,7 @@
 .talent-grid .node .image {
   z-index: 2;
   transform: scale(0.6);
+  transition: opacity 0.25s, transform 0.25s;
   pointer-events: none;
 }
 

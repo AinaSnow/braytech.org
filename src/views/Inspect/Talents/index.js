@@ -17,75 +17,106 @@ function talentGrid(itemHash, selectedNodes) {
 
   if (!definitionTalentGrid) return {};
 
-  const talentGridHash = definitionTalentGrid.hash;
-//  const nodes = .filter((node, n) => definitionTalentGrid.independentNodeIndexes.includes(n));
+  const nodes = definitionTalentGrid.nodes.map((node) => {
+    const talentNodeGroup = definitionTalentGrid.nodes[node.nodeIndex];
+    const step = talentNodeGroup.steps[0];
+
+    return {
+      hash: step.nodeStepHash,
+      groupHash: talentNodeGroup.groupHash,
+      layoutIdentifier: talentNodeGroup.layoutIdentifier,
+      displayProperties: step.displayProperties,
+      hidden: Boolean(node.hidden),
+      isActivated: selectedNodes.includes(step.nodeStepHash),
+      column: talentNodeGroup.column + 9,
+      row: talentNodeGroup.row + 14,
+    };
+  });
 
   return {
-    talentGridHash,
-    nodeCategories: definitionTalentGrid.nodeCategories.map(({ nodeHashes, ...category }) => ({ ...category, nodeIndexes: nodeHashes })),
-    nodes: definitionTalentGrid.nodes.map((node) => {
-      const talentNodeGroup = definitionTalentGrid.nodes[node.nodeIndex];
-      const step = talentNodeGroup.steps[0];
-
-      return {
-        hash: step.nodeStepHash,
-        groupHash: talentNodeGroup.groupHash,
-        layoutIdentifier: talentNodeGroup.layoutIdentifier,
-        displayProperties: step.displayProperties,
-        hidden: node.hidden && true,
-        isActivated: selectedNodes.includes(step.nodeStepHash),
-        column: talentNodeGroup.column + 20,
-        row: talentNodeGroup.row + 12,
-      };
-    }),
+    talentGridHash: definitionTalentGrid.hash,
+    nodeCategories: definitionTalentGrid.nodeCategories.map(({ nodeHashes, ...category }) => ({
+      ...category,
+      nodeIndexes: nodeHashes,
+      isSubclassPath: Boolean(SUBCLASS_PATHS.find((path) => nodeHashes.find((nodeHash) => nodes[nodeHash].hash === path.nodeStepHash))),
+    })),
+    nodes,
   };
 }
 
 export default function Talents() {
-  // const member = useSelector((state) => state.member);
-
   const location = useLocation();
   const params = useParams();
   const itemHash = params.itemHash && +params.itemHash;
 
-  // const { itemInstanceId } = member.data.inventory?.find((item) => item.itemHash === itemHash) || {};
-
   const query = queryString.parse(location.search);
   const urlNodes = query.nodes?.split('/').map((node) => +node || false);
 
-  const { talentGridHash, nodeCategories, nodes } = talentGrid(itemHash, urlNodes);
-
-  console.log(talentGridHash, nodeCategories, nodes);
-
-  const maxColumns = nodes
-    .filter((node) => !node.hidden)
-    .reduce((max, node) => {
-      return Math.max(max, node.column);
-    }, 0);
-
-  // console.log(maxColumns)
+  const { nodeCategories, nodes } = talentGrid(itemHash, urlNodes);
 
   return (
     <div className='view' id='inspect'>
       <div className='talent-grid'>
         {nodeCategories.map((category, c) => {
-          const isSubclassPath = SUBCLASS_PATHS.find((path) => category.nodeIndexes.find((nodeIndex) => nodes[nodeIndex].hash === path.nodeStepHash));
           const { columnAvg, rowAvg } = categoryAverage(category, nodes);
 
-          return isSubclassPath ? (
+          return category.isSubclassPath ? (
             <div key={c} className='group'>
+              <div className={cx('path', { selected: category.nodeIndexes.filter((nodeIndex) => nodes[nodeIndex].isActivated).length })} style={{ left: `${columnAvg}%`, top: `${rowAvg}%` }}>
+                <Miscellaneous.SubclassSelected />
+              </div>
               <div className='border' style={{ left: `${columnAvg}%`, top: `${rowAvg}%` }} />
-              {category.nodeIndexes.map((nodeIndex, n) => (
-                <TalentGridNode key={n} node={nodes[nodeIndex]} />
-              ))}
+              {category.nodeIndexes.map((nodeIndex, n) => {
+                const to = talentGridUrl(itemHash, nodeCategories, nodes, nodeIndex);
+
+                return <TalentGridNode key={n} node={nodes[nodeIndex]} to={to} />;
+              })}
             </div>
           ) : (
-            category.nodeIndexes.map((nodeIndex, n) => <TalentGridNode key={n} node={nodes[nodeIndex]} />)
+            category.nodeIndexes.map((nodeIndex, n) => {
+              const to = talentGridUrl(itemHash, nodeCategories, nodes, nodeIndex);
+
+              return <TalentGridNode key={n} node={nodes[nodeIndex]} to={to} />;
+            })
           );
         })}
       </div>
     </div>
   );
+}
+
+function talentGridUrl(itemHash, nodeCategories, nodes, nodeIndex) {
+  const target = nodeCategories.find(({ nodeIndexes }) => nodeIndexes.includes(nodeIndex));
+
+  const configuration = nodeCategories.map(({ nodeIndexes, isSubclassPath }) => {
+    const includesTargetIndex = nodeIndexes.includes(nodeIndex);
+
+    return nodeIndexes.map((n) => {
+      if (isSubclassPath) {
+        // this will catch super nodes themselves
+        if (includesTargetIndex) {
+          return nodes[n].hash;
+        }
+        // else leave whatever is activated, activated, unless the target is a node group
+        else if (nodes[n].isActivated && !target.isSubclassPath) {
+          return nodes[n].hash;
+        } else {
+          return false;
+        }
+      }
+
+      if (includesTargetIndex) {
+        return n === nodeIndex ? nodes[n].hash : false;
+      }
+
+      return nodes[n].isActivated ? nodes[n].hash : false;
+    });
+  });
+
+  return `/inspect/talents/${itemHash}?nodes=${configuration
+    .flat()
+    .map((hash) => hash || '')
+    .join('/')}`;
 }
 
 function categoryAverage({ nodeIndexes }, nodes) {
@@ -94,7 +125,7 @@ function categoryAverage({ nodeIndexes }, nodes) {
   return {
     columnAvg: group.reduce((sum, node) => sum + node.column, 0) / group.length,
     rowAvg: group.reduce((sum, node) => sum + node.row, 0) / group.length,
-  }
+  };
 }
 
 function TalentGridNode({ node, to }) {
