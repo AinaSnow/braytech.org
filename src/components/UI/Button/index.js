@@ -4,96 +4,80 @@ import cx from 'classnames';
 
 import './styles.css';
 
-class DestinyKey extends React.Component {
-  constructor(props) {
-    super(props);
+const buttons = {
+  1: {
+    settings: [
+      {
+        char: '',
+      },
+    ],
+    dismiss: [
+      {
+        color: '#f44336',
+        char: '',
+      },
+      {
+        char: '',
+      },
+    ],
+    more: [
+      {
+        color: '#ffc107',
+        char: '',
+      },
+      {
+        char: '',
+      },
+    ],
+    accept: [
+      {
+        color: '#598652',
+        char: '',
+      },
+      {
+        char: '',
+      },
+    ],
+    modify: [
+      {
+        color: '#4769c7',
+        char: '',
+      },
+      {
+        char: '',
+      },
+    ],
+  },
+};
 
-    this.state = {};
-  }
+export function DestinyKey({ type, platform = 1 }) {
+  return (
+    <div className='destiny-key'>
+      {buttons[platform][type].map((l, i) => {
+        return (
+          <span key={i} className={l.color && 'color'} style={{ color: l.color }}>
+            {l.char}
+          </span>
+        );
+      })}
+    </div>
+  );
+}
 
-  buttons = {
-    1: {
-      settings: [
-        {
-          char: ''
-        }
-      ],
-      dismiss: [
-        {
-          color: '#f44336',
-          char: ''
-        },
-        {
-          char: ''
-        }
-      ],
-      more: [
-        {
-          color: '#ffc107',
-          char: ''
-        },
-        {
-          char: ''
-        }
-      ],
-      accept: [
-        {
-          color: '#598652',
-          char: ''
-        },
-        {
-          char: ''
-        }
-      ],
-      modify: [
-        {
-          color: '#4769c7',
-          char: ''
-        },
-        {
-          char: ''
-        }
-      ]
-    }
-  };
-
-  render() {
-    const { type, platform = 1 } = this.props;
-
+export function Button({ inverted, lined, cta, disabled, ...props }) {
+  if (props.anchor) {
     return (
-      <div className='destiny-key'>
-        {this.buttons[platform][type].map((l, i) => {
-          return (
-            <span key={i} style={{ color: l.color }}>
-              {l.char}
-            </span>
-          );
-        })}
-      </div>
+      <Link className={cx('button', props.className, { inverted, lined, cta, disabled })} onClick={props.action || undefined} to={props.to}>
+        {props.text ? <div className='text'>{props.text}</div> : props.children}
+      </Link>
+    );
+  } else {
+    return (
+      <button className={cx('button', props.className, { inverted, lined, cta, disabled })} onClick={props.action || undefined} type={props.type || 'button'}>
+        {props.text ? <div className='text'>{props.text}</div> : props.children}
+      </button>
     );
   }
 }
-
-class Button extends React.Component {
-  render() {
-    const { className, text, children, action, cta, disabled, lined, anchor, type, inverted } = this.props;
-
-    if (anchor) {
-      return (
-        <Link className={cx('button', className, { inverted, lined, disabled, cta })} onClick={action || undefined} to={this.props.to}>
-          {text ? <div className='text'>{text}</div> : children}
-        </Link>
-      );
-    } else {
-      return (
-        <button className={cx('button', className, { inverted, lined, disabled, cta })} onClick={action || undefined} type={type || 'button'}>
-          {text ? <div className='text'>{text}</div> : children}
-        </button>
-      );
-    }
-  }
-}
-
-export { DestinyKey, Button };
 
 export default Button;

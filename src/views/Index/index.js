@@ -1,16 +1,20 @@
 import React, { useState, useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
+import cx from 'classnames';
 
 import { t, fromNow, BraytechText } from '../../utils/i18n';
 import manifest from '../../utils/manifest';
+import { GetBlogPosts } from '../../utils/voluspa';
 import MemberLink from '../../components/MemberLink';
 import Button from '../../components/UI/Button';
+import Spinner from '../../components/UI/Spinner';
+import ObservedImage from '../../components/ObservedImage';
 import { Common, Views } from '../../svg';
 
 import captainsLog from '../../data/captainsLog';
 
 import './styles.css';
-import Braytech from '../../components/Tooltip/UI/Braytech';
 
 function shuffle(array) {
   var currentIndex = array.length,
@@ -33,31 +37,75 @@ function shuffle(array) {
 }
 
 export default function Index() {
-  const [index, setIndex] = useState(0);
+  const viewport = useSelector((state) => state.viewport);
 
+  const supporters = manifest.statistics?.patrons && shuffle([...manifest.statistics.patrons.alpha, ...manifest.statistics.patrons.beta.filter((m) => manifest.statistics.patrons.alpha.indexOf(m) < 0)]).slice(0, viewport.width < 1025 && viewport.width > 600 ? 10 : viewport.width > 600 ? 21 : 7);
+
+  const [changeLogIndex, setChangeLogIndex] = useState(0);
   const logs = [...captainsLog].reverse();
 
-  const supporters = manifest.statistics?.patrons && shuffle([...manifest.statistics.patrons.alpha, ...manifest.statistics.patrons.beta.filter((m) => manifest.statistics.patrons.alpha.indexOf(m) < 0)]).slice(0, 14);
+  function handler_changeLog_onClickPrevious(event) {
+    if (changeLogIndex + 1 === logs.length) {
+      return;
+    }
+
+    setChangeLogIndex(changeLogIndex + 1);
+  }
+
+  function handler_changeLog_onClickNext(event) {
+    if (changeLogIndex === 0) {
+      return;
+    }
+
+    setChangeLogIndex(changeLogIndex - 1);
+  }
+
+  const [blog, setBlog] = useState({
+    loading: true,
+    error: false,
+    posts: [],
+  });
+  const [blogPostsIndex, setBlogPostsIndex] = useState(0);
+
+  function handler_blogPosts_onClickPrevious(event) {
+    if (blogPostsIndex + 1 === logs.length) {
+      return;
+    }
+
+    setBlogPostsIndex(blogPostsIndex + 1);
+  }
+
+  function handler_blogPosts_onClickNext(event) {
+    if (blogPostsIndex === 0) {
+      return;
+    }
+
+    setBlogPostsIndex(blogPostsIndex - 1);
+  }
 
   useEffect(() => {
     window.scrollTo(0, 0);
+
+    async function getBlogPosts() {
+      const response = await GetBlogPosts();
+
+      if (response?.ErrorCode === 1) {
+        setBlog({
+          loading: false,
+          error: false,
+          posts: response.Response,
+        });
+      } else {
+        setBlog({
+          loading: false,
+          error: true,
+          posts: [],
+        });
+      }
+    }
+
+    getBlogPosts();
   }, []);
-
-  function handler_onClickPrevious(event) {
-    if (index + 1 === logs.length) {
-      return;
-    }
-
-    setIndex(index + 1);
-  }
-
-  function handler_onClickNext(event) {
-    if (index === 0) {
-      return;
-    }
-
-    setIndex(index - 1);
-  }
 
   const highlights = [
     {
@@ -157,6 +205,65 @@ export default function Index() {
           </div>
         </div>
       </div>
+      <div className='row development'>
+        <div className='wrapper'>
+          <div className='module changes'>
+            <div className='header'>
+              <div className='text'>
+                <div className='time'>
+                  <time title={logs[changeLogIndex].date}>{fromNow(logs[changeLogIndex].date, false, true)}</time>
+                </div>
+                <h3>{logs[changeLogIndex].version}</h3>
+              </div>
+              <div className='buttons'>
+                <Button action={handler_changeLog_onClickPrevious} disabled={changeLogIndex + 1 === logs.length ? true : false}>
+                  <i className='segoe-mdl-chevron-left' />
+                </Button>
+                <Button action={handler_changeLog_onClickNext} disabled={changeLogIndex === 0 ? true : false}>
+                  <i className='segoe-mdl-chevron-right' />
+                </Button>
+              </div>
+            </div>
+            <BraytechText className='content' value={logs[changeLogIndex].content} />
+          </div>
+          <div className={cx('module', 'blog', { loading: blog.loading })}>
+            {blog.loading ? (
+              <Spinner />
+            ) : blog.posts.length ? (
+              <>
+                <div className='header'>
+                  <div className='text'>
+                    <div className='time'>
+                      <time title={blog.posts[blogPostsIndex].date}>{fromNow(blog.posts[blogPostsIndex].date, false, true)}</time>
+                    </div>
+                    <BraytechText className='summary' value={blog.posts[blogPostsIndex].summary} />
+                    <h3>{blog.posts[blogPostsIndex].name}</h3>
+                  </div>
+                  <div className='buttons'>
+                    <Button action={handler_blogPosts_onClickPrevious} disabled={blogPostsIndex + 1 === blog.posts.length ? true : false}>
+                      <i className='segoe-mdl-chevron-left' />
+                    </Button>
+                    <Button action={handler_blogPosts_onClickNext} disabled={blogPostsIndex === 0 ? true : false}>
+                      <i className='segoe-mdl-chevron-right' />
+                    </Button>
+                  </div>
+                </div>
+                <div className='post'>
+                  {blog.posts[blogPostsIndex].content.map((block, b) =>
+                    block.media ? (
+                      <div key={b} className='block media'>
+                        <ObservedImage padded ratio={block.media.height / block.media.width} src={block.media.storage === 'directus' && `https://directus.upliftnaturereserve.com/bt03/assets/${block.media.privateHash}`} />
+                      </div>
+                    ) : (
+                      <BraytechText key={b} className='block markdown' value={block.markdown} />
+                    )
+                  )}
+                </div>
+              </>
+            ) : null}
+          </div>
+        </div>
+      </div>
       <div className='row about'>
         <div className='wrapper'>
           <div className='module'>
@@ -189,26 +296,6 @@ export default function Index() {
               </ul>
             </div>
           ) : null}
-        </div>
-      </div>
-      <div className='row changes'>
-        <div className='wrapper'>
-          <div className='module'>
-            <h3>{t('Change log')}</h3>
-            <div className='meta'>
-              <div className='text'>
-                <div className='number'>{logs[index].version}</div>
-                <div className='time'>
-                  <time title={logs[index].date}>{fromNow(logs[index].date, false, true)}</time>
-                </div>
-              </div>
-              <div className='buttons'>
-                <Button text={t('Older')} action={handler_onClickPrevious} disabled={index + 1 === logs.length ? true : false} />
-                <Button text={t('Newer')} action={handler_onClickNext} disabled={index === 0 ? true : false} />
-              </div>
-            </div>
-            <BraytechText className='log-content' value={logs[index].content} />
-          </div>
         </div>
       </div>
     </div>

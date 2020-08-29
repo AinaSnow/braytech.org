@@ -22,14 +22,14 @@ import Default from './Default';
 import Equipment from './Equipment';
 import Emblem from './Emblem';
 import Mod from './Mod';
-import SubClass from './SubClass';
+import Subclass from './Subclass';
 import TrialsPassage from './TrialsPassage';
 
 const woolworths = {
   equipment: Equipment,
   emblem: Emblem,
   mod: Mod,
-  'sub-class': SubClass,
+  'sub-class': Subclass,
   'trials-passage': TrialsPassage,
 };
 

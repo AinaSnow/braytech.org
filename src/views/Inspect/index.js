@@ -16,13 +16,15 @@ const FRAMES = {
 
 export default function Inspect() {
   const member = useSelector((state) => state.member);
+
   const location = useLocation();
   const [referrer] = useState(location.state?.from || (member.characterId && `/${member.membershipType}/${member.membershipId}/${member.characterId}/collections`) || '/collections');
-  const { type } = useParams();
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
+  
+  const { type } = useParams();
 
   const Component = FRAMES[type] || Default;
 

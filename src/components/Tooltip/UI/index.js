@@ -4,32 +4,48 @@ import cx from 'classnames';
 
 import { t } from '../../../utils/i18n';
 import manifest from '../../../utils/manifest';
+import { talentGridNodeStepDefinition } from '../../../utils/destinyTalentGrids';
 import ObservedImage from '../../ObservedImage';
 
 import './styles.css';
 
 import Default from './Default';
 import Braytech from './Braytech';
+import Talent from './Talent';
 
 const woolworths = {
   braytech: Braytech,
+  talent: Talent,
 };
 
 function UI({ ...props }) {
   const viewport = useSelector((state) => state.viewport);
 
   const item = {
-    itemHash: props.hash,
-    itemInstanceId: props.instanceid,
-    itemComponents: null,
+    hash: props.hash,
     relatedHash: props.related,
+    talentGridHash: props.talentgridhash,
     quantity: +props.quantity || 1,
     state: +props.state || 0,
     rarity: 'common',
     type: props.type,
   };
 
-  const definition = item.type === 'braytech' ? manifest.BraytechDefinition[item.itemHash] : item.type === 'stat' ? manifest.DestinyStatDefinition[item.itemHash] || manifest.DestinyHistoricalStatsDefinition[item.itemHash] : item.type === 'modifier' ? manifest.DestinyActivityModifierDefinition[item.itemHash] : false;
+  const definition =
+    item.type === 'braytech'
+      ? // Braytech custom definitions
+        manifest.BraytechDefinition[item.hash]
+      : // Stats, either or
+      item.type === 'stat'
+      ? manifest.DestinyStatDefinition[item.hash] || manifest.DestinyHistoricalStatsDefinition[item.hash]
+      : // Activity modifiers
+      item.type === 'modifier'
+      ? manifest.DestinyActivityModifierDefinition[item.hash]
+      : // Talent grid node step
+      item.type === 'talent'
+      ? talentGridNodeStepDefinition(item.talentGridHash, item.hash)
+      : // Nothing
+        false;
 
   if (!definition) {
     return null;
@@ -61,7 +77,7 @@ function UI({ ...props }) {
   return (
     <>
       <div className='acrylic' />
-      <div className='frame ui'>
+      <div className={cx('frame', 'ui', item.type)}>
         <div className='header'>
           <div className='name'>{definition.displayProperties?.name || definition.statName}</div>
           {definition.itemTypeDisplayName ? <div className='kind'>{definition.itemTypeDisplayName}</div> : <div />}

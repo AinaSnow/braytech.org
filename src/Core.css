@@ -57,8 +57,9 @@ table {
   color: #fff;
 }
 
-@import './fonts/Cromwell/styles.css';
+@import './fonts/Aldine/styles.css';
 @import './fonts/Braytech/styles.css';
+@import './fonts/Cromwell/styles.css';
 @import './fonts/Destiny-Symbols/styles.css';
 
 [class^="segoe-uni"], [class*=" segoe-uni"] {

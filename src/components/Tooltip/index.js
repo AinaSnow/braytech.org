@@ -243,7 +243,7 @@ class Tooltip extends React.Component {
       if (this.state.type === 'record') Tooltip = Record;
       if (this.state.type === 'vendor') Tooltip = Vendor;
       if (this.state.type === 'collections-badge') Tooltip = CollectionsBadge;
-      if (['braytech', 'ui', 'modifier', 'stat'].includes(this.state.type)) Tooltip = UI;
+      if (['braytech', 'ui', 'modifier', 'stat', 'talent'].includes(this.state.type)) Tooltip = UI;
     }
 
     return (

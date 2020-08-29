@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import {  useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import manifest from '../../utils/manifest';
 import store from '../../store';
@@ -90,13 +90,6 @@ export default function Inventory(props) {
   const membership = { membershipType: member.membershipType, membershipId: member.membershipId, characterId: member.characterId };
 
   const inventory = member.data.inventory.filter(item => item.characterId ? item.characterId === member.characterId : true);
-
-  const equippedSuper = itemsInBucket(inventory, enums.DestinyInventoryBucket.Subclass, true)[0];
-
-  console.log(equippedSuper)
-
-  
-
 
 
 

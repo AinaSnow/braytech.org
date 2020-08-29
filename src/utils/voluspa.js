@@ -69,6 +69,22 @@ export async function GetNotifications() {
   }
 }
 
+export async function GetBlogPosts() {
+  try {
+    const request = await fetch('https://voluspa.braytech.org/Blog/Posts', defaults);
+
+    if (request.ok) {
+      const response = await request.json();
+
+      return response;
+    } else {
+      return false;
+    }
+  } catch (e) {
+    return false;
+  }
+}
+
 export async function GetGearAsset(reference_id) {
   try {
     const request = await fetch(`https://voluspa.braytech.org/Manifest/gear-asset/?reference_id=${reference_id}`, defaults);

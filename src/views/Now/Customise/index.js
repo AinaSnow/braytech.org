@@ -564,7 +564,7 @@ class Customise extends React.Component {
                                         <div className='description'>{t('An error occurred while attempting to render module: {{moduleName}}', { moduleName: mod.component })}</div>
                                       </div>
                                       <Button className='remove' action={this.handler_removeMod(col.id, mod.id)}>
-                                        <i className='segoe-mdl-cancel1' />
+                                        <i className='segoe-mdl-cancel' />
                                       </Button>
                                     </div>
                                   );
@@ -593,7 +593,7 @@ class Customise extends React.Component {
                                         </div>
                                         {settings ? <ModulesSettings settings={settings} column={col.id} mod={mod.id} setSettings={this.handler_setSettings} /> : null}
                                         <Button className='remove' action={this.handler_removeMod(col.id, mod.id)}>
-                                          <i className='segoe-mdl-cancel1' />
+                                          <i className='segoe-mdl-cancel' />
                                         </Button>
                                       </div>
                                     )}

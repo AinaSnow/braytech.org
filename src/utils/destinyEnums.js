@@ -58,12 +58,6 @@ export const PLATFORM_STRINGS = {
   6: 'nintendo',
 };
 
-export const CLASS_STRINGS = {
-  0: 'titan',
-  1: 'hunter',
-  2: 'warlock',
-};
-
 export const DestinyGender = {
   Male: 0,
   Female: 1,
@@ -77,12 +71,24 @@ export const DestinyClass = {
   Unknown: 3,
 };
 
+export const CLASS_STRINGS = {
+  0: 'titan',
+  1: 'hunter',
+  2: 'warlock',
+};
+
 export const DestinyDamageType = {
   None: 0,
   Kinetic: 1,
   Arc: 2,
   Solar: 3,
   Void: 4,
+};
+
+export const DAMAGE_STRINGS = {
+  2: 'arc',
+  3: 'solar',
+  4: 'void',
 };
 
 export const DestinyTierType = {

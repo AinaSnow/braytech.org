@@ -10,6 +10,7 @@ import manifest from '../../../utils/manifest';
 import * as enums from '../../../utils/destinyEnums';
 import * as utils from '../../../utils/destinyUtils';
 import { classHashToString } from '../../../utils/destinyConverters';
+import { talentGrid, activatedNodes, activatedPath } from '../../../utils/destinyTalentGrids';
 import ObservedImage from '../../../components/ObservedImage';
 import ObservedImageBase64 from '../../../components/ObservedImageBase64';
 import Button from '../../../components/UI/Button';
@@ -587,7 +588,8 @@ class Legend extends React.Component {
                   
                   const subClassItem = equipment.find(item => item.inventory.bucketTypeHash === 3284755031);
 
-                  const subClassInfo = subClassItem && utils.getSubclassPathInfo({ talentGrids: member.data.profile.itemComponents.talentGrids.data[subClassItem.itemInstanceId] }, subClassItem);
+                  const { nodeCategories, nodes } = talentGrid(subClassItem.itemHash, activatedNodes(member.data.profile.itemComponents.talentGrids.data[subClassItem.itemInstanceId].talentGridHash, member.data.profile.itemComponents.talentGrids.data[subClassItem.itemInstanceId]));
+                  const { attunement, ability } = activatedPath(nodeCategories, nodes);
 
                   const loadout = (c.characterId && [
                     equipment.find(item => item.inventory.bucketTypeHash === 1498876634),
@@ -648,10 +650,10 @@ class Legend extends React.Component {
                             })}
                           </div>
                           <div key={i} className='super'>
-                            <div className={cx('icon', `sbp_${subClassInfo && subClassInfo.super.hash}`)}>{subClassInfo && subClassInfo.super.icon}</div>
+                            <div className={cx('icon', `sbp_${ability.sandboxPerkHash}`)}>{ability.icon}</div>
                             <div className='text'>
-                              <div className='name'>{subClassInfo && subClassInfo.super.name}</div>
-                              <div className='description'>{subClassInfo && subClassInfo.super.description}</div>
+                              <div className='name'>{ability.name}</div>
+                              <div className='description'>{ability.description}</div>
                             </div>
                           </div>
                           <div className='loadout'>

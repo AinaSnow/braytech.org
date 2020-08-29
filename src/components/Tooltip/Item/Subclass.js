@@ -1,35 +1,33 @@
 import React from 'react';
 
 import manifest from '../../../utils/manifest';
-import { getSubclassPathInfo } from '../../../utils/destinyUtils';
+import { talentGrid, activatedNodes, activatedPath } from '../../../utils/destinyTalentGrids';
 
-const Subclass = props => {
-  const { itemHash, itemInstanceId, itemComponents } = props;
-
+export default function Subclass({ itemHash, itemComponents }) {
   const definitionItem = manifest.DestinyInventoryItemDefinition[itemHash];
 
-  const subClassInfo = getSubclassPathInfo(itemComponents, { itemHash, itemInstanceId });
+  const { nodeCategories, nodes } = talentGrid(itemHash, activatedNodes(itemComponents.talentGrids.talentGridHash, itemComponents.talentGrids));
+  const { attunement, ability } = activatedPath(nodeCategories, nodes);
 
-  // description as flair string
   const flair = definitionItem.displayProperties?.description !== '' && definitionItem.displayProperties.description;
 
   return (
     <div className='background-overflow'>
-      {subClassInfo ? (
+      {ability ? (
         <div className='super'>
           <div className='path'>
             <div className='line' />
-            <div className='text'>{subClassInfo.name}</div>
+            <div className='text'>{attunement?.name}</div>
             <div className='line' />
           </div>
           <div className='ability'>
             <div className='text'>
-              <div className='name'>{subClassInfo.super.name}</div>
+              <div className='name'>{ability.name}</div>
               <div className='description'>
-                <p>{subClassInfo.super.description}</p>
+                <p>{ability.description}</p>
               </div>
             </div>
-            <div className='icon'>{subClassInfo.super.icon}</div>
+            <div className='icon'>{ability.icon}</div>
           </div>
         </div>
       ) : null}
@@ -39,6 +37,4 @@ const Subclass = props => {
       </div>
     </div>
   );
-};
-
-export default Subclass;
+}

@@ -4,10 +4,12 @@ import cx from 'classnames';
 class ObservedImageInner extends React.Component {
   state = {
     downloaded: false,
-    styles: {}
+    styles: {},
   };
 
-  encodeToBase64 = bmp => {
+  element = React.createRef();
+
+  encodeToBase64 = (bmp) => {
     const canvas = document.createElement('canvas');
     const ctx = canvas.getContext('2d');
 
@@ -16,29 +18,29 @@ class ObservedImageInner extends React.Component {
     ctx.drawImage(bmp.target, 0, 0);
 
     return canvas.toDataURL('image/png');
-  }
+  };
 
-  handler_onLoad = bmp => {
-    const { className = 'image', base64 } = this.props;
+  handler_onLoad = (bmp) => {
+    const { padded, base64 } = this.props;
 
     const ratio = bmp.target.height / bmp.target.width;
 
     const url = base64 ? this.encodeToBase64(bmp) : bmp.target.src;
 
-    if (className.includes('padding')) {
+    if (padded) {
       this.setState({
         downloaded: true,
         styles: {
           paddingBottom: ratio * 100 + '%',
-          backgroundImage: `url(${url})`
-        }
+          backgroundImage: `url(${url})`,
+        },
       });
     } else {
       this.setState({
         downloaded: true,
         styles: {
-          backgroundImage: `url(${url})`
-        }
+          backgroundImage: `url(${url})`,
+        },
       });
     }
 
@@ -48,7 +50,7 @@ class ObservedImageInner extends React.Component {
   };
 
   observe = () => {
-    const { src, ratio, noConstraints } = this.props;
+    const { src, padded, ratio, noConstraints } = this.props;
 
     if (!src) return;
 
@@ -56,16 +58,16 @@ class ObservedImageInner extends React.Component {
       return;
     }
 
-    if (ratio) {
+    if (padded && ratio) {
       this.setState({
         styles: {
-          paddingBottom: ratio * 100 + '%'
-        }
+          paddingBottom: ratio * 100 + '%',
+        },
       });
     }
 
-    this.observer = new IntersectionObserver(entries => {
-      entries.forEach(entry => {
+    this.observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
         if (entry.isIntersecting || noConstraints) {
           this.image = new window.Image();
           this.image.onload = this.handler_onLoad;
@@ -75,7 +77,7 @@ class ObservedImageInner extends React.Component {
       });
     });
 
-    this.observer.observe(this.element);
+    this.observer.observe(this.element.current);
   };
 
   componentDidMount() {
@@ -92,14 +94,14 @@ class ObservedImageInner extends React.Component {
   }
 
   render() {
-    const { src, className = 'image', noConstraints, base64, ...attributes } = this.props;
+    const { src, className = 'image', noConstraints, base64, padded, ratio, ...attributes } = this.props;
 
     return (
       <div
         {...attributes}
-        ref={el => (this.element = el)}
+        ref={this.element}
         className={cx(className, {
-          dl: this.state.downloaded
+          dl: this.state.downloaded,
         })}
         style={this.state.styles}
       />
@@ -110,6 +112,6 @@ class ObservedImageInner extends React.Component {
 // using Key here forces a full component remount when we are given a new
 // src, avoiding weirdness where the src changes but the component is still
 // downloading the old image
-const ObservedImage = props => <ObservedImageInner {...props} key={props.src} />;
+const ObservedImage = (props) => <ObservedImageInner {...props} key={props.src} />;
 
 export default ObservedImage;

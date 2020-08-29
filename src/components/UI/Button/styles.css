@@ -3,11 +3,18 @@
 }
 
 .destiny-key span {
+  position: relative;
   color: #fff;
 }
 
 .wrapper.dark .destiny-key span {
   color: #333;
+}
+
+.destiny-key span.color {
+  position: absolute;
+  padding: 1px;
+  font-size: 90%;
 }
 
 .button {

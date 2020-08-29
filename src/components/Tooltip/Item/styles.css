@@ -521,9 +521,9 @@
 #tooltip .super .path .text {
   padding: 18px 0 14px;
   text-align: center;
-  font-family: var(--font-serif);
+  font-family: 'Aldine 401 BT', serif;
   font-size: 18px;
-  letter-spacing: 4px;
+  letter-spacing: 3px;
   text-transform: uppercase;
   color: rgba(255, 255, 255, 0.6);
 }
