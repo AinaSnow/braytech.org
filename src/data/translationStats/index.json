@@ -1,102 +1,86 @@
 {
   "de": {
-    "translated": 698,
-    "notTranslated": 87,
+    "translated": 688,
+    "notTranslated": 96,
     "added": [],
     "removed": []
   },
   "debug": {
-    "translated": 785,
+    "translated": 784,
     "notTranslated": 0,
     "added": [],
     "removed": []
   },
   "en": {
-    "translated": 785,
+    "translated": 784,
     "notTranslated": 0,
     "added": [],
     "removed": []
   },
   "es-mx": {
-    "translated": 785,
-    "notTranslated": 0,
+    "translated": 775,
+    "notTranslated": 9,
     "added": [],
     "removed": []
   },
   "es": {
-    "translated": 785,
-    "notTranslated": 0,
+    "translated": 775,
+    "notTranslated": 9,
     "added": [],
     "removed": []
   },
   "fr": {
-    "translated": 626,
-    "notTranslated": 159,
+    "translated": 616,
+    "notTranslated": 168,
     "added": [],
     "removed": []
   },
   "it": {
-    "translated": 785,
-    "notTranslated": 0,
+    "translated": 775,
+    "notTranslated": 9,
     "added": [],
     "removed": []
   },
   "ja": {
-    "translated": 573,
-    "notTranslated": 212,
+    "translated": 564,
+    "notTranslated": 220,
     "added": [],
     "removed": []
   },
   "ko": {
-    "translated": 502,
-    "notTranslated": 283,
+    "translated": 492,
+    "notTranslated": 292,
     "added": [],
     "removed": []
   },
   "pl": {
-    "translated": 337,
-    "notTranslated": 448,
-    "added": [
-      "Landing.VOLUSPA.PlayedSeason.Description",
-      "Landing.VOLUSPA.TrackedPlayers.Description"
-    ],
-    "removed": [
-      "Number of players VOLUSPA is tracking through their activities and accomplishments",
-      "Number of tracked players who've played this season"
-    ]
+    "translated": 485,
+    "notTranslated": 299,
+    "added": [],
+    "removed": []
   },
   "pt-br": {
-    "translated": 765,
-    "notTranslated": 20,
+    "translated": 755,
+    "notTranslated": 29,
     "added": [],
     "removed": []
   },
   "ru": {
-    "translated": 785,
-    "notTranslated": 0,
+    "translated": 775,
+    "notTranslated": 9,
     "added": [],
     "removed": []
   },
   "zh-chs": {
-    "translated": 609,
-    "notTranslated": 176,
-    "added": [
-      "Landing.VOLUSPA.PlayedSeason.Description",
-      "Landing.VOLUSPA.TrackedPlayers.Description"
-    ],
-    "removed": [
-      "Number of players VOLUSPA is tracking through their activities and accomplishments",
-      "Number of tracked players who've played this season"
-    ]
+    "translated": 599,
+    "notTranslated": 185,
+    "added": [],
+    "removed": []
   },
   "zh-cht": {
-    "translated": 666,
-    "notTranslated": 119,
-    "added": [
-      "Landing.VOLUSPA.TrackedPlayers.Description"
-    ],
-    "removed": [
-      "Number of players VOLUSPA is tracking through their activities and accomplishments"
-    ]
+    "translated": 657,
+    "notTranslated": 127,
+    "added": [],
+    "removed": []
   }
 }

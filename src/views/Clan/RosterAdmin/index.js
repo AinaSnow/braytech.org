@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
+import cx from 'classnames';
 
 import { t } from '../../../utils/i18n';
 
@@ -11,8 +12,9 @@ import Spinner from '../../../components/UI/Spinner';
 import './styles.css';
 
 export default function AdminView() {
-  const groupMembers = useSelector((state) => state.groupMembers);
+  const viewport = useSelector((state) => state.viewport);
   const auth = useSelector((state) => state.auth);
+  const groupMembers = useSelector((state) => state.groupMembers);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -21,6 +23,9 @@ export default function AdminView() {
   if (!auth) {
     return <NoAuth />;
   }
+
+  const loading = groupMembers.loading && groupMembers.members.length < 1;
+  const error = !groupMembers.loading && groupMembers.error && groupMembers.members.length < 1;
 
   return (
     <>
@@ -39,9 +44,9 @@ export default function AdminView() {
           </>
         ) : null}
       </div>
-      <div className='module'>
-        {groupMembers.loading && groupMembers.members.length < 1 ? <Spinner /> : null}
-        {!groupMembers.loading && groupMembers.error && groupMembers.members.length < 1 ? <div className='info'>{t('There was a network error')}</div> : null}
+      <div className={cx('module', 'roster', { loading: loading || error })}>
+        {loading ? <Spinner mini={viewport.width < 601 ? true : false} /> : null}
+        {error ? <div className='info'>{t('There was a network error')}</div> : null}
         <RosterAdmin />
       </div>
     </>

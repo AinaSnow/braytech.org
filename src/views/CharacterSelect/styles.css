@@ -1,11 +1,8 @@
 #character-select {
-  display: grid;
   padding: 0;
   margin: -40px auto 0;
-  width: 100%;
+  min-height: 100vh;
   overflow: hidden;
-  min-height: calc(100vh - 80px);
-  align-content: start;
 }
 
 #character-select .module.head {
@@ -147,6 +144,12 @@
   pointer-events: none;
 }
 
+#character-select.loading .profile {
+  display: grid;
+  justify-content: center;
+  align-content: center;
+}
+
 
 #character-select .list li .icon,
 #character-select .list li .displayName,
@@ -210,6 +213,10 @@
 
   #character-select .error {
     margin: 0 0 2rem;
+  }
+
+  #character-select.loading .profile {
+    min-height: 300px;
   }
 
   #character-select .profile .user {

@@ -231,8 +231,8 @@ class ChaliceRecipes extends React.Component {
               <div className='module'>
                 <div className='frame' ref={this.ref_chaliceUI}>
                   <div className={cx('flair', { active: Object.values(this.state.slots).filter((s) => s).length > 2 })}>
-                    <ObservedImage className='image padding corner' src='/static/images/extracts/ui/01E3-00000700.png' />
-                    <ObservedImage className='image padding corner active' src='/static/images/extracts/ui/01E3-00000700-A.png' />
+                    <ObservedImage className='image corner' padded src='/static/images/extracts/ui/01E3-00000700.png' />
+                    <ObservedImage className='image corner active' src='/static/images/extracts/ui/01E3-00000700-A.png' />
                     <ObservedImage className='image leviathan' src='/static/images/extracts/ui/01E3-00000702.png' />
                     <ObservedImage className='image leviathan active' src='/static/images/extracts/ui/01E3-00000702-A.png' />
                     <ObservedImage className='image ring-outer' src='/static/images/extracts/ui/01E3-00000777.png' />

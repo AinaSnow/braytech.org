@@ -225,11 +225,12 @@
 
 #index .row.development .header .buttons {
   display: grid;
-  grid-template-columns: 38px 38px;
+  grid-auto-flow: column;
   gap: 3px
 }
 
 #index .row.development .header .buttons .button {
+  width: 38px;
   display: grid;
   justify-content: center;
 }
@@ -309,19 +310,62 @@
   gap: 2rem;
 }
 
-#index .row.development .blog .post .block.media {
+#index .row.development .blog .post .block.files {
+  display: grid;
+  gap: 2rem;
+}
+
+#index .row.development .blog .post .block.files .file {
   background-color: rgba(255, 255, 255, 0.1);
 }
 
-#index .row.development .blog .post .block.media .image {
-  position: relative;
+#index .row.development .blog .post .block.text p {
+  max-width: 1024px;
+  line-height: 1.6;
 }
 
+#index .row.development .blog .posts {
+  
+}
 
+#index .row.development .blog .posts li {
+  
+}
 
+#index .row.development .blog .posts li time,
+#index .row.development .blog .posts li .summary {
+  line-height: 1.4;
+  color: rgba(255, 255, 255, 0.6);
+}
 
+#index .row.development .blog .posts li time {
+  display: block;
+}
 
+#index .row.development .blog .posts li h4 {
+  display: inline-block;
+  position: relative;
+  margin: 4px 0 8px;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 18px;
+  cursor: pointer;
+}
 
+#index .row.development .blog .posts li h4::before {
+  content: " ";
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background-color: rgb(255, 255, 255);
+  opacity: 0.2;
+}
+
+#index .row.development .blog .posts li h4:hover::before {
+  background-color: rgb(255, 255, 255);
+  opacity: 0.6;
+}
 
 
 
@@ -466,8 +510,17 @@
     top: calc(16rem + 15px);
   }
 
+  #index .row.development .module {
+    min-height: unset;
+  }
+
+  #index .row.development .changes .header {
+    margin: 0;
+  }
+
   #index .row.development .blog .header {
     column-gap: 1rem;
+    margin: 0;
   }
 
   #index .row.development .header .text {

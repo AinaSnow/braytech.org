@@ -1,5 +1,12 @@
 #clan.admin .buff .content {
   row-gap: 2rem;
+  grid-template-rows: min-content 1fr;
+}
+
+#clan.admin .buff .content .module.roster.loading {
+  display: grid;
+  justify-content: center;
+  align-content: center;
 }
 
 #clan.admin .download-data {

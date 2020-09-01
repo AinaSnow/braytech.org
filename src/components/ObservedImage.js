@@ -1,6 +1,17 @@
 import React from 'react';
 import cx from 'classnames';
 
+function encodeToBase64(bmp) {
+  const canvas = document.createElement('canvas');
+  const ctx = canvas.getContext('2d');
+
+  canvas.height = bmp.target.height;
+  canvas.width = bmp.target.width;
+  ctx.drawImage(bmp.target, 0, 0);
+
+  return canvas.toDataURL('image/png');
+}
+
 class ObservedImageInner extends React.Component {
   state = {
     downloaded: false,
@@ -9,23 +20,12 @@ class ObservedImageInner extends React.Component {
 
   element = React.createRef();
 
-  encodeToBase64 = (bmp) => {
-    const canvas = document.createElement('canvas');
-    const ctx = canvas.getContext('2d');
-
-    canvas.height = bmp.target.height;
-    canvas.width = bmp.target.width;
-    ctx.drawImage(bmp.target, 0, 0);
-
-    return canvas.toDataURL('image/png');
-  };
-
   handler_onLoad = (bmp) => {
     const { padded, base64 } = this.props;
 
     const ratio = bmp.target.height / bmp.target.width;
 
-    const url = base64 ? this.encodeToBase64(bmp) : bmp.target.src;
+    const url = base64 ? encodeToBase64(bmp) : bmp.target.src;
 
     if (padded) {
       this.setState({
@@ -50,7 +50,7 @@ class ObservedImageInner extends React.Component {
   };
 
   observe = () => {
-    const { src, padded, ratio, noConstraints } = this.props;
+    const { src, padded, ratio, noConstraints, base64 } = this.props;
 
     if (!src) return;
 
@@ -70,6 +70,7 @@ class ObservedImageInner extends React.Component {
       entries.forEach((entry) => {
         if (entry.isIntersecting || noConstraints) {
           this.image = new window.Image();
+          this.image.crossOrigin = base64 && 'Anonymous';
           this.image.onload = this.handler_onLoad;
 
           this.image.src = src;
@@ -101,6 +102,7 @@ class ObservedImageInner extends React.Component {
         {...attributes}
         ref={this.element}
         className={cx(className, {
+          padded,
           dl: this.state.downloaded,
         })}
         style={this.state.styles}
@@ -109,9 +111,9 @@ class ObservedImageInner extends React.Component {
   }
 }
 
-// using Key here forces a full component remount when we are given a new
+// using key here forces a full component remount when we are given a new
 // src, avoiding weirdness where the src changes but the component is still
 // downloading the old image
-const ObservedImage = (props) => <ObservedImageInner {...props} key={props.src} />;
+const ObservedImage = (props) => <ObservedImageInner key={props.src} {...props} />;
 
 export default ObservedImage;

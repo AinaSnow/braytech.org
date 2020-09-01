@@ -1,6 +1,6 @@
 @font-face {
   font-family: 'Segoe-MDL';
-  src: url('Segoe-MDL.woff?spyo8q') format('woff');
+  src: url('Segoe-MDL.woff?ln10aa') format('woff');
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -74,4 +74,7 @@
 }
 .segoe-mdl-character-locked:before {
   content: '\f400';
+}
+.segoe-mdl-news:before {
+  content: "\f581";
 }

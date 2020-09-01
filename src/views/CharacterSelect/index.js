@@ -55,7 +55,7 @@ class CharacterSelect extends React.Component {
     const savedProfile = ls.get('setting.profile') || {};
 
     const profileCharacterSelect = loading ? (
-      <Spinner />
+      <Spinner mini={viewport.width < 601 ? true : false} />
     ) : member.data && member.characterId ? (
       <>
         <div className='sub-header'>

@@ -1,77 +1,54 @@
 import React from 'react';
-import { compose } from 'redux';
-import { connect } from 'react-redux';
-import { withTranslation } from 'react-i18next';
+import { useSelector } from 'react-redux';
 
+import { t } from '../../../utils/i18n';
 import { BungieAuthButton } from '../../BungieAuth';
 import DismissTip from '../../UI/DismissTip';
 
 import './styles.css';
 
-class AuthUpsell extends React.Component {
-  render() {
-    const { t, member } = this.props;
+export default function AuthUpsell() {
+  const member = useSelector((state) => state.member);
 
-    return (
-      <div className='wrap'>
-        <div className='headline'>{t('Hey {{displayName}}, did you know you can authenticate Braytech with Bungie.net for access to more features', { displayName: member.data.profile.profile.data.userInfo.displayName })}</div>
-        <div className='text'>
-          <p>{t("Most of Braytech's features are available to all users and depend on publically available data, but some of Destiny's features require more explicit access permissions which you can grant to Braytech by authenticating with Bungie.net.")}</p>
-          <ul className='feature-sell'>
-            <li>
-              <div className='icon pursuits' />
-              <div className='text'>
-                <div className='name'>{t('Pursuits')}</div>
-                <div className='description'>
-                  <p>{t('Quests and bounties, step by step, reward by reward')}</p>
-                </div>
+  return (
+    <div className='wrap'>
+      <div className='headline'>{t('UserModules.AuthUpsell.Headline', { displayName: member.data.profile.profile.data.userInfo.displayName })}</div>
+      <div className='text'>
+        <p>{t('UserModules.AuthUpsell.Text')}</p>
+        <ul className='feature-sell'>
+          <li>
+            <div className='icon pursuits' />
+            <div className='text'>
+              <div className='name'>{t('Quests')}</div>
+              <div className='description'>
+                <p>{t('UserModules.AuthUpsell.Upsell1.Description')}</p>
               </div>
-            </li>
-            <li>
-              <div className='icon artifact' />
-              <div className='text'>
-                <div className='name'>{t('Seasonal artifact')}</div>
-                <div className='description'>
-                  <p>{t('Review your unlocks and monitor your progress')}</p>
-                </div>
+            </div>
+          </li>
+          <li>
+            <div className='icon admin' />
+            <div className='text'>
+              <div className='name'>{t('Clan Admin')}</div>
+              <div className='description'>
+                <p>{t('UserModules.AuthUpsell.Upsell2.Description')}</p>
               </div>
-            </li>
-            <li>
-              <div className='icon admin' />
-              <div className='text'>
-                <div className='name'>{t('Clan Admin')}</div>
-                <div className='description'>
-                  <p>{t('Minimal though powerful clan management for rapid sorting and member actions')}</p>
-                </div>
+            </div>
+          </li>
+          <li>
+            <div className='icon inventory' />
+            <div className='text'>
+              <div className='name'>{t('Inventory')}</div>
+              <div className='description'>
+                <p>{t('UserModules.AuthUpsell.Upsell3.Description')}</p>
               </div>
-            </li>
-            <li>
-              <div className='icon inventory' />
-              <div className='text'>
-                <div className='name'>{t('Inventory')}</div>
-                <div className='description'>
-                  <p>{t('Get helpful reminders regarding your soon to be overflowing postmaster')}</p>
-                </div>
-              </div>
-            </li>
-          </ul>
-        </div>
-        <div className='actions'>
-          <BungieAuthButton />
-          <DismissTip value='AuthUpsellModule' />
-        </div>
+            </div>
+          </li>
+        </ul>
       </div>
-    );
-  }
+      <div className='actions'>
+        <BungieAuthButton />
+        <DismissTip value='AuthUpsellModule' />
+      </div>
+    </div>
+  );
 }
-
-function mapStateToProps(state, ownProps) {
-  return {
-    member: state.member
-  };
-}
-
-export default compose(
-  connect(mapStateToProps),
-  withTranslation()
-)(AuthUpsell);

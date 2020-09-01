@@ -90,7 +90,7 @@ export default function Clan(props) {
   const Component = views[view];
 
   return (
-    <div className={cx('view', view, { error: view === 'no-clan' || view === 'viewport-width' })} id='clan'>
+    <div className={cx('view', view, { center: view === 'roster' || view === 'admin', error: view === 'no-clan' || view === 'viewport-width' })} id='clan'>
       <div className='buff'>
         <NavLinks />
         <div className='content'>

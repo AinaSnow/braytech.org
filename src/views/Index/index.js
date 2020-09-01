@@ -12,7 +12,7 @@ import Spinner from '../../components/UI/Spinner';
 import ObservedImage from '../../components/ObservedImage';
 import { Common, Views } from '../../svg';
 
-import captainsLog from '../../data/captainsLog';
+import captainsLog from '../../data/captains-log';
 
 import './styles.css';
 
@@ -64,23 +64,45 @@ export default function Index() {
     loading: true,
     error: false,
     posts: [],
+    index: 0,
+    list: false,
   });
-  const [blogPostsIndex, setBlogPostsIndex] = useState(0);
+
+  function handler_blogPosts_onClickToggleList(event) {
+    setBlog((state) => ({
+      ...state,
+      list: !state.list,
+    }));
+  }
+
+  const handler_blogPosts_onClickReadPost = (index) => (event) => {
+    setBlog((state) => ({
+      ...state,
+      list: false,
+      index,
+    }));
+  };
 
   function handler_blogPosts_onClickPrevious(event) {
-    if (blogPostsIndex + 1 === logs.length) {
+    if (blog.index + 1 === logs.length) {
       return;
     }
 
-    setBlogPostsIndex(blogPostsIndex + 1);
+    setBlog((state) => ({
+      ...state,
+      index: state.index + 1,
+    }));
   }
 
   function handler_blogPosts_onClickNext(event) {
-    if (blogPostsIndex === 0) {
+    if (blog.index === 0) {
       return;
     }
 
-    setBlogPostsIndex(blogPostsIndex - 1);
+    setBlog((state) => ({
+      ...state,
+      index: state.index - 1,
+    }));
   }
 
   useEffect(() => {
@@ -90,17 +112,17 @@ export default function Index() {
       const response = await GetBlogPosts();
 
       if (response?.ErrorCode === 1) {
-        setBlog({
+        setBlog((state) => ({
+          ...state,
           loading: false,
           error: false,
           posts: response.Response,
-        });
+        }));
       } else {
-        setBlog({
-          loading: false,
+        setBlog((state) => ({
+          ...state,
           error: true,
-          posts: [],
-        });
+        }));
       }
     }
 
@@ -164,9 +186,9 @@ export default function Index() {
         <div className='wrapper'>
           <div className='large-text'>
             <div className='name'>Braytech</div>
-            <div className='description'>{t('Landing.Flair')}</div>
+            <div className='description'>{t('Landing.Header.Flair')}</div>
             <Link className='button cta' to='/now'>
-              <div className='text'>{t('Select your character')}</div>
+              <div className='text'>{t('Landing.Header.Action')}</div>
               <i className='segoe-mdl-arrow-right' />
             </Link>
           </div>
@@ -226,41 +248,70 @@ export default function Index() {
             </div>
             <BraytechText className='content' value={logs[changeLogIndex].content} />
           </div>
-          <div className={cx('module', 'blog', { loading: blog.loading })}>
+          <div className={cx('module', 'blog', { loading: blog.loading || blog.error })}>
             {blog.loading ? (
               <Spinner />
             ) : blog.posts.length ? (
-              <>
-                <div className='header'>
-                  <div className='text'>
-                    <div className='time'>
-                      <time title={blog.posts[blogPostsIndex].date}>{fromNow(blog.posts[blogPostsIndex].date, false, true)}</time>
+              blog.list ? (
+                <>
+                  <div className='header'>
+                    <div className='text'>
+                      <div>{t('Landing.Blog.AllPosts')}</div>
+                      <h3>{t('Landing.Blog')}</h3>
                     </div>
-                    <BraytechText className='summary' value={blog.posts[blogPostsIndex].summary} />
-                    <h3>{blog.posts[blogPostsIndex].name}</h3>
                   </div>
-                  <div className='buttons'>
-                    <Button action={handler_blogPosts_onClickPrevious} disabled={blogPostsIndex + 1 === blog.posts.length ? true : false}>
-                      <i className='segoe-mdl-chevron-left' />
-                    </Button>
-                    <Button action={handler_blogPosts_onClickNext} disabled={blogPostsIndex === 0 ? true : false}>
-                      <i className='segoe-mdl-chevron-right' />
-                    </Button>
-                  </div>
-                </div>
-                <div className='post'>
-                  {blog.posts[blogPostsIndex].content.map((block, b) =>
-                    block.media ? (
-                      <div key={b} className='block media'>
-                        <ObservedImage padded ratio={block.media.height / block.media.width} src={block.media.storage === 'directus' && `https://directus.upliftnaturereserve.com/bt03/assets/${block.media.privateHash}`} />
+                  <ul className='posts'>
+                    {blog.posts.map((post, p) => (
+                      <li key={p}>
+                        <time title={post.date}>{fromNow(post.date, false, true)}</time>
+                        <h4 onClick={handler_blogPosts_onClickReadPost(p)}>{post.name}</h4>
+                        <BraytechText className='summary' value={post.summary} />
+                      </li>
+                    ))}
+                  </ul>
+                </>
+              ) : (
+                <>
+                  <div className='header'>
+                    <div className='text'>
+                      <div className='time'>
+                        <time title={blog.posts[blog.index].date}>{fromNow(blog.posts[blog.index].date, false, true)}</time>
                       </div>
-                    ) : (
-                      <BraytechText key={b} className='block markdown' value={block.markdown} />
-                    )
-                  )}
-                </div>
-              </>
-            ) : null}
+                      <BraytechText className='summary' value={blog.posts[blog.index].summary} />
+                      <h3>{blog.posts[blog.index].name}</h3>
+                    </div>
+                    <div className='buttons'>
+                      <Button action={handler_blogPosts_onClickToggleList}>
+                        <i className='segoe-mdl-news' />
+                      </Button>
+                      <Button action={handler_blogPosts_onClickPrevious} disabled={blog.index + 1 === blog.posts.length ? true : false}>
+                        <i className='segoe-mdl-chevron-left' />
+                      </Button>
+                      <Button action={handler_blogPosts_onClickNext} disabled={blog.index === 0 ? true : false}>
+                        <i className='segoe-mdl-chevron-right' />
+                      </Button>
+                    </div>
+                  </div>
+                  <div className='post'>
+                    {blog.posts[blog.index].content.map((block, b) =>
+                      block.files.length ? (
+                        <div key={b} className='block files'>
+                          {block.files.map((file, f) => (
+                            <div key={f} className='file'>
+                              <ObservedImage padded ratio={file.height / file.width} src={file.storage === 'directus' && `https://directus.upliftnaturereserve.com/bt03/assets/${file.privateHash}`} />
+                            </div>
+                          ))}
+                        </div>
+                      ) : (
+                        <BraytechText key={b} className='block text' value={block.text} />
+                      )
+                    )}
+                  </div>
+                </>
+              )
+            ) : (
+              <div className='info'>{t('Landing.Blog.Error')}</div>
+            )}
           </div>
         </div>
       </div>

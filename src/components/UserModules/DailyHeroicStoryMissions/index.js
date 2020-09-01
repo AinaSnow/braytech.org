@@ -27,7 +27,7 @@ export default function DailyHeroicStoryMissions() {
       </div>
       <div className='text'>
         <p>
-          <em>{t('Revisit the trials of times past. Reconcile with these emotions and challenge yourself to do better.')}</em>
+          <em>{t('UserModules.DailyHeroicStoryMissions.Description')}</em>
         </p>
       </div>
       <h4>{t('Available activities')}</h4>

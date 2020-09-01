@@ -76,7 +76,7 @@ export default function CrucibleRotators() {
       </div>
       <div className='text'>
         <p>
-          <em>{t('The following Crucible modes are currently in rotation and available for you to test your vigour in against other Guardians.')}</em>
+          <em>{t('UserModules.CrucibleRotators.Description')}</em>
         </p>
       </div>
       <h4>{t('Rotator playlists')}</h4>

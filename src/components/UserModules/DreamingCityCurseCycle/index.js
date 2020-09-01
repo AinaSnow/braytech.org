@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { t } from '../../../utils/i18n';
+import { t, BraytechText } from '../../../utils/i18n';
 import { Miscellaneous } from '../../../svg';
 
 import './styles.css';
@@ -24,12 +24,7 @@ export default function DreamingCityCurseCycle({ cycleInfo }) {
         <div>{t("Savathûn's Curse")}</div>
       </div>
       <h3>{rotation[cycleInfo.week.curse].strength}</h3>
-      <div className='text'>
-        <p>{t('The Dreaming City is in stage {{week}} of its ongoing curse.', { week: cycleInfo.week.curse })}</p>
-        <p>
-          <em>{t("Savathûn's Curse: implemented with Riven's dying breath and reset with every death of Dûl Incaru.")}</em>
-        </p>
-      </div>
+      <BraytechText className='text' value={t("UserModules.DreamingCityCurseCycle.Description", { week: cycleInfo.week.curse })} />
       <div className='icon'>
         <Miscellaneous.CurseCycle />
       </div>

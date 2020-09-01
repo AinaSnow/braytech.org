@@ -50,7 +50,7 @@ export default function DailyVanguardModifiers() {
     return (
       <div className='user-module daily-vanguard-modifiers'>
         <div className='sub-header'>
-          <div>{t('Vanguard Ops')}</div>
+          <div>{t('UserModules.DailyVanguardModifiers.Name')}</div>
         </div>
         <div className='text'>
           <p>
@@ -83,11 +83,11 @@ export default function DailyVanguardModifiers() {
     return (
       <div className='user-module daily-vanguard-modifiers'>
         <div className='sub-header'>
-          <div>{t('Vanguard Ops')}</div>
+          <div>{t('UserModules.DailyVanguardModifiers.Name')}</div>
         </div>
         <div className='text'>
           <p>
-            <em>{t('Vanguard Strikes are unavailable for this character.')}</em>
+            <em>{t('UserModules.DailyVanguardModifiers.Unavailable')}</em>
           </p>
         </div>
       </div>

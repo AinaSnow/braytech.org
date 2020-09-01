@@ -8,11 +8,11 @@ function goToTop() {
 }
 
 export function linkHelper(props) {
-  const url = new URL(props.href);
+  const url = new URL(props.href.includes('https://') ? props.href : `${window.location.origin}${props.href}`);
 
   if (url.hostname === window.location.hostname) {
     return (
-      <Link className='hyperlink' to={url.pathname} onClick={goToTop}>
+      <Link className='hyperlink' to={`${url.pathname}${url.search}`} onClick={goToTop}>
         {props.children}
       </Link>
     );

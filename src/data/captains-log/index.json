@@ -1238,5 +1238,20 @@
     "date": "2020-08-26T14:43:58.077Z",
     "version": "2.31.19",
     "content": "- brand new subclass version of the _Inspect_ view\n  - currently, this view can only be accessed through the _Character Equipment_ module for the _Now_ view as subclasses just aren't really exposed anywhere else...\n - a lot of upgrades to how subclass info is handled and prepared"
+  },
+  {
+    "date": "2020-08-29T18:45:22.046Z",
+    "version": "2.31.26",
+    "content": "- added a blog"
+  },
+  {
+    "date": "2020-08-30T07:31:50.542Z",
+    "version": "2.31.27",
+    "content": "- improved blog\n- breaking changes to base layout components\n- common UI improvements"
+  },
+  {
+    "date": "2020-08-31T13:14:17.408Z",
+    "version": "2.31.30",
+    "content": "- additions to _Content Vault_ view"
   }
 ]

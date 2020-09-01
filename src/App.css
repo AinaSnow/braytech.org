@@ -17,6 +17,8 @@
   --ui-scale: var(--ui-scale-1);
   --ui-scale-1: 1.017;
   --ui-scale-2: 1.05;
+  --header-height: 152px;
+  --view-height: calc(100vh - var(--header-height));
   --platform-xbox: #4CAF50;
   --platform-playstation: #3F51B5;
   --platform-steam: #165b83;
@@ -27,16 +29,30 @@
 ;
 }
 
+@media screen and (max-width: 600px) {
+  #root {
+    --header-height: 112px;
+  }
+}
+
 #root .main {
-  min-height: calc(100vh - 82px);
+  min-height: 100vh;
 }
 
 .view {
-  display: flex;
+  margin: 0 auto;
   padding: 0 3rem;
   width: 100%;
-  margin: 0 auto;
   max-width: 1920px;
+  min-height: var(--view-height);
+  display: grid;
+  align-items: start;
+  align-content: start;
+}
+
+.view.center {
+  align-items: stretch;
+  align-content: stretch;
 }
 
 #root > .wrapper {
@@ -116,7 +132,7 @@ p code {
   line-height: 1;
 }
 
-.image:not(.padding) {
+.image:not(.padded) {
   position: absolute;
   top: 0;
   left: 0;
@@ -129,7 +145,7 @@ p code {
   transition: opacity 0.5s;
 }
 
-.image.padding {
+.image.padded {
   position: relative;
   width: 100%;
   background-repeat: no-repeat;

@@ -1,5 +1,12 @@
 #clan.roster .buff .content {
   row-gap: 2rem;
+  grid-template-rows: min-content 1fr;
+}
+
+#clan.roster .buff .content .module.roster.loading {
+  display: grid;
+  justify-content: center;
+  align-content: center;
 }
 
 @media screen and (max-width: 600px) {

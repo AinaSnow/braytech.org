@@ -71,7 +71,11 @@ export async function GetNotifications() {
 
 export async function GetBlogPosts() {
   try {
-    const request = await fetch('https://voluspa.braytech.org/Blog/Posts', defaults);
+    const request = await fetch('https://voluspa.braytech.org/Blog/Posts', {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
 
     if (request.ok) {
       const response = await request.json();

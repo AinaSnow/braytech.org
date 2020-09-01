@@ -12,7 +12,6 @@ import * as utils from '../../../utils/destinyUtils';
 import { classHashToString } from '../../../utils/destinyConverters';
 import { talentGrid, activatedNodes, activatedPath } from '../../../utils/destinyTalentGrids';
 import ObservedImage from '../../../components/ObservedImage';
-import ObservedImageBase64 from '../../../components/ObservedImageBase64';
 import Button from '../../../components/UI/Button';
 import Checkbox from '../../../components/UI/Checkbox';
 import Spinner from '../../../components/UI/Spinner';
@@ -663,7 +662,7 @@ class Legend extends React.Component {
                                   return (
                                     <li key={i}>
                                       <div className='icon'>
-                                        <ObservedImageBase64 noConstraints src={`https://www.bungie.net${item.displayProperties.icon}`} />
+                                        <ObservedImage base64 noConstraints src={`https://www.bungie.net${item.displayProperties.icon}`} />
                                       </div>
                                       <div className='text'>
                                         <div className='name'>{item.displayProperties.name}</div>
