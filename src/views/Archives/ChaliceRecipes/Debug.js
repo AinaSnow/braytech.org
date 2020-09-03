@@ -6,7 +6,7 @@ import { withTranslation } from 'react-i18next';
 import manifest from '../../../utils/manifest';
 import Items from '../../../components/Items';
 
-import ChaliceCombos from '../../../data/chaliceData';
+import ChaliceCombos from '../../../data/chalice-data';
 
 import './styles.css';
 

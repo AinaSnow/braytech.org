@@ -55,27 +55,28 @@ class Test extends React.Component {
     // const reducedRecords = [...this.props.lists.nodes.reduce((a, v) => [...a, manifest.DestinyPresentationNodeDefinition[v].children.records.map((c) => c.recordHash)], []).flat(), ...this.props.list.records];
     //console.log(DestinyContentVault[0])
     //selectedVault.bucketHash || selectedVault.placeHash || selectedVault.activityHash || selectedVault.activityModeHash
-    console.log(`[${
-      DestinyContentVault[0].vault.map((place) => {
-        return `{
-          name: '${place.name}',
-          slug: '${place.slug}',
-        buckets: {
-nodes: [
-      ${place.buckets.nodes.map((hash) => `${hash}, // ${manifest.DestinyPresentationNodeDefinition[hash].displayProperties.name}`).join('\n')}
-    ],
-    collectibles: [
-      ${place.buckets.collectibles.map((hash) => `${hash}, // ${manifest.DestinyCollectibleDefinition[hash].displayProperties.name}`).join('\n')}
-    ],
-    records: [
-      ${place.buckets.records.map((hash) => `${hash}, // ${manifest.DestinyRecordDefinition[hash].displayProperties.name}`).join('\n')}
-    ],
-  }
-},`;
-        })
-        
-        .join('\n')
-      }]`);
+//     console.log(
+//       `[${DestinyContentVault[0].vault
+//         .map((place) => {
+//           return `{
+//           name: '${place.name}',
+//           slug: '${place.slug}',
+//         buckets: {
+// nodes: [
+//       ${place.buckets.nodes.map((hash) => `${hash}, // ${manifest.DestinyPresentationNodeDefinition[hash].displayProperties.name}`).join('\n')}
+//     ],
+//     collectibles: [
+//       ${place.buckets.collectibles.map((hash) => `${hash}, // ${manifest.DestinyCollectibleDefinition[hash].displayProperties.name}`).join('\n')}
+//     ],
+//     records: [
+//       ${place.buckets.records.map((hash) => `${hash}, // ${manifest.DestinyRecordDefinition[hash].displayProperties.name}`).join('\n')}
+//     ],
+//   }
+// },`;
+//         })
+
+//         .join('\n')}]`
+//     );
 
     // const data = [
     //   { id: 1, season: 1, week: 2, date: null, sales: 4190156464, location: null },
@@ -451,13 +452,13 @@ nodes: [
     //             item: {
     //               id: sale.id,
     //               itemHash: sale.sales
-    //             }                
+    //             }
     //           }
     //         ]
     //       }
     //     ];
     //   }
-      
+
     //   return [
     //     ...seasons,
     //     {
@@ -524,6 +525,798 @@ nodes: [
     // console.log(lol)
     // console.log(lol.map(week => Object.values(week).join('  ')).join('\n'))
 
+    // const locations = [
+    //   { id: 0, world: 'Unknown', region: 'Unknown', x: '0', y: '0', description: 'His will is not his own' },
+    //   { id: 1, world: 'Edz', region: 'Winding Cove', x: '0.35', y: '0.67', description: 'Nestled in the uppermost corner, beneath the greater hull of a crashed Fallen dropship.' },
+    //   { id: 2, world: 'Titan', region: 'The Rig', x: '0.6', y: '0.45', description: 'Out of sight, out of mind, in an abandoned and unused room overlooking the Methane ocean.' },
+    //   { id: 3, world: 'Nessus', region: "Watcher's Grave", x: '0.63', y: '0.18', description: 'Aloft the thickest branch of a red-leafed tree, overlooking the greater area.' },
+    //   { id: 4, world: 'Io', region: "Giant's Scar", x: '0.74', y: '0.32', description: 'Dwelling in a cave along the north-western wall.' },
+    //   { id: 5, world: 'Tower', region: 'Tower Hangar', x: '0.61', y: '0.31', description: 'Beside an emergency stairwell, behind Arach Jalaal of Dead Orbit.' },
+    // ];
+
+    // const history = [
+    //   // {
+    //   //   "date": "20180505",
+    //   //   "location": "nessus"
+    //   // },
+    //   // {
+    //   //   "date": "20180519",
+    //   //   "location": "tower"
+    //   // },
+    //   // {
+    //   //   "date": "20180525",
+    //   //   "location": "io"
+    //   // },
+    //   // {
+    //   //   "date": "20180601",
+    //   //   "location": "titan"
+    //   // },
+    //   // {
+    //   //   "date": "20180608",
+    //   //   "location": "tower"
+    //   // },
+    //   // {
+    //   //   "date": "20180615",
+    //   //   "location": "edz"
+    //   // },
+    //   // {
+    //   //   "date": "20180622",
+    //   //   "location": "tower"
+    //   // },
+    //   // {
+    //   //   "date": "20180629",
+    //   //   "location": "nessus"
+    //   // },
+    //   // {
+    //   //   "date": "20180706",
+    //   //   "location": "titan"
+    //   // },
+    //   // {
+    //   //   "date": "20180713",
+    //   //   "location": "tower"
+    //   // },
+    //   // {
+    //   //   "date": "20180720",
+    //   //   "location": "io"
+    //   // },
+    //   // {
+    //   //   "date": "20180727",
+    //   //   "location": "edz"
+    //   // },
+    //   // {
+    //   //   "date": "20180803",
+    //   //   "location": "nessus"
+    //   // },
+    //   // {
+    //   //   "date": "20180810",
+    //   //   "location": "tower"
+    //   // },
+    //   // {
+    //   //   "date": "20180818",
+    //   //   "location": "io"
+    //   // },
+    //   // {
+    //   //   "date": "20180824",
+    //   //   "location": "titan"
+    //   // },
+    //   // {
+    //   //   "date": "20180831",
+    //   //   "location": "edz"
+    //   // },
+    //   // {
+    //   //   "date": "20180907",
+    //   //   "location": "tower"
+    //   // },
+    //   // {
+    //   //   "date": "20180914",
+    //   //   "location": "edz"
+    //   // },
+    //   // {
+    //   //   "date": "20180921",
+    //   //   "location": "nessus"
+    //   // },
+    //   // {
+    //   //   "date": "20180928",
+    //   //   "location": "tower"
+    //   // },
+    //   // {
+    //   //   "date": "20181005",
+    //   //   "location": "io"
+    //   // },
+    //   // {
+    //   //   "date": "20181013",
+    //   //   "location": "titan"
+    //   // },
+    //   // {
+    //   //   "date": "20181019",
+    //   //   "location": "io"
+    //   // },
+    //   // {
+    //   //   "date": "20181026",
+    //   //   "location": "edz"
+    //   // },
+    //   // {
+    //   //   "date": "20181103",
+    //   //   "location": "nessus"
+    //   // },
+    //   // {
+    //   //   "date": "20181109",
+    //   //   "location": "io"
+    //   // },
+    //   // {
+    //   //   "date": "20181117",
+    //   //   "location": "titan"
+    //   // },
+    //   // {
+    //   //   "date": "20181123",
+    //   //   "location": "edz"
+    //   // },
+    //   // {
+    //   //   "date": "20181130",
+    //   //   "location": "nessus"
+    //   // },
+    //   // {
+    //   //   "date": "20181217",
+    //   //   "location": "tower"
+    //   // },
+    //   // {
+    //   //   "date": "20181217",
+    //   //   "location": "io"
+    //   // },
+    //   // {
+    //   //   "date": "20181221",
+    //   //   "location": "tower"
+    //   // },
+    //   // {
+    //   //   "date": "20190101",
+    //   //   "location": "titan"
+    //   // },
+    //   // {
+    //   //   "date": "20190111",
+    //   //   "location": "tower"
+    //   // },
+    //   {
+    //     date: '20190118',
+    //     location: 'io',
+    //   },
+    //   {
+    //     date: '20190125',
+    //     location: 'titan',
+    //   },
+    //   {
+    //     date: '20190201',
+    //     location: 'edz',
+    //   },
+    //   {
+    //     date: '20190208',
+    //     location: 'tower',
+    //   },
+    //   {
+    //     date: '20190215',
+    //     location: 'edz',
+    //   },
+    //   {
+    //     date: '20190222',
+    //     location: 'io',
+    //   },
+    //   {
+    //     date: '20190301',
+    //     location: 'nessus',
+    //   },
+    //   {
+    //     date: '20190308',
+    //     location: 'tower',
+    //   },
+    //   {
+    //     date: '20190315',
+    //     location: 'titan',
+    //   },
+    //   {
+    //     date: '20190322',
+    //     location: 'edz',
+    //   },
+    //   {
+    //     date: '20190329',
+    //     location: 'tower',
+    //   },
+    //   {
+    //     date: '20190405',
+    //     location: 'titan',
+    //   },
+    //   {
+    //     date: '20190412',
+    //     location: 'tower',
+    //   },
+    //   {
+    //     date: '20190419',
+    //     location: 'edz',
+    //   },
+    //   {
+    //     date: '20190426',
+    //     location: 'titan',
+    //   },
+    //   {
+    //     date: '20190503',
+    //     location: 'io',
+    //   },
+    //   {
+    //     date: '20190510',
+    //     location: 'tower',
+    //   },
+    //   {
+    //     date: '20190517',
+    //     location: 'titan',
+    //   },
+    //   {
+    //     date: '20190524',
+    //     location: 'edz',
+    //   },
+    //   {
+    //     date: '20190531',
+    //     location: 'tower',
+    //   },
+    //   {
+    //     date: '20190607',
+    //     location: 'nessus',
+    //   },
+    //   {
+    //     date: '20190614',
+    //     location: 'nessus',
+    //   },
+    //   {
+    //     date: '20190621',
+    //     location: 'edz',
+    //   },
+    //   {
+    //     date: '20190628',
+    //     location: 'tower',
+    //   },
+    //   {
+    //     date: '20190705',
+    //     location: 'nessus',
+    //   },
+    //   {
+    //     date: '20190712',
+    //     location: 'titan',
+    //   },
+    //   {
+    //     date: '20190719',
+    //     location: 'io',
+    //   },
+    //   {
+    //     date: '20190726',
+    //     location: 'edz',
+    //   },
+    //   {
+    //     date: '20190802',
+    //     location: 'tower',
+    //   },
+    //   {
+    //     date: '20190809',
+    //     location: 'nessus',
+    //   },
+    //   {
+    //     date: '20190816',
+    //     location: 'titan',
+    //   },
+    //   {
+    //     date: '20190823',
+    //     location: 'nessus',
+    //   },
+    //   {
+    //     date: '20190830',
+    //     location: 'titan',
+    //   },
+    //   {
+    //     date: '20190906',
+    //     location: 'edz',
+    //   },
+    //   {
+    //     date: '20190913',
+    //     location: 'titan',
+    //   },
+    //   {
+    //     date: '20190920',
+    //     location: 'edz',
+    //   },
+    //   {
+    //     date: '20190927',
+    //     location: 'io',
+    //   },
+    //   {
+    //     date: '20191004',
+    //     location: 'nessus',
+    //   },
+    //   {
+    //     date: '20191011',
+    //     location: 'tower',
+    //   },
+    //   {
+    //     date: '20191018',
+    //     location: 'nessus',
+    //   },
+    //   {
+    //     date: '20191025',
+    //     location: 'tower',
+    //   },
+    //   {
+    //     date: '20191101',
+    //     location: 'nessus',
+    //   },
+    //   {
+    //     date: '20191115',
+    //     location: 'io',
+    //   },
+    //   {
+    //     date: '20191129',
+    //     location: 'tower',
+    //   },
+    //   {
+    //     date: '20191206',
+    //     location: 'titan',
+    //   },
+    //   {
+    //     date: '20191213',
+    //     location: 'nessus',
+    //   },
+    //   {
+    //     date: '20191220',
+    //     location: 'titan',
+    //   },
+    //   {
+    //     date: '20191227',
+    //     location: 'edz',
+    //   },
+    //   {
+    //     date: '20200103',
+    //     location: 'io',
+    //   },
+    //   {
+    //     date: '20200110',
+    //     location: 'titan',
+    //   },
+    //   {
+    //     date: '20200117',
+    //     location: 'nessus',
+    //   },
+    //   {
+    //     date: '20200124',
+    //     location: 'titan',
+    //   },
+    //   {
+    //     date: '20200131',
+    //     location: 'io',
+    //   },
+    //   {
+    //     date: '20200207',
+    //     location: 'tower',
+    //   },
+    //   {
+    //     date: '20200214',
+    //     location: 'nessus',
+    //   },
+    //   {
+    //     date: '20200221',
+    //     location: 'edz',
+    //   },
+    //   {
+    //     date: '20200228',
+    //     location: 'tower',
+    //   },
+    //   {
+    //     date: '20200306',
+    //     location: 'nessus',
+    //   },
+    //   {
+    //     date: '20200313',
+    //     location: 'tower',
+    //   },
+    //   {
+    //     date: '20200320',
+    //     location: 'io',
+    //   },
+    //   {
+    //     date: '20200327',
+    //     location: 'edz',
+    //   },
+    //   {
+    //     date: '20200403',
+    //     location: 'io',
+    //   },
+    //   {
+    //     date: '20200410',
+    //     location: 'titan',
+    //   },
+    //   {
+    //     date: '20200417',
+    //     location: 'tower',
+    //   },
+    //   {
+    //     date: '20200424',
+    //     location: 'nessus',
+    //   },
+    //   {
+    //     date: '20200501',
+    //     location: 'titan',
+    //   },
+    //   {
+    //     date: '20200508',
+    //     location: 'nessus',
+    //   },
+    //   {
+    //     date: '20200515',
+    //     location: 'io',
+    //   },
+    //   {
+    //     date: '20200522',
+    //     location: 'nessus',
+    //   },
+    //   {
+    //     date: '20200529',
+    //     location: 'tower',
+    //   },
+    //   {
+    //     date: '20200605',
+    //     location: 'titan',
+    //   },
+    //   {
+    //     date: '20200612',
+    //     location: 'nessus',
+    //   },
+    //   {
+    //     date: '20200619',
+    //     location: 'io',
+    //   },
+    //   {
+    //     date: '20200626',
+    //     location: 'edz',
+    //   },
+    //   {
+    //     date: '20200703',
+    //     location: 'tower',
+    //   },
+    //   {
+    //     date: '20200710',
+    //     location: 'nessus',
+    //   },
+    //   {
+    //     date: '20200717',
+    //     location: 'tower',
+    //   },
+    //   {
+    //     date: '20200724',
+    //     location: 'titan',
+    //   },
+    //   {
+    //     date: '20200731',
+    //     location: 'edz',
+    //   },
+    //   {
+    //     date: '20200807',
+    //     location: 'nessus',
+    //   },
+    //   {
+    //     date: '20200814',
+    //     location: 'titan',
+    //   },
+    //   {
+    //     date: '20200821',
+    //     location: 'edz',
+    //   },
+    //   {
+    //     date: '20200828',
+    //     location: 'titan',
+    //   },
+    // ];
+
+    // const seasonsInfo = {
+    //   5: {
+    //     DLCName: 'Black Armory',
+    //     seasonName: 'Season of the Forge',
+    //     seasonTag: 'forge',
+    //     season: 5,
+    //     year: 2,
+    //     maxLevel: 50,
+    //     maxPower: 650,
+    //     softCap: 500,
+    //     releaseDate: '2018-11-27',
+    //     resetTime: '17:00:00Z',
+    //     numWeeks: 12,
+    //   },
+    //   6: {
+    //     DLCName: "Joker's Wild",
+    //     seasonName: 'Season of the Drifter',
+    //     seasonTag: 'drifter',
+    //     season: 6,
+    //     year: 2,
+    //     maxLevel: 50,
+    //     maxPower: 700,
+    //     softCap: 500,
+    //     releaseDate: '2019-03-05',
+    //     resetTime: '17:00:00Z',
+    //     numWeeks: 14,
+    //   },
+    //   7: {
+    //     DLCName: 'Penumbra',
+    //     seasonName: 'Season of Opulence',
+    //     seasonTag: 'opulence',
+    //     season: 7,
+    //     year: 2,
+    //     maxLevel: 50,
+    //     maxPower: 750,
+    //     softCap: 500,
+    //     releaseDate: '2019-06-04',
+    //     resetTime: '17:00:00Z',
+    //     numWeeks: 13,
+    //   },
+    //   8: {
+    //     DLCName: 'Shadowkeep',
+    //     seasonName: 'Season of the Undying',
+    //     seasonTag: 'undying',
+    //     season: 8,
+    //     year: 3,
+    //     maxLevel: 50,
+    //     maxPower: 960,
+    //     softCap: 900,
+    //     releaseDate: '2019-10-01',
+    //     resetTime: '17:00:00Z',
+    //     numWeeks: 10,
+    //   },
+    //   9: {
+    //     DLCName: '',
+    //     seasonName: 'Season of Dawn',
+    //     seasonTag: 'dawn',
+    //     season: 9,
+    //     year: 3,
+    //     maxLevel: 50,
+    //     maxPower: 970,
+    //     softCap: 900,
+    //     releaseDate: '2019-12-10',
+    //     resetTime: '17:00:00Z',
+    //     numWeeks: 13,
+    //   },
+    //   10: {
+    //     DLCName: '',
+    //     seasonName: 'Season of the Worthy',
+    //     seasonTag: 'worthy',
+    //     season: 10,
+    //     year: 3,
+    //     maxLevel: 50,
+    //     maxPower: 1010,
+    //     softCap: 950,
+    //     releaseDate: '2020-03-10',
+    //     resetTime: '17:00:00Z',
+    //     numWeeks: 13,
+    //   },
+    //   11: {
+    //     DLCName: '',
+    //     seasonName: 'Season of the Arrivals',
+    //     seasonTag: 'arrival',
+    //     season: 11,
+    //     year: 3,
+    //     maxLevel: 50,
+    //     maxPower: 1060,
+    //     softCap: 1000,
+    //     releaseDate: '2020-06-09',
+    //     resetTime: '17:00:00Z',
+    //     numWeeks: 15,
+    //   },
+    //   12: {
+    //     DLCName: 'Beyond Light',
+    //     seasonName: 'Season of [the Redacted-12]', // TODO: Update on verification
+    //     seasonTag: 'redacted-12', // TODO: Update on verification
+    //     season: 12,
+    //     year: 4,
+    //     maxLevel: 50,
+    //     maxPower: 1110, // TODO: Update on verification
+    //     softCap: 1050, // TODO: Update on verification
+    //     releaseDate: '2020-11-10',
+    //     resetTime: '17:00:00Z',
+    //     numWeeks: 13,
+    //   },
+    // };
+
+    // const reddit = [
+    //   { date: '2020-08-14', title: '[D2] Xûr Megathread [2020-08-14]', sales: ['978537162', '136355432', '1030017949', '4285666432'] },
+    //   { date: '2020-08-28', title: '[D2] Xûr Megathread [2020-08-28]', sales: ['2907129557', '1474735276', '1591207518', '1906093346', '4285666432'] },
+    //   { date: '2020-08-21', title: '[D2] Xûr Megathread [2020-08-21]', sales: ['3413860063', '475652357', '2808156426', '3948284065', '4285666432'] },
+    //   { date: '2020-07-31', title: '[D2] Xûr Megathread [2020-07-31]', sales: ['2208405142', '3942036043', '3539357318', '3627185503', '4285666432'] },
+    //   { date: '2020-07-24', title: '[D2] Xûr Megathread [2020-07-24]', sales: ['2907129557', '4165919945', '2808156426', '1030017949', '4285666432'] },
+    //   { date: '2020-08-07', title: '[D2] Xûr Megathread [2020-08-07]', sales: ['4190156464', '1163283805', '2255796155', '3381022971', '4285666432'] },
+    //   { date: '2020-07-17', title: '[D2] Xûr Megathread [2020-07-17]', sales: ['4255268456', '903984858', '3539357319', '1725917554', '4285666432'] },
+    //   { date: '2020-06-12', title: '[D2] Xûr Megathread [2020-06-12]', sales: ['3766045777', '2766109872', '241462142', '235591051', '4285666432'] },
+    //   { date: '2020-06-26', title: '[D2] Xûr Megathread [2020-06-26]', sales: ['3899270607', '475652357', '241462142', '4057299719', '4285666432'] },
+    //   { date: '2020-07-10', title: '[D2] Xûr Megathread [2020-07-10]', sales: ['3766045777', '1734144409', '1160559849', '3288917178', '4285666432'] },
+    //   { date: '2020-07-03', title: '[D2] Xûr Megathread [2020-07-03]', sales: ['2286143274', '193869522', '3883866764', '4136768282', '4285666432'] },
+    //   { date: '2020-06-19', title: '[D2] Xûr Megathread [2020-06-19]', sales: ['3437746471', '2766109874', '136355432', '2082483156', '4285666432'] },
+    //   { date: '2020-05-29', title: '[D2] Xûr Megathread [2020-05-29]', sales: ['3549153979', '1219761634', '241462141', '3381022969', '4285666432'] },
+    //   { date: '2020-06-05', title: '[D2] Xûr Megathread [2020-06-05]', sales: ['2856683562', '193869520', '2240152949', '3288917178', '4285666432'] },
+    //   { date: '2020-05-22', title: '[D2] Xûr Megathread [2020-05-22]', sales: ['1541131350', '1321354573', '3883866764', '3844826440', '4285666432'] },
+    //   { date: '2020-05-15', title: '[D2] Xûr Megathread [2020-05-15]', sales: ['3141979346', '1474735277', '1160559849', '3288917178', '4285666432'] },
+    //   { date: '2020-05-01', title: '[D2] Xûr Megathread [2020-05-01]', sales: ['4068264807', '2757274117', '2326396534', '1030017949', '4285666432'] },
+    //   { date: '2020-05-08', title: '[D2] Xûr Megathread [2020-05-08]', sales: ['4124984448', '1474735276', '1192890598', '1096253259', '4285666432'] },
+    //   { date: '2020-04-24', title: '[D2] Xûr Megathread [2020-04-24]', sales: ['3549153978', '1321354573', '1192890598', '3070555693', '4285666432'] },
+    //   { date: '2020-02-21', title: '[D2] Xûr Megathread [2020-02-21]', sales: ['3899270607', '2766109872', '3883866764', '3381022969', '4285666432'] },
+    //   { date: '2020-04-17', title: '[D2] Xûr Megathread [2020-04-17]', sales: ['1345867571', '1321354572', '3874247549', '3381022969', '4285666432'] },
+    //   { date: '2020-03-13', title: '[D2] Xûr Megathread [2020-03-13]', sales: ['1345867571', '193869522', '1734844650', '4057299718', '4285666432'] },
+    //   { date: '2020-04-03', title: '[D2] Xûr Megathread [2020-04-03]', sales: ['4124984448', '193869523', '2240152949', '1906093346', '4285666432'] },
+    //   { date: '2020-03-27', title: '[D2] Xûr Megathread [2020-03-27]', sales: ['2286143274', '1474735277', '1591207519', '1030017949', '4285666432'] },
+    //   { date: '2020-03-20', title: '[D2] Xûr Megathread [2020-03-20]', sales: ['2044500762', '691578978', '136355432', '3627185503', '4285666432'] },
+    //   { date: '2020-04-10', title: '[D2] Xûr Megathread [2020-04-10]', sales: ['3844694310', '1474735277', '1192890598', '121305948', '4285666432'] },
+    //   { date: '2020-02-07', title: '[D2] Xûr Megathread [2020-02-07]', sales: ['3766045777', '1321354572', '3539357318', '2950045886', '4285666432'] },
+    //   { date: '2020-02-14', title: '[D2] Xûr Megathread [2020-02-14]', sales: ['3580904581', '2766109874', '2082483156', '1734844651', '4285666432'] },
+    //   { date: '2020-02-28', title: '[D2] Xûr Megathread [2020-02-28]', sales: ['2907129557', '1160559849', '3381022970', '3942036043', '4285666432'] },
+    //   { date: '2020-01-24', title: '[D2] Xûr Megathread [2020-01-24]', sales: ['4068264807', '193869523', '1591207518', '2428181146', '4285666432'] },
+    //   { date: '2020-03-06', title: '[D2] Xûr Megathread [2020-03-06]', sales: ['19024058', '193869522', '106575079', '1096253259', '4285666432'] },
+    //   { date: '2020-01-31', title: '[D2] Xûr Megathread [2020-01-31]', sales: ['3549153978', '193869522', '2082483156', '2255796155', '4285666432'] },
+    //   { date: '2020-01-10', title: '[D2] Xûr Megathread [2020-01-10]', sales: ['3766045777', '193869522', '138282166', '2808156426', '4285666432', '312904089'] },
+    //   { date: '2020-01-17', title: '[D2] Xûr Megathread [2020-01-17]', sales: ['3899270607', '3883866764', '4136768282', '1053737370', '4285666432'] },
+    //   { date: '2020-01-03', title: '[D2] Xûr Megathread [2020-01-03]', sales: [] },
+    //   { date: '2019-11-22', title: '[D2] Xûr Megathread [2019-11-22]', sales: [] },
+    //   { date: '2019-12-27', title: '[D2] Xûr Megathread [2019-12-27]', sales: ['3549153978', '1734144409', '136355432', '2177524718', '4285666432', '2378215640'] },
+    //   { date: '2019-12-13', title: '[D2] Xûr Megathread [2019-12-13]', sales: ['19024058', '475652357', '1192890598', '370930766', '4285666432', '2378215640'] },
+    //   { date: '2019-11-08', title: '[D2] Xûr Megathread [2019-11-08]', sales: ['138282166', '609852545', '2808156426', '4285666432', '2378215640'] },
+    //   { date: '2019-11-29', title: '[D2] Xûr Megathread [2019-11-29]', sales: ['3628991658', '193869520', '138282166', '1848640623', '4285666432', '2378215640'] },
+    //   { date: '2019-10-18', title: '[D2] Xûr Megathread [2019-10-18]', sales: ['2208405142', '1160559849', '138282166', '691578979', '4285666432', '2378215640'] },
+    //   { date: '2019-12-20', title: '[D2] Xûr Megathread [2019-12-20]', sales: ['2694576561', '1160559849', '1906093346', '2203146422', '4285666432', '2378215640'] },
+    //   { date: '2019-10-04', title: '[D2] Xûr Megathread [2019-10-04]', sales: ['1508896098', '2563444729', '3381022971', '1474735277', '4285666432', '312904089'] },
+    //   { date: '2019-11-15', title: '[D2] Xûr Megathread [2019-11-15]', sales: ['3883866764', '1030017949', '978537162', '4285666432', '2378215640'] },
+    //   { date: '2019-11-01', title: '[D2] Xûr Megathread [2019-11-01]', sales: ['3628991659', '193869522', '3539357319', '3381022971', '4285666432', '2378215640'] },
+    //   { date: '2019-10-11', title: '[D2] Xûr Megathread [2019-10-11]', sales: [] },
+    //   { date: '2019-12-06', title: '[D2] Xûr Megathread [2019-12-06]', sales: ['3766045777', '4136768282', '3562696927', '2240152949', '4285666432', '2378215640'] },
+    //   { date: '2019-08-23', title: '[D2] Xûr Megathread [2019-08-23]', sales: ['2130065553', '2523259395', '1786557270', '809007410', '4285666432', '312904089'] },
+    //   { date: '2019-08-16', title: '[D2] Xûr Megathread [2019-08-16]', sales: ['2208405142', '1656912113', '2897117448', '576499615', '4285666432', '312904089'] },
+    //   { date: '2019-10-25', title: '[D2] Xûr Megathread [2019-10-25]', sales: ['2856683562', '241462142', '4165919945', '121305948', '4285666432', '2378215640'] },
+    //   { date: '2019-08-09', title: '[D2] Xûr Megathread [2019-08-09]', sales: ['3899270607', '1035680664', '1098931325', '3488362706', '4285666432', '312904089'] },
+    //   { date: '2019-09-27', title: '[D2] Xûr Megathread [2019-09-27]', sales: ['3628991659', '1245809812', '2523259393', '1362342075', '4285666432', '312904089'] },
+    //   { date: '2019-08-02', title: '[D2] Xûr Megathread [2019-08-02]', sales: ['4285666432'] },
+    //   { date: '2019-08-30', title: '[D2] Xûr Megathread [2019-08-30]', sales: ['3628991659', '1906855381', '3392742912', '3488362706', '4285666432', '312904089'] },
+    //   { date: '2019-09-06', title: '[D2] Xûr Megathread [2019-09-06]', sales: ['3413860063', '3790373074', '1862800747', '1488061763', '4285666432', '312904089'] },
+    //   { date: '2019-09-20', title: '[D2] Xûr Megathread [2019-09-20]', sales: ['3899270607', '1245809813', '1862800746', '809007410', '4285666432', '312904089'] },
+    //   { date: '2019-07-12', title: '[D2] Xûr Megathread [2019-07-12]', sales: ['4124984448', '2782999716', '1488061763', '1362342075', '4285666432', '312904089'] },
+    //   { date: '2019-09-13', title: '[D2] Xûr Megathread [2019-09-13]', sales: ['1345867571', '419976108', '458095282', '3488362706', '4285666432', '312904089'] },
+    //   { date: '2019-06-28', title: '[D2] Xûr Megathread [2019-06-28]', sales: ['3628991659', '1245809814', '3918600864', '3488362706', '4285666432', '312904089'] },
+    //   { date: '2019-07-19', title: '[D2] Xûr Megathread [2019-07-19]', sales: ['1345867571', '2782999717', '1656912113', '1643575148', '4285666432', '312904089'] },
+    //   { date: '2019-05-24', title: '[D2] Xûr Megathread [2019-05-24]', sales: ['1345867570', '419976110', '3918600864', '3488362706', '4285666432', '312904089'] },
+    //   { date: '2019-07-26', title: '[D2] Xûr Megathread [2019-07-26]', sales: ['3141979346', '1799380614', '2600992433', '2829609851', '4285666432', '312904089'] },
+    //   { date: '2019-06-14', title: '[D2] Xûr Megathread [2019-06-14]', sales: ['2044500762', '1667080811', '1035680664', '2808445048', '4285666432', '312904089'] },
+    //   { date: '2019-07-05', title: '[D2] Xûr Megathread [2019-07-05]', sales: ['2286143274', '1862800747', '3926392527', '510504540', '4285666432', '312904089'] },
+    //   { date: '2019-04-05', title: '[D2] Xûr Megathread [2019-04-05]', sales: ['3141979346', '1862800745', '4070560770', '1315823811', '4285666432', '3794435484'] },
+    //   { date: '2019-06-07', title: '[D2] Xûr Megathread [2019-06-07]', sales: ['1345867570', '1862800746', '809007410', '4070560771', '4285666432', '312904089'] },
+    //   { date: '2019-06-21', title: '[D2] Xûr Megathread [2019-06-21]', sales: ['3844694310', '1098931324', '1484674161', '3488362707', '4285666432', '312904089'] },
+    //   { date: '2019-04-19', title: '[D2] Xûr Megathread [2019-04-19]', sales: ['1508896098', '419976110', '458095282', '2954558332', '4285666432', '1086501114'] },
+    //   { date: '2019-05-03', title: '[D2] Xûr Megathread [2019-05-03]', sales: ['2286143274', '1488061763', '1315823811', '2389062558', '4285666432', '198570583'] },
+    //   { date: '2019-03-22', title: '[D2] Xûr Megathread [2019-03-22]', sales: ['2286143274', '197761152', '1488061763', '2389062558', '4285666432', '2293314698'] },
+    //   { date: '2019-04-12', title: '[D2] Xûr Megathread [2019-04-12]', sales: ['3844694310', '1245809812', '3790373072', '2782999717', '4285666432', '2913848309'] },
+    //   { date: '2019-03-08', title: '[D2] Xûr Megathread [2019-03-08]', sales: ['814876685', '68357813', '1098931324', '1484674161', '4285666432'] },
+    //   { date: '2019-05-10', title: '[D2] Xûr Megathread [2019-05-10]', sales: ['3899270607', '4284305242', '197761152', '2523259392', '4285666432', '3592498273'] },
+    //   { date: '2019-03-29', title: '[D2] Xûr Megathread [2019-03-29]', sales: ['2907129557', '1667080809', '1862800747', '1362342075', '4285666432', '2378215640'] },
+    //   { date: '2019-05-17', title: '[D2] Xûr Megathread [2019-05-17]', sales: ['3141979346', '1667080810', '1484674161', '2808445048', '4285666432', '2030344701'] },
+    //   { date: '2019-03-15', title: '[D2] Xûr Megathread [2019-03-15]', sales: ['3437746471', '1245809813', '809007411', '3488362706', '4285666432', '312904089'] },
+    //   { date: '2019-05-31', title: '[D2] Xûr Megathread [2019-05-31]', sales: ['2782999716', '1906855381', '574694189', '4285666432', '312904089'] },
+    //   { date: '2019-04-26', title: '[D2] Xûr Megathread [2019-04-26]', sales: ['1345867570', '1245809812', '1035680665', '2076339106', '4285666432', '198570583'] },
+    //   { date: '2019-02-01', title: '[D2] Xûr Megathread [2019-02-01]', sales: ['2286143274', '1245809814', '197761153', '2970800254', '4285666432'] },
+    //   { date: '2019-02-22', title: '[D2] Xûr Megathread [2019-02-22]', sales: ['3628991658', '1245809813', '1035680666', '2076339106', '4285666432'] },
+    //   { date: '2019-01-25', title: '[D2] Xûr Megathread [2019-01-25]', sales: ['3437746471', '2954558333', '574694189', '809007410', '4285666432'] },
+    //   { date: '2019-03-01', title: '[D2] Xûr Megathread [2019-03-01]', sales: ['3899270607', '1667080811', '3790373075', '2970800254', '4285666432'] },
+    //   { date: '2019-02-08', title: '[D2] Xûr Megathread [2019-02-08]', sales: ['4255268456', '419976108', '1862800747', '809007411', '4285666432'] },
+    //   { date: '2019-01-04', title: '[D2] Xûr Megathread [2019-01-04]', sales: ['3628991658', '1667080810', '3790373072', '2422973183', '4285666432'] },
+    //   { date: '2019-01-11', title: '[D2] Xûr Megathread [2019-01-11]', sales: ['4190156464', '4284305242', '1035680665', '2523259395', '4285666432'] },
+    // ];
+
+    // const hehe = [
+    //   { date: '2019-01-18 17:00:00', season: 0, week: 0, sales: [], location: 4 },
+    //   { date: '2019-01-25 17:00:00', season: 0, week: 0, sales: [], location: 2 },
+    //   { date: '2019-02-01 17:00:00', season: 0, week: 0, sales: [], location: 1 },
+    //   { date: '2019-02-08 17:00:00', season: 0, week: 0, sales: [], location: 5 },
+    //   { date: '2019-02-15 17:00:00', season: 0, week: 0, sales: [], location: 1 },
+    //   { date: '2019-02-22 17:00:00', season: 0, week: 0, sales: [], location: 4 },
+    //   { date: '2019-03-01 17:00:00', season: 0, week: 0, sales: [], location: 3 },
+    //   { date: '2019-03-08 17:00:00', season: 0, week: 0, sales: [], location: 5 },
+    //   { date: '2019-03-15 17:00:00', season: 0, week: 0, sales: [], location: 2 },
+    //   { date: '2019-03-22 17:00:00', season: 0, week: 0, sales: [], location: 1 },
+    //   { date: '2019-03-29 17:00:00', season: 0, week: 0, sales: [], location: 5 },
+    //   { date: '2019-04-05 17:00:00', season: 0, week: 0, sales: [], location: 2 },
+    //   { date: '2019-04-12 17:00:00', season: 0, week: 0, sales: [], location: 5 },
+    //   { date: '2019-04-19 17:00:00', season: 0, week: 0, sales: [], location: 1 },
+    //   { date: '2019-04-26 17:00:00', season: 0, week: 0, sales: [], location: 2 },
+    //   { date: '2019-05-03 17:00:00', season: 0, week: 0, sales: [], location: 4 },
+    //   { date: '2019-05-10 17:00:00', season: 0, week: 0, sales: [], location: 5 },
+    //   { date: '2019-05-17 17:00:00', season: 0, week: 0, sales: [], location: 2 },
+    //   { date: '2019-05-24 17:00:00', season: 0, week: 0, sales: [], location: 1 },
+    //   { date: '2019-05-31 17:00:00', season: 0, week: 0, sales: [], location: 5 },
+    //   { date: '2019-06-07 17:00:00', season: 0, week: 0, sales: [], location: 3 },
+    //   { date: '2019-06-14 17:00:00', season: 0, week: 0, sales: [], location: 3 },
+    //   { date: '2019-06-21 17:00:00', season: 0, week: 0, sales: [], location: 1 },
+    //   { date: '2019-06-28 17:00:00', season: 0, week: 0, sales: [], location: 5 },
+    //   { date: '2019-07-05 17:00:00', season: 0, week: 0, sales: [], location: 3 },
+    //   { date: '2019-07-12 17:00:00', season: 0, week: 0, sales: [], location: 2 },
+    //   { date: '2019-07-19 17:00:00', season: 0, week: 0, sales: [], location: 4 },
+    //   { date: '2019-07-26 17:00:00', season: 0, week: 0, sales: [], location: 1 },
+    //   { date: '2019-08-02 17:00:00', season: 0, week: 0, sales: [], location: 5 },
+    //   { date: '2019-08-09 17:00:00', season: 0, week: 0, sales: [], location: 3 },
+    //   { date: '2019-08-16 17:00:00', season: 0, week: 0, sales: [], location: 2 },
+    //   { date: '2019-08-23 17:00:00', season: 0, week: 0, sales: [], location: 3 },
+    //   { date: '2019-08-30 17:00:00', season: 0, week: 0, sales: [], location: 2 },
+    //   { date: '2019-09-06 17:00:00', season: 0, week: 0, sales: [], location: 1 },
+    //   { date: '2019-09-13 17:00:00', season: 0, week: 0, sales: [], location: 2 },
+    //   { date: '2019-09-20 17:00:00', season: 0, week: 0, sales: [], location: 1 },
+    //   { date: '2019-09-27 17:00:00', season: 0, week: 0, sales: [], location: 4 },
+    //   { date: '2019-10-04 17:00:00', season: 0, week: 0, sales: [], location: 3 },
+    //   { date: '2019-10-11 17:00:00', season: 0, week: 0, sales: [], location: 5 },
+    //   { date: '2019-10-18 17:00:00', season: 0, week: 0, sales: [], location: 3 },
+    //   { date: '2019-10-25 17:00:00', season: 0, week: 0, sales: [], location: 5 },
+    //   { date: '2019-11-01 17:00:00', season: 0, week: 0, sales: [], location: 3 },
+    //   { date: '2019-11-15 17:00:00', season: 0, week: 0, sales: [], location: 4 },
+    //   { date: '2019-11-29 17:00:00', season: 0, week: 0, sales: [], location: 5 },
+    //   { date: '2019-12-06 17:00:00', season: 0, week: 0, sales: [], location: 2 },
+    //   { date: '2019-12-13 17:00:00', season: 0, week: 0, sales: [], location: 3 },
+    //   { date: '2019-12-20 17:00:00', season: 0, week: 0, sales: [], location: 2 },
+    //   { date: '2019-12-27 17:00:00', season: 0, week: 0, sales: [], location: 1 },
+    //   { date: '2020-01-03 17:00:00', season: 0, week: 0, sales: [], location: 4 },
+    //   { date: '2020-01-10 17:00:00', season: 0, week: 0, sales: [], location: 2 },
+    //   { date: '2020-01-17 17:00:00', season: 0, week: 0, sales: [], location: 3 },
+    //   { date: '2020-01-24 17:00:00', season: 0, week: 0, sales: [], location: 2 },
+    //   { date: '2020-01-31 17:00:00', season: 0, week: 0, sales: [], location: 4 },
+    //   { date: '2020-02-07 17:00:00', season: 0, week: 0, sales: [], location: 5 },
+    //   { date: '2020-02-14 17:00:00', season: 0, week: 0, sales: [], location: 3 },
+    //   { date: '2020-02-21 17:00:00', season: 0, week: 0, sales: [], location: 1 },
+    //   { date: '2020-02-28 17:00:00', season: 0, week: 0, sales: [], location: 5 },
+    //   { date: '2020-03-06 17:00:00', season: 0, week: 0, sales: [], location: 3 },
+    //   { date: '2020-03-13 17:00:00', season: 0, week: 0, sales: [], location: 5 },
+    //   { date: '2020-03-20 17:00:00', season: 0, week: 0, sales: [], location: 4 },
+    //   { date: '2020-03-27 17:00:00', season: 0, week: 0, sales: [], location: 1 },
+    //   { date: '2020-04-03 17:00:00', season: 0, week: 0, sales: [], location: 4 },
+    //   { date: '2020-04-10 17:00:00', season: 0, week: 0, sales: [], location: 2 },
+    //   { date: '2020-04-17 17:00:00', season: 0, week: 0, sales: [], location: 5 },
+    //   { date: '2020-04-24 17:00:00', season: 0, week: 0, sales: [], location: 3 },
+    //   { date: '2020-05-01 17:00:00', season: 0, week: 0, sales: [], location: 2 },
+    //   { date: '2020-05-08 17:00:00', season: 0, week: 0, sales: [], location: 3 },
+    //   { date: '2020-05-15 17:00:00', season: 0, week: 0, sales: [], location: 4 },
+    //   { date: '2020-05-22 17:00:00', season: 0, week: 0, sales: [], location: 3 },
+    //   { date: '2020-05-29 17:00:00', season: 0, week: 0, sales: [], location: 5 },
+    //   { date: '2020-06-05 17:00:00', season: 0, week: 0, sales: [], location: 2 },
+    //   { date: '2020-06-12 17:00:00', season: 0, week: 0, sales: [], location: 3 },
+    //   { date: '2020-06-19 17:00:00', season: 0, week: 0, sales: [], location: 4 },
+    //   { date: '2020-06-26 17:00:00', season: 0, week: 0, sales: [], location: 1 },
+    //   { date: '2020-07-03 17:00:00', season: 0, week: 0, sales: [], location: 5 },
+    //   { date: '2020-07-10 17:00:00', season: 0, week: 0, sales: [], location: 3 },
+    //   { date: '2020-07-17 17:00:00', season: 0, week: 0, sales: [], location: 5 },
+    //   { date: '2020-07-24 17:00:00', season: 0, week: 0, sales: [], location: 2 },
+    //   { date: '2020-07-31 17:00:00', season: 0, week: 0, sales: [], location: 1 },
+    //   { date: '2020-08-07 17:00:00', season: 0, week: 0, sales: [], location: 3 },
+    //   { date: '2020-08-14 17:00:00', season: 0, week: 0, sales: [], location: 2 },
+    //   { date: '2020-08-21 17:00:00', season: 0, week: 0, sales: [], location: 1 },
+    //   { date: '2020-08-28 17:00:00', season: 0, week: 0, sales: [], location: 2 },
+    // ];
+
+    // let s = 5;
+    // let w = 7;
+    // console.log(
+    //   hehe.map((visit, v) => {
+    //     if (new Date(visit.date) > new Date(seasonsInfo[s + 1].releaseDate)) {
+    //       s++;
+    //       w = 0;
+    //     }
+    //     w++;
+
+    //     return {
+    //       ...visit,
+    //       season: s,
+    //       week: w,
+    //       sales: reddit.find((r) => `${r.date} 17:00:00` === visit.date)?.sales.map((s) => +s),
+    //     };
+    //   }).sort((a, b) => a.date - b.date).map(v => `(NULL, '${v.date}', '${v.season}', '${v.week}', '[${v.sales ? v.sales : ''}]', '${v.location}')`).join(', ')
+    // );
+
+    // console.log(history.map(r => ({
+    //   date: `${r.date.slice(0, 4)}-${r.date.slice(4, 6)}-${r.date.slice(6, 8)} 17:00:00`,
+    //   season: 0,
+    //   week: 0,
+    //   sales: [],
+    //   location: locations.find(l => l.world.toLowerCase() === r.location)?.id || 0
+    // })))
+
     return (
       <div className='view' id='test'>
         {/* <ul className='list collection-items'>
@@ -571,6 +1364,9 @@ nodes: [
         {/* <div id='tooltip' className='visible'>
           <Item hash='3887892656' instanceid='6917529029394206558' />
         </div> */}
+        <div id='tooltip' className='visible'>
+          <Item hash='3887892656' instanceid='6917529029394206558' />
+        </div>
       </div>
     );
   }

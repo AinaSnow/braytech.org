@@ -2,9 +2,14 @@ import * as enums from './destinyEnums';
 import manifest from './manifest';
 
 export function activatedNodes(talentGridHash, talentGrids) {
+  if (!talentGridHash) return [];
+
   const definitionTalentGrid = manifest.DestinyTalentGridDefinition[talentGridHash];
 
-  return talentGrids.nodes.map((node) => (node.isActivated ? definitionTalentGrid.nodes[node.nodeIndex]?.steps?.[0].nodeStepHash : ''));
+  // in case we get no talentGrids but still have a talentGrid to work with
+  const nodes = talentGrids?.nodes || definitionTalentGrid.nodes;
+
+  return nodes.map((node) => (node.isActivated ? definitionTalentGrid.nodes[node.nodeIndex]?.steps?.[0].nodeStepHash : ''));
 }
 
 export function talentGrid(itemHash, selectedNodes) {
@@ -21,6 +26,7 @@ export function talentGrid(itemHash, selectedNodes) {
       groupHash: node.groupHash,
       layoutIdentifier: node.layoutIdentifier,
       displayProperties: step.displayProperties,
+      perkHashes: step.perkHashes,
       hidden: Boolean(node.hidden),
       isActivated: selectedNodes.includes(step.nodeStepHash),
       column: node.column + 9,
@@ -48,13 +54,9 @@ export function activatedPath(nodeCategories, nodes) {
     ...path,
     attunement: {
       name: displayProperties?.name,
-      icon: displayProperties?.icon
+      icon: displayProperties?.icon,
     },
-    ability: {
-      ...path.ability,
-      name: manifest.DestinySandboxPerkDefinition[path.ability?.sandboxPerk]?.displayProperties.name,
-      description: manifest.DestinySandboxPerkDefinition[path.ability?.sandboxPerk]?.displayProperties.description
-    },
+    perkHashes: nodeIndexes?.length ? nodes[nodeIndexes[nodeIndexes.length - 1]]?.perkHashes : [],
     nodeIndexes,
   };
 }

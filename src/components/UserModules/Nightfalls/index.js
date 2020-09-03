@@ -12,6 +12,9 @@ import './styles.css';
 
 export default function Nightfalls() {
   const member = useSelector((state) => state.member);
+
+  // console.log(member.data.profile.characterActivities.data[member.characterId].availableActivities.map(m => ({ name: manifest.DestinyActivityDefinition[m.activityHash].displayProperties.name, ...m })));
+
   // get all available nightfall strikes
   const weeklyNightfallStrikeActivities = member.data.profile.characterActivities.data[member.characterId].availableActivities.filter((a) => {
     if (!a.activityHash) return false;
@@ -24,7 +27,7 @@ export default function Nightfalls() {
   });
 
   // find the canonical hash of the active nightfall: ordeal
-  const weeklyNightfallStrikesOrdealHash = Object.keys(enums.nightfalls).find((hash) => enums.nightfalls[hash]?.ordealHashes.find((ordealHash) => weeklyNightfallStrikeActivities.find((activity) => activity.activityHash === ordealHash)));
+  const weeklyNightfallStrikesOrdealHash = Object.keys(enums.nightfalls).find((hash) => enums.nightfalls[hash]?.ordealHashes.find((ordealHash) => weeklyNightfallStrikeActivities.filter((activity) => activity.recommendedLight < 1100).find((activity) => activity.activityHash === ordealHash)));
   // collect and sort available difficulties of the active nightfall: ordeal
   const weeklyNightfallStrikesOrdealVersions = weeklyNightfallStrikeActivities.filter((activity) => enums.nightfalls[weeklyNightfallStrikesOrdealHash]?.ordealHashes.includes(activity.activityHash)).sort((a, b) => b.recommendedLight - a.recommendedLight);
   // get old-style active nightfalls
@@ -78,7 +81,7 @@ export default function Nightfalls() {
               })}
             </ul>
           ) : (
-            <div className='info'>{t("UserModules.Nightfalls.ModifiersUnavailable")}</div>
+            <div className='info'>{t('UserModules.Nightfalls.ModifiersUnavailable')}</div>
           )}
           <h4>{t('Collectibles')}</h4>
           {enums.nightfalls[definitionNightfall.hash]?.collectibles.length ? (
@@ -90,7 +93,7 @@ export default function Nightfalls() {
           ) : (
             <div className='info'>
               <p>
-                <em>{t("UserModules.Nightfalls.NoCollectibles")}</em>
+                <em>{t('UserModules.Nightfalls.NoCollectibles')}</em>
               </p>
             </div>
           )}
@@ -104,7 +107,7 @@ export default function Nightfalls() {
           ) : (
             <div className='info'>
               <p>
-                <em>{t("UserModules.Nightfalls.NoRecords")}</em>
+                <em>{t('UserModules.Nightfalls.NoRecords')}</em>
               </p>
             </div>
           )}

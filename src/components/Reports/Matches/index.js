@@ -104,7 +104,7 @@ export default function Match({ mode, limit = 15, offset = 0, root }) {
     <div ref={ref_matches} className='matches'>
       <div className='state'>
         <TimeTilRefresh isLoading={loading} duration='20s' />
-        {loading ? <Spinner mini /> : null}
+        {loading ? <Spinner /> : null}
       </div>
       <ul className='list reports'>
         {reports.map((r) => (
@@ -118,7 +118,7 @@ export default function Match({ mode, limit = 15, offset = 0, root }) {
     </div>
   ) : loading ? (
     <div className='matches loading'>
-      <Spinner mini />
+      <Spinner />
     </div>
   ) : (
     <div className='matches info'>{t('No reports available')}</div>

@@ -126,7 +126,7 @@ export default function Crucible(props) {
         </div>
       ) : (
         <div className='modes loading'>
-          <Spinner mini />
+          <Spinner />
         </div>
       )}
       <Matches mode={props.mode || options.defaultMode} limit={options.limit} offset={props.offset} root={options.root} />

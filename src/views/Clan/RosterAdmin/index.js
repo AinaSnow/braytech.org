@@ -12,7 +12,6 @@ import Spinner from '../../../components/UI/Spinner';
 import './styles.css';
 
 export default function AdminView() {
-  const viewport = useSelector((state) => state.viewport);
   const auth = useSelector((state) => state.auth);
   const groupMembers = useSelector((state) => state.groupMembers);
 
@@ -45,7 +44,7 @@ export default function AdminView() {
         ) : null}
       </div>
       <div className={cx('module', 'roster', { loading: loading || error })}>
-        {loading ? <Spinner mini={viewport.width < 601 ? true : false} /> : null}
+        {loading ? <Spinner /> : null}
         {error ? <div className='info'>{t('There was a network error')}</div> : null}
         <RosterAdmin />
       </div>

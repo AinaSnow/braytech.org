@@ -11,7 +11,7 @@ import { Button, DestinyKey } from '../../../components/UI/Button';
 import Items from '../../../components/Items';
 
 import { NavLinks } from '../';
-import ChaliceCombos from '../../../data/chaliceData';
+import ChaliceCombos from '../../../data/chalice-data';
 
 import './styles.css';
 

@@ -6,7 +6,7 @@ import cx from 'classnames';
 import { t, BungieText } from '../../utils/i18n';
 import manifest from '../../utils/manifest';
 import { cartographer } from '../../utils/maps';
-import { stepsWithRecords, rewardsQuestLineOverrides, rewardsQuestLineOverridesShadowkeep, setDataQuestLineOverrides } from '../../data/questLines';
+import { stepsWithRecords, rewardsQuestLineOverrides, rewardsQuestLineOverridesShadowkeep, setDataQuestLineOverrides } from '../../data/quest-lines';
 import { removeMemberIds } from '../../utils/paths';
 
 import Records from '../Records/';

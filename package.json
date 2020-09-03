@@ -1,12 +1,12 @@
 {
   "name": "braytech.org",
   "author": "Tom Chapman <twitter://BraytechHelp> (https://thomchap.com.au)",
-  "version": "2.31.31",
+  "version": "2.31.37",
   "private": true,
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "build:beta": "env-cmd -f .env.beta npm run build && node scripts/build-beta-post-deploy.js",
+    "build:beta": " ./node_modules/.bin/env-cmd -f .env.beta node ./node_modules/react-scripts/bin/react-scripts.js build && node scripts/build-beta-post-deploy.js",
     "analyze": "node scripts/build-analyze-bundle.js",
     "translations": "node scripts/extract-translations.js --stats --delete-unused",
     "checklists": "node --experimental-modules --experimental-json-modules scripts/checklists/prepare.mjs",
@@ -15,13 +15,12 @@
     "story-missions": "node --experimental-modules scripts/prepare-story-data.mjs"
   },
   "dependencies": {
-    "@types/jest": "^26.0.10",
+    "@types/jest": "^26.0.12",
     "@types/node": "^14.6.2",
-    "@types/react": "^16.9.48",
+    "@types/react": "^16.9.49",
     "@types/react-dom": "^16.9.8",
     "classnames": "^2.2.6",
     "dexie": "^3.0.2",
-    "env-cmd": "^10.1.0",
     "html2canvas": "^1.0.0-rc.7",
     "i18next": "^19.7.0",
     "i18next-xhr-backend": "^3.2.2",
@@ -47,11 +46,12 @@
     "typescript": "^4.0.2"
   },
   "devDependencies": {
-    "@babel/cli": "^7.10.5",
-    "@babel/core": "^7.11.4",
+    "@babel/cli": "^7.11.5",
+    "@babel/core": "^7.11.5",
     "@babel/plugin-proposal-optional-chaining": "^7.11.0",
     "chalk": "^4.1.0",
     "entities": "^2.0.3",
+    "env-cmd": "^10.1.0",
     "eslint-plugin-react": "^7.20.6",
     "find-in-files": "^0.5.0",
     "fs-extra": "^9.0.1",

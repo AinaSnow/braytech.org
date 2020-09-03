@@ -8,7 +8,7 @@ import { BungieAuth } from '../../components/BungieAuth';
 import Checkbox from '../../components/UI/Checkbox';
 import Button from '../../components/UI/Button';
 
-import translationStats from '../../data/translationStats';
+import translationStats from '../../data/translation-stats';
 
 import './styles.css';
 

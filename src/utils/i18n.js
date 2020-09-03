@@ -7,7 +7,7 @@ import moment from 'moment';
 
 import ls from './localStorage';
 import { stringToIcons } from './destinyUtils';
-import { linkHelper, wrapEnergy, noParagraphs } from './markdown';
+import { markdownHelper_link, markdownHelper_listItem, wrapEnergy, noParagraphs } from './markdown';
 
 let _defaultLanguage = 'en';
 let _currentLanguage;
@@ -418,7 +418,7 @@ export function BraytechText(props) {
 
   const source = escapeValue ? stringToIcons(escapeString(value), true) : stringToIcons(value, true);
 
-  return <ReactMarkdown className={className} source={source} {...rest} renderers={{ link: linkHelper }} disallowedTypes={disallowedTypes} unwrapDisallowed />;
+  return <ReactMarkdown className={className} source={source} {...rest} renderers={{ link: markdownHelper_link, listItem: markdownHelper_listItem }} disallowedTypes={disallowedTypes} unwrapDisallowed />;
 }
 
 export function withinString(type, activityName) {

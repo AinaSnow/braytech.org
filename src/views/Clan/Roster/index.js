@@ -11,7 +11,6 @@ import Spinner from '../../../components/UI/Spinner';
 import './styles.css';
 
 export default function RosterView() {
-  const viewport = useSelector((state) => state.viewport);
   const groupMembers = useSelector((state) => state.groupMembers);
 
   useEffect(() => {
@@ -39,7 +38,7 @@ export default function RosterView() {
         ) : null}
       </div>
       <div className={cx('module', 'roster', { loading: loading || error })}>
-        {loading ? <Spinner mini={viewport.width < 601 ? true : false} /> : null}
+        {loading ? <Spinner /> : null}
         {error ? <div className='info'>{t('There was a network error')}</div> : null}
         <Roster />
       </div>

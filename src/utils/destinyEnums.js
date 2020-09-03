@@ -1483,7 +1483,23 @@ export const DestinyContentVault = [
             1098033985, // Satou's Secret
             1098033986, // Meyrin's Vision
           ],
-          records: [],
+          records: [
+            3723768609, // Master Smith
+            2748367119, // Guardian of the Black Armory
+            578385083, // Black Armory Bounty Hunter
+            212587483, // A Study in Obsidian
+            2957876347, // EDZ Black Armory Smith
+            2487226217, // Nessus Black Armory Smith
+            142013189, // Master Blaster
+            903845240, // Clean Up on Aisle Five
+            3608027344, // Beautiful but Deadly
+            2172518965, // Reunited Siblings
+            378857807, // Izanami Forge discovered
+            562163044, // Gofannon Forge discovered
+            1518215963, // Forges Afield
+            2590294698, // EDZ Saboteurs Elimination
+            2167527924, // Nessus Saboteurs Elimination
+          ],
         },
       },
       {
@@ -1616,6 +1632,7 @@ export const DestinyContentVault = [
             2716100025, // Sonata-48
             3895764279, // Guseva-C
             3875807583, // Whisper of the Worm
+            3142437750, // A Thousand Wings
           ],
           records: [
             1289798960, // The Tortured Scientist
@@ -1873,6 +1890,7 @@ export const DestinyContentVault = [
             1279318110, // D.F.A.
             2466440635, // Worm God Incarnation
             1534387877, // BrayTech Osprey
+            319846607, // After the Nightfall
           ],
           records: [
             3054774873, // A Garden World
@@ -2025,7 +2043,7 @@ export const DestinyContentVault = [
             1114960391, // Gunsmith's Devotion Suit
             1384165442, // Bladesmith's Memory Suit
             1672247878, // Bulletsmith's Ire Suit
-            4214538151, // Scourge of the Past
+            2039028930, // Black Armory
           ],
           collectibles: [
             982798874, // No Feelings
@@ -2039,7 +2057,6 @@ export const DestinyContentVault = [
             3162743664, // Recovered Memories
             1657525185, // Fallen Barrier
             557403582, // Fallen Repurposing
-            2473783710, // Scourge of Nothing
             4051063432, // Midnight Smith
           ],
           records: [],
@@ -2055,7 +2072,6 @@ export const DestinyContentVault = [
             1649720500, // Shadow of War Suit
             1070500232, // The Chronicon
             2721577348, // Confessions
-            1891105980, // Crown of Sorrow
           ],
           collectibles: [
             2014766405, // Emperor's Courtesy
@@ -2069,11 +2085,23 @@ export const DestinyContentVault = [
             1366523382, // Hive Repurposing
             753635605, // Shadow of Earth Shell
             3171386139, // Crown of Sorrow
-            3171386140, // Heavy Is the Crown
             2168196994, // Imperial Opulence
             2168196995, // Imperial Dress
           ],
-          records: [],
+          records: [
+            1558682416, // Crown of Ease
+            1558682429, // Lost in the Kingdom of Sorrow
+            1575460005, // I'm Not Superstitious
+            1575460004, // Limited Blessings
+            1575460003, // Total Victory
+            1575460002, // With Both Hands
+            1558682421, // In the Shadow of the Kingdom of Sorrow
+            1558682423, // Clan Night: Crown of Sorrow
+            1558682417, // Arc Borne
+            1558682418, // Void Borne
+            1558682419, // Solar Borne
+            1558682428, // Stay Classy
+          ],
         },
       },
       {

@@ -7,7 +7,7 @@ function goToTop() {
   window.scrollTo(0, 0);
 }
 
-export function linkHelper(props) {
+export function markdownHelper_link(props) {
   const url = new URL(props.href.includes('https://') ? props.href : `${window.location.origin}${props.href}`);
 
   if (url.hostname === window.location.hostname) {
@@ -23,6 +23,28 @@ export function linkHelper(props) {
       </a>
     );
   }
+}
+
+export function markdownHelper_listItem(props) {
+  const EXPRESSION_CLASSNAME = /@CLASSNAME=([a-z0-9].+)@/gm;
+  const className = EXPRESSION_CLASSNAME.exec(props.children?.map((child) => child.props?.value).join(''))?.[1];
+  
+  // console.log(props.children?.map((child) => child.props?.value).join(''));
+  // console.log(EXPRESSION_CLASSNAME.exec(props.children?.map((child) => child.props?.value).join('')));
+  // console.log(className);
+  // console.log(props.children);
+
+  return (
+    <li className={className}>
+      {props.children.map((child) => ({
+        ...child,
+        props: {
+          ...child.props,
+          children: typeof child.props.children === 'string' ? child.props.children.replace(EXPRESSION_CLASSNAME, '') : child.props.children,
+        },
+      }))}
+    </li>
+  );
 }
 
 export function wrapEnergy(props) {

@@ -277,7 +277,7 @@ export default function Index() {
                       <div className='time'>
                         <time title={blog.posts[blog.index].date}>{fromNow(blog.posts[blog.index].date, false, true)}</time>
                       </div>
-                      <BraytechText className='summary' value={blog.posts[blog.index].summary} />
+                      {viewport.width > 600 ? <BraytechText className='summary' value={blog.posts[blog.index].summary} /> : null}
                       <h3>{blog.posts[blog.index].name}</h3>
                     </div>
                     <div className='buttons'>
@@ -293,6 +293,7 @@ export default function Index() {
                     </div>
                   </div>
                   <div className='post'>
+                    {viewport.width < 601 ? <BraytechText className='block summary' value={blog.posts[blog.index].summary} /> : null}
                     {blog.posts[blog.index].content.map((block, b) =>
                       block.files.length ? (
                         <div key={b} className='block files'>

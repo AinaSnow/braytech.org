@@ -510,135 +510,34 @@
   background-size: cover;
 }
 
-#tooltip .super {
-  padding: 20px 16px 0;
+#tooltip .frame.sub-class {
+
 }
 
-#tooltip .super .path {
-  margin: 0 0 20px;
+#tooltip .frame.sub-class .attunement {
+  padding: 16px;
+  display: grid;
+  grid-template-columns: 90px 1fr;
+  gap: 10px;
+  align-items: center;
 }
 
-#tooltip .super .path .text {
-  padding: 18px 0 14px;
-  text-align: center;
-  font-family: 'Aldine 401 BT', serif;
-  font-size: 18px;
-  letter-spacing: 3px;
-  text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.6);
-}
-
-#tooltip .super .path .line {
+#tooltip .frame.sub-class .attunement .icon {
   position: relative;
-  height: 1px;
+  width: 90px;
+  height: 70px;
 }
 
-#tooltip .super .path .line::before,
-#tooltip .super .path .line::after {
-  content: ' ';
-  position: absolute;
-  top: 1px;
-  width: 1rem;
-  height: 1px;
-  background-color: rgba(255, 255, 255, 0.2);
+#tooltip .frame.sub-class .attunement .icon.dl {
+  opacity: 0.4;
 }
 
-#tooltip .super .path .line::after {
-  right: 0;
-}
-
-#tooltip .super .path .line:last-child::before,
-#tooltip .super .path .line:last-child::after {
-  top: unset;
-  bottom: 1px;
-}
-
-#tooltip .super .ability {
-  margin: 0 0 12px;
-}
-
-#tooltip .super .ability .icon {
-  font-size: 38px;
-  position: absolute;
-  bottom: 0;
-  right: 0;
-  transform: scale(5);
-  transform-origin: 90% bottom;
-  opacity: 0.2;
-}
-
-#tooltip .background-overflow {
-  position: relative;
-  overflow: hidden;
-}
-
-#tooltip .super .ability .text {
-  font-size: 16px;
-}
-
-#tooltip .super .ability .text .name {
-  margin: 0 0 6px;
-}
-
-#tooltip .super .ability .text .description {
+#tooltip .frame.sub-class .attunement .description {
   padding: 0;
-}
-
-#tooltip .super .ability .text .description p {
-  font-style: italic;
-  font-size: 14px;
-  letter-spacing: 0.5px;
-  color: rgba(255, 255, 255, 0.6);
-}
-
-/* Nova Warp */
-#tooltip .super .ability .icon.sbp_3247948194 {
-  font-size: 30px;
-}
-
-/* Daybreak */
-#tooltip .super .ability .icon.sbp_1136882502 {
-  font-size: 23px;
-}
-
-/* Chaos Reach */
-#tooltip .super .ability .icon.sbp_3368836162 {
-  font-size: 30px;
-}
-
-/* Stormtrance */
-#tooltip .super .ability .icon.sbp_803974717 {
-  font-size: 32px;
-}
-
-/* Burning Maul */
-#tooltip .super .ability .icon.sbp_2401205106 {
-  font-size: 34px;
-}
-
-/* Hammer of Sol */
-#tooltip .super .ability .icon.sbp_3881209933 {
-  font-size: 44px;
-}
-
-/* Banner Shield */
-#tooltip .super .ability .icon.sbp_3112248479 {
-  font-size: 31px;
-}
-
-/* Whirlwind Guard */
-#tooltip .super .ability .icon.sbp_2236497009 {
-  font-size: 34px;
-}
-
-/* Arc Staff */
-#tooltip .super .ability .icon.sbp_674606208 {
-  font-size: 20px;
-}
-
-/* Golden Gun */
-#tooltip .super .ability .icon.sbp_3205500087 {
-  font-size: 32px;
+  font-size: 18px;
+  font-family: var(--font-text);
+  text-transform: uppercase;
+  color: #ffffff;
 }
 
 #tooltip .trials-passage .description {

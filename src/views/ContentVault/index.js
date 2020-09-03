@@ -68,15 +68,16 @@ function ToggleCompletedLink() {
 export default function ContentVault(props) {
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    window.scrollTo(0, 0);
-    dispatch(actions.tooltips.rebind());
+  const slug = props.match.params.slug;
 
-    return () => {};
+  useEffect(() => {
+    dispatch(actions.tooltips.rebind());
   }, []);
 
-  const season = +props.match.params.season;
-  const slug = props.match.params.slug;
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [slug]);
+
   const data = DestinyContentVault[0];
 
   const selectedVault = (slug && data.vault.find((vault) => slug === vault.slug)) || data.vault[0];
