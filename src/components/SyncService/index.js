@@ -56,7 +56,6 @@ export default function SyncService() {
           });
 
           dispatchNotification({
-            hash: 'SettingsSyncSuccess',
             displayProperties: {
               name: 'Voluspa',
               description: 'Settings downloaded successfully',
@@ -73,7 +72,6 @@ export default function SyncService() {
       console.log(`%cSettings download failed.`, 'color:cyan');
       console.log(response);
       dispatchNotification({
-        hash: 'SettingsDownloadSuccess',
         displayProperties: {
           name: 'Voluspa',
           description: 'Settings download failed',
@@ -112,7 +110,6 @@ export default function SyncService() {
         dispatch(actions.sync.set({ updated: response.Response.updated }));
 
         dispatchNotification({
-          hash: 'SettingsSyncSuccess',
           displayProperties: {
             name: 'Voluspa',
             description: 'Settings synced successfully',
@@ -126,7 +123,6 @@ export default function SyncService() {
         console.log(auth);
         console.log(response);
         dispatchNotification({
-          hash: 'SettingsSyncFailure',
           displayProperties: {
             name: 'Voluspa',
             description: 'Settings sync fail',
