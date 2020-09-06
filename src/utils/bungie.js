@@ -1,7 +1,8 @@
 import store from '../store';
 import ls from './localStorage';
+import { dedupePromise } from './promises';
 
-export async function BungieAuth() {
+export const BungieAuth = dedupePromise(async function BungieAuth() {
   // get saved auth tokes
   const tokens = ls.get('setting.auth');
 
@@ -31,13 +32,13 @@ export async function BungieAuth() {
       }
     } else {
       if (process.env.NODE_ENV === 'development') console.log('%cAuth tokens are current.', 'font-style: italic');
-      
+
       return tokens;
     }
   } else {
-    console.log('uh oh')
+    return false;
   }
-}
+});
 
 async function apiRequest(path, options = {}) {
   const defaults = {

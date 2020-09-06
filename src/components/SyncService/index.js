@@ -1,15 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import actions from '../../store/actions';
 import ls from '../../utils/localStorage';
-import { useIsMounted, useInterval } from '../../utils/hooks';
+import { dedupePromise } from '../../utils/promises';
+import { useIsMounted, useInterval, useDebounce } from '../../utils/hooks';
 import { BungieAuth } from '../../utils/bungie';
 import { GetMemberSettings, PostMemberSettings } from '../../utils/voluspa';
-
-function save(payload) {
-  ls.set('settings', payload);
-}
 
 export default function SyncService() {
   const dispatch = useDispatch();
@@ -27,8 +24,46 @@ export default function SyncService() {
     }
   }, []);
 
+  useEffect(() => {
+    if (isMounted.current && sync.enabled) {
+      download();
+    }
+  }, []);
+
+  useInterval(() => {
+    if (isMounted.current && sync.enabled) {
+      download();
+    }
+  }, 1800 * 1000);
+
+  // if a user spams settings changes, 
+  // we wait 500ms before setting a value, trigegring the effect
+  const debouncedSettingsUpdated = useDebounce(settings.updated, 500);
+
+  // sync changes
+  useEffect(() => {
+    // if sync is enabled, sync then save
+    if (isMounted.current && isSetup && sync.enabled && settings.updated > sync.updated) {
+      update();
+    }
+    // just save
+    else {
+      ls.set('settings', settings);
+    }
+  }, [debouncedSettingsUpdated]);
+
+  function dispatchNotification(payload) {
+    dispatch(
+      actions.notifications.push({
+        date: new Date().toISOString(),
+        expiry: 86400 * 1000,
+        ...payload,
+      })
+    );
+  }
+
   // download state
-  async function download() {
+  const download = dedupePromise(async () => {
     console.log(`%cSettings downloading...`, 'color:cyan');
 
     const response = await GetMemberSettings({
@@ -50,7 +85,7 @@ export default function SyncService() {
             })
           );
 
-          save({
+          ls.set('settings', {
             ...settings,
             updated: response.Response.updated,
           });
@@ -80,80 +115,46 @@ export default function SyncService() {
         error: true,
       });
     }
-  }
+  });
 
-  useEffect(() => {
-    if (isMounted.current && sync.enabled) {
-      download();
-    }
-  }, []);
+  const update = dedupePromise(async () => {
+    console.log(`%cSettings syncing...`, 'color:lime');
 
-  useInterval(() => {
-    if (isMounted.current && sync.enabled) {
-      download();
-    }
-  }, 1800 * 1000);
+    const auth = await BungieAuth();
+    const response = await PostMemberSettings({
+      bnetMembershipId: auth.bnetMembershipId,
+      membershipId: member.membershipId,
+      settings,
+    });
 
-  // sync changes
-  useEffect(() => {
-    async function distribute() {
-      console.log(`%cSettings syncing...`, 'color:lime');
+    if (response?.ErrorCode === 1) {
+      dispatch(actions.sync.set({ updated: response.Response.updated }));
 
-      const auth = await BungieAuth();
-      const response = await PostMemberSettings({
-        bnetMembershipId: auth.bnetMembershipId,
-        membershipId: member.membershipId,
-        settings,
+      dispatchNotification({
+        displayProperties: {
+          name: 'Voluspa',
+          description: 'Settings synced successfully',
+          timeout: 4,
+        },
       });
 
-      if (response?.ErrorCode === 1) {
-        dispatch(actions.sync.set({ updated: response.Response.updated }));
-
-        dispatchNotification({
-          displayProperties: {
-            name: 'Voluspa',
-            description: 'Settings synced successfully',
-            timeout: 4,
-          },
-        });
-
-        console.log(`%cSettings synced at: ${response.Response.updated}`, 'color:lime');
-      } else {
-        console.log(`%cSettings sync failed.`, 'color:lime');
-        console.log(auth);
-        console.log(response);
-        dispatchNotification({
-          displayProperties: {
-            name: 'Voluspa',
-            description: 'Settings sync fail',
-            timeout: 10,
-          },
-          error: true,
-        });
-      }
-
-      save(settings);
+      console.log(`%cSettings synced at: ${response.Response.updated}`, 'color:lime');
+    } else {
+      console.log(`%cSettings sync failed.`, 'color:lime');
+      console.log(auth);
+      console.log(response);
+      dispatchNotification({
+        displayProperties: {
+          name: 'Voluspa',
+          description: 'Settings sync fail',
+          timeout: 10,
+        },
+        error: true,
+      });
     }
 
-    // if sync is enabled, sync then save
-    if (isMounted.current && isSetup && sync.enabled && settings.updated > sync.updated) {
-      distribute();
-    }
-    // just save
-    else {
-      save(settings);
-    }
-  }, [settings.updated]);
-
-  function dispatchNotification(payload) {
-    dispatch(
-      actions.notifications.push({
-        date: new Date().toISOString(),
-        expiry: 86400 * 1000,
-        ...payload,
-      })
-    );
-  }
+    ls.set('settings', settings);
+  });
 
   return null;
 }
