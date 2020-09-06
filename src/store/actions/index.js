@@ -11,7 +11,7 @@ export default {
         type: 'SETTINGS_SYNC',
         payload,
       };
-    },
+    }
   },
   sync: {
     set: function (payload) {
@@ -47,6 +47,17 @@ export default {
         payload,
       };
     },
+    pushHistory: function (payload) {
+      return {
+        type: 'SETTINGS_MEMBERS_HISTORY_PUSH',
+        payload,
+      };
+    },
+    resetHistory: function (payload) {
+      return {
+        type: 'SETTINGS_MEMBERS_HISTORY_RESET',
+      };
+    }
   },
   theme: {
     scrollbars: function (payload) {

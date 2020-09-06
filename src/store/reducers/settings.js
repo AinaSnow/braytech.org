@@ -10,6 +10,9 @@ const initial = {
     threeShadows: false,
     gay: false,
   },
+  developer: {
+    lists: false,
+  },
   itemVisibility: {
     hideCompletedRecords: false,
     hideCompletedChecklistItems: false,
@@ -19,6 +22,12 @@ const initial = {
     hideDudRecords: true,
     hideUnobtainableRecords: true,
     suppressVaultWarnings: false,
+  },
+  triumphs: {
+    tracked: [],
+  },
+  members: {
+    history: [],
   },
   maps: {
     debug: false,
@@ -44,12 +53,6 @@ const initial = {
       530600409: true, // Calcified fragments
     },
   },
-  developer: {
-    lists: false,
-  },
-  triumphs: {
-    tracked: [],
-  },
 };
 
 const defaults = merge({ ...initial }, ls.get('settings'));
@@ -68,15 +71,19 @@ export default function reducer(state = defaults, action) {
   }
   // accepts shapes
   else if (action.type === 'SETTINGS_SET') {
-    const settings = merge({
-      ...state,
-      ...action.payload,
-      updated: new Date().toISOString(),
-    });
+    const settings = merge(
+      {
+        ...state,
+      },
+      action.payload,
+      {
+        updated: new Date().toISOString(),
+      }
+    );
 
     return settings;
   }
-  // accepts a hash
+  // triumphs: track toggle
   else if (action.type === 'SETTINGS_TRIUMPHS_TRACKED_TOGGLE') {
     const settings = {
       ...state,
@@ -92,13 +99,41 @@ export default function reducer(state = defaults, action) {
     };
 
     return settings;
-  } else if (action.type === 'SETTINGS_TRIUMPHS_TRACKED_RESET') {
+  }
+  // triumphs: reset
+  else if (action.type === 'SETTINGS_TRIUMPHS_TRACKED_RESET') {
     const settings = {
       ...state,
       updated: new Date().toISOString(),
       triumphs: {
         ...state.triumphs,
         tracked: [],
+      },
+    };
+
+    return settings;
+  }
+  // member history: push
+  else if (action.type === 'SETTINGS_MEMBERS_HISTORY_PUSH') {
+    const settings = {
+      ...state,
+      updated: new Date().toISOString(),
+      members: {
+        ...state.members,
+        history: [],
+      },
+    };
+
+    return settings;
+  }
+  // member history: reset
+  else if (action.type === 'SETTINGS_MEMBERS_HISTORY_RESET') {
+    const settings = {
+      ...state,
+      updated: new Date().toISOString(),
+      members: {
+        ...state.members,
+        history: [],
       },
     };
 

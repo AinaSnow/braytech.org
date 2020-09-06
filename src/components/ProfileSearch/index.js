@@ -1,10 +1,9 @@
 import React from 'react';
 import { debounce } from 'lodash';
-import { withTranslation } from 'react-i18next';
 
 import { t } from '../../utils/i18n';
 import ls from '../../utils/localStorage';
-import * as bungie from '../../utils/bungie';
+import { GetMembershipFromHardLinkedCredential, GetMembershipDataById, SearchDestinyPlayer, GetProfile } from '../../utils/bungie';
 import Spinner from '../../components/UI/Spinner';
 
 import './styles.css';
@@ -51,20 +50,19 @@ class ProfileSearch extends React.Component {
       const isMembershipId = search.match(/\b\d{19}\b/);
       const response = isSteamID64
         ? // is SteamID64
-          await bungie.GetMembershipFromHardLinkedCredential({ params: { crType: 'SteamId', credential: search } })
+          await GetMembershipFromHardLinkedCredential({ params: { crType: 'SteamId', credential: search } })
         : isMembershipId
         ? // is MembershipId
-          await bungie.GetMembershipDataById({ params: { membershipId: search, membershipType: '-1' } })
+          await GetMembershipDataById({ params: { membershipId: search, membershipType: '-1' } })
         : // is display name
-          await bungie.SearchDestinyPlayer('-1', search);
+          await SearchDestinyPlayer('-1', search);
       // 4611686018430042660
 
       const results =
         isSteamID64 && response.ErrorCode === 1
           ? // is SteamID64
             [
-              await bungie
-                .GetProfile({
+              await GetProfile({
                   params: {
                     membershipType: response.Response.membershipType,
                     membershipId: response.Response.membershipId,
