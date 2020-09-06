@@ -55,6 +55,15 @@ export default function SyncService() {
             updated: response.Response.updated,
           });
 
+          dispatchNotification({
+            hash: 'SettingsSyncSuccess',
+            displayProperties: {
+              name: 'Voluspa',
+              description: 'Settings downloaded successfully',
+              timeout: 4,
+            },
+          });
+
           console.log(`%cSettings downloaded: last updated ${response.Response.updated}`, 'color:cyan');
         } else {
           console.log(`%cSettings downloaded: current ${response.Response.updated}`, 'color:cyan');
@@ -63,6 +72,15 @@ export default function SyncService() {
     } else {
       console.log(`%cSettings download failed.`, 'color:cyan');
       console.log(response);
+      dispatchNotification({
+        hash: 'SettingsDownloadSuccess',
+        displayProperties: {
+          name: 'Voluspa',
+          description: 'Settings download failed',
+          timeout: 10,
+        },
+        error: true,
+      });
     }
   }
 
@@ -93,9 +111,29 @@ export default function SyncService() {
       if (response?.ErrorCode === 1) {
         dispatch(actions.sync.set({ updated: response.Response.updated }));
 
+        dispatchNotification({
+          hash: 'SettingsSyncSuccess',
+          displayProperties: {
+            name: 'Voluspa',
+            description: 'Settings synced successfully',
+            timeout: 4,
+          },
+        });
+
         console.log(`%cSettings synced at: ${response.Response.updated}`, 'color:lime');
       } else {
         console.log(`%cSettings sync failed.`, 'color:lime');
+        console.log(auth);
+        console.log(response);
+        dispatchNotification({
+          hash: 'SettingsSyncFailure',
+          displayProperties: {
+            name: 'Voluspa',
+            description: 'Settings sync fail',
+            timeout: 10,
+          },
+          error: true,
+        });
       }
 
       save(settings);
@@ -110,6 +148,16 @@ export default function SyncService() {
       save(settings);
     }
   }, [settings.updated]);
+
+  function dispatchNotification(payload) {
+    dispatch(
+      actions.notifications.push({
+        date: new Date().toISOString(),
+        expiry: 86400 * 1000,
+        ...payload,
+      })
+    );
+  }
 
   return null;
 }

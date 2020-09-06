@@ -120,7 +120,10 @@ export default function reducer(state = defaults, action) {
       updated: new Date().toISOString(),
       members: {
         ...state.members,
-        history: [],
+        history: [
+          ...state.members.history.slice(0, 9),
+          action.payload
+        ],
       },
     };
 

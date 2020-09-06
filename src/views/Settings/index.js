@@ -65,7 +65,7 @@ function Common() {
   const dispatch = useDispatch();
   const settings = useSelector((state) => state.settings);
   const theme = useSelector((state) => state.theme);
-  const dim = useSelector((state) => state.dim);
+  const sync = useSelector((state) => state.sync);
   const member = useSelector((state) => state.member);
 
   useEffect(() => {
@@ -136,9 +136,9 @@ function Common() {
           </li>
         </ul>
         <div className='sub-header'>
-          <div>{t('DIM Sync')}</div>
+          <div>{t('Synchronisation')}</div>
         </div>
-        dimApiEnabled: {dim.dimApiEnabled && 'true'}
+        last synced: {sync.updated}
       </div>
       <div className='module'>
         <div className='sub-header'>
@@ -317,7 +317,7 @@ function Advanced() {
   };
 
   const handler_profileHistoryReset = (event) => {
-    ls.set('history.profiles', []);
+    dispatch(actions.member.resetHistory());
   };
 
   const handler_notificationsReset = (event) => {

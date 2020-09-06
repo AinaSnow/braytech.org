@@ -42,7 +42,7 @@ export default function CharacterSelect() {
     dispatch(actions.member.load({ membershipType, membershipId }));
 
     if (displayName) {
-      ls.update('history.profiles', { membershipType, membershipId, displayName }, true, 9);
+      dispatch(actions.member.pushHistory({ membershipType, membershipId, displayName }));
     }
   };
 

@@ -1,84 +1,79 @@
-import React from 'react';
-import { debounce } from 'lodash';
+import React, { useState, useEffect } from 'react';
+import { useSelector } from 'react-redux';
 
+import { useIsMounted, useDebounce } from '../../utils/hooks';
 import { t } from '../../utils/i18n';
-import ls from '../../utils/localStorage';
 import { GetMembershipFromHardLinkedCredential, GetMembershipDataById, SearchDestinyPlayer, GetProfile } from '../../utils/bungie';
+
 import Spinner from '../../components/UI/Spinner';
 
 import './styles.css';
 
-class ProfileSearch extends React.Component {
-  state = {
+export default function ProfileSearch({ ...props }) {
+  const isMounted = useIsMounted();
+  const history = useSelector((state) => state.settings.members.history);
+
+  const [state, setState] = useState({
     results: false,
-    search: '',
     searching: false,
-  };
+  });
 
-  componentDidMount() {
-    this.mounted = true;
-  }
+  const [input, setInput] = useState('');
 
-  componentWillUnmount() {
-    this.mounted = false;
-  }
+  const debouncedInput = useDebounce(input, 500);
 
-  handler_onSearchChange = (e) => {
-    if (this.mounted) {
-      this.setState({ search: e.target.value });
+  useEffect(() => {
+    searchForPlayers();
+  }, [debouncedInput]);
 
-      this.searchForPlayers();
+  function handler_onChange(event) {
+    if (isMounted.current) {
+      setInput(event.target.value.trim());
     }
-  };
+  }
 
-  handler_onSearchKeyPress = (e) => {
+  function handler_onKeyPress(event) {
     // If they pressed enter, ignore the debounce and search right meow. MEOW, SON.
-    if (e.key === 'Enter') this.searchForPlayers.flush();
-  };
+    if (event.key === 'Enter') searchForPlayers();
+  }
 
-  // Debounced so that we don't make an API request for every single
-  // keypress - only when they stop typing.
-  searchForPlayers = debounce(async () => {
-    const { search } = this.state;
-
-    if (!search) return;
-
-    this.setState({ searching: true });
+  async function searchForPlayers() {
+    if (!input) return;
 
     try {
-      const isSteamID64 = search.match(/\b\d{17}\b/);
-      const isMembershipId = search.match(/\b\d{19}\b/);
+      setState((state) => ({ ...state, searching: true }));
+
+      const isSteamID64 = input.match(/\b\d{17}\b/);
+      const isMembershipId = input.match(/\b\d{19}\b/);
       const response = isSteamID64
         ? // is SteamID64
-          await GetMembershipFromHardLinkedCredential({ params: { crType: 'SteamId', credential: search } })
+          await GetMembershipFromHardLinkedCredential({ params: { crType: 'SteamId', credential: input } })
         : isMembershipId
         ? // is MembershipId
-          await GetMembershipDataById({ params: { membershipId: search, membershipType: '-1' } })
+          await GetMembershipDataById({ params: { membershipId: input, membershipType: '-1' } })
         : // is display name
-          await SearchDestinyPlayer('-1', search);
-      // 4611686018430042660
+          await SearchDestinyPlayer('-1', input);
 
       const results =
         isSteamID64 && response.ErrorCode === 1
           ? // is SteamID64
             [
               await GetProfile({
-                  params: {
-                    membershipType: response.Response.membershipType,
-                    membershipId: response.Response.membershipId,
-                    components: '100',
-                  },
-                  errors: {
-                    hide: false,
-                  },
-                })
-                .then((response) => {
-                  return {
-                    displayName: response.Response.profile.data.userInfo.displayName,
-                    membershipId: response.Response.profile.data.userInfo.membershipId,
-                    membershipType: response.Response.profile.data.userInfo.membershipType,
-                  };
-                }),
+                params: {
+                  membershipType: response.Response.membershipType,
+                  membershipId: response.Response.membershipId,
+                  components: '100',
+                },
+                errors: {
+                  hide: false,
+                },
+              }).then((response) => {
+                return {
+                  displayName: response.Response.profile.data.userInfo.displayName,
+                  membershipId: response.Response.profile.data.userInfo.membershipId,
+                  membershipType: response.Response.profile.data.userInfo.membershipType,
+                };
+              }),
             ]
           : isMembershipId && response.ErrorCode === 1
           ? // is MembershipId
@@ -86,69 +81,59 @@ class ProfileSearch extends React.Component {
           : // is display name
             response.Response;
 
-      if (this.mounted) {
+      if (isMounted.current) {
         if (results) {
-          this.setState({ results, searching: false });
+          setState({ results, searching: false });
         } else {
           throw Error();
         }
       }
-    } catch (e) {
+    } catch (error) {
       // If we get an error here it's usually because somebody is being cheeky
       // (eg entering invalid search data), so log it only.
-      console.warn(`Error while searching for ${search}: ${e}`);
+      console.warn(`Error while searching for ${input}: ${error}`);
 
-      if (this.mounted) this.setState({ results: false, searching: false });
+      if (isMounted.current) {
+        setState({ results: false, searching: false });
+      }
     }
-  }, 500);
+  }
 
-  resultsElement() {
-    const { results, searching } = this.state;
-
-    if (searching) {
+  function resultsElement() {
+    if (state.searching) {
       return null;
     }
 
-    if (results && results.length > 0) {
-      return this.props.resultsListItems(results);
-    } else if (results) {
+    if (state.results.length > 0) {
+      return props.resultsListItems(state.results);
+    } else if (state.results) {
       return <li className='no-profiles'>{t('No profiles found')}</li>;
     }
 
     return null;
   }
 
-  render() {
-    const { search, searching } = this.state;
-
-    const history = ls.get('history.profiles') || [];
-
-    return (
-      <div className='profile-search'>
-        <div className='sub-header'>
-          <div>{t('Search for player')}</div>
-        </div>
-        <div className='form'>
-          <div className='field'>
-            <input onChange={this.handler_onSearchChange} type='text' placeholder={t('insert gamertag or SteamId64')} spellCheck='false' value={search} onKeyPress={this.handler_onSearchKeyPress} />
-          </div>
-        </div>
-
-        <div className='results'>{searching ? <Spinner mini /> : <ul className='list'>{this.resultsElement()}</ul>}</div>
-
-        {history.length > 0 && (
-          <>
-            <div className='sub-header'>
-              <div>{t('Previous searches')}</div>
-            </div>
-            <div className='results'>
-              <ul className='list'>{this.props.resultsListItems(history)}</ul>
-            </div>
-          </>
-        )}
+  return (
+    <div className='profile-search'>
+      <div className='sub-header'>
+        <div>{t('Search for player')}</div>
       </div>
-    );
-  }
+      <div className='form'>
+        <div className='field'>
+          <input onChange={handler_onChange} onKeyPress={handler_onKeyPress} type='text' placeholder={t('insert gamertag or SteamId64')} spellCheck='false' value={input.value} />
+        </div>
+      </div>
+      <div className='results'>{state.searching ? <Spinner mini /> : <ul className='list'>{resultsElement()}</ul>}</div>
+      {history.length > 0 && (
+        <>
+          <div className='sub-header'>
+            <div>{t('Previous searches')}</div>
+          </div>
+          <div className='results'>
+            <ul className='list'>{props.resultsListItems(history)}</ul>
+          </div>
+        </>
+      )}
+    </div>
+  );
 }
-
-export default ProfileSearch;
