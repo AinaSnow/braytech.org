@@ -1,86 +1,151 @@
 {
   "de": {
-    "translated": 688,
-    "notTranslated": 96,
-    "added": [],
+    "translated": 784,
+    "notTranslated": 8,
+    "added": [
+      "Settings.Sync.Description",
+      "Settings.Sync.Info",
+      "Settings.Sync.Name",
+      "Synchronisation"
+    ],
     "removed": []
   },
   "debug": {
-    "translated": 784,
+    "translated": 792,
     "notTranslated": 0,
-    "added": [],
+    "added": [
+      "Settings.Sync.Description",
+      "Settings.Sync.Info",
+      "Settings.Sync.Name",
+      "Synchronisation"
+    ],
     "removed": []
   },
   "en": {
-    "translated": 784,
+    "translated": 792,
     "notTranslated": 0,
     "added": [],
     "removed": []
   },
   "es-mx": {
-    "translated": 775,
-    "notTranslated": 9,
-    "added": [],
+    "translated": 788,
+    "notTranslated": 4,
+    "added": [
+      "Settings.Sync.Description",
+      "Settings.Sync.Info",
+      "Settings.Sync.Name",
+      "Synchronisation"
+    ],
     "removed": []
   },
   "es": {
-    "translated": 775,
-    "notTranslated": 9,
-    "added": [],
+    "translated": 788,
+    "notTranslated": 4,
+    "added": [
+      "Settings.Sync.Description",
+      "Settings.Sync.Info",
+      "Settings.Sync.Name",
+      "Synchronisation"
+    ],
     "removed": []
   },
   "fr": {
     "translated": 616,
-    "notTranslated": 168,
-    "added": [],
+    "notTranslated": 176,
+    "added": [
+      "Settings.Sync.Description",
+      "Settings.Sync.Info",
+      "Settings.Sync.Name",
+      "Synchronisation"
+    ],
     "removed": []
   },
   "it": {
-    "translated": 775,
-    "notTranslated": 9,
-    "added": [],
+    "translated": 786,
+    "notTranslated": 6,
+    "added": [
+      "Settings.Sync.Description",
+      "Settings.Sync.Info",
+      "Settings.Sync.Name",
+      "Synchronisation"
+    ],
     "removed": []
   },
   "ja": {
     "translated": 564,
-    "notTranslated": 220,
-    "added": [],
+    "notTranslated": 228,
+    "added": [
+      "Settings.Sync.Description",
+      "Settings.Sync.Info",
+      "Settings.Sync.Name",
+      "Synchronisation"
+    ],
     "removed": []
   },
   "ko": {
     "translated": 492,
-    "notTranslated": 292,
-    "added": [],
+    "notTranslated": 300,
+    "added": [
+      "Settings.Sync.Description",
+      "Settings.Sync.Info",
+      "Settings.Sync.Name",
+      "Synchronisation"
+    ],
     "removed": []
   },
   "pl": {
     "translated": 485,
-    "notTranslated": 299,
-    "added": [],
+    "notTranslated": 307,
+    "added": [
+      "Settings.Sync.Description",
+      "Settings.Sync.Info",
+      "Settings.Sync.Name",
+      "Synchronisation"
+    ],
     "removed": []
   },
   "pt-br": {
-    "translated": 755,
-    "notTranslated": 29,
-    "added": [],
+    "translated": 754,
+    "notTranslated": 38,
+    "added": [
+      "Settings.Sync.Description",
+      "Settings.Sync.Info",
+      "Settings.Sync.Name",
+      "Synchronisation"
+    ],
     "removed": []
   },
   "ru": {
-    "translated": 775,
-    "notTranslated": 9,
-    "added": [],
+    "translated": 786,
+    "notTranslated": 6,
+    "added": [
+      "Settings.Sync.Description",
+      "Settings.Sync.Info",
+      "Settings.Sync.Name",
+      "Synchronisation"
+    ],
     "removed": []
   },
   "zh-chs": {
-    "translated": 599,
-    "notTranslated": 185,
-    "added": [],
+    "translated": 637,
+    "notTranslated": 155,
+    "added": [
+      "Settings.Sync.Description",
+      "Settings.Sync.Info",
+      "Settings.Sync.Name",
+      "Synchronisation"
+    ],
     "removed": []
   },
   "zh-cht": {
-    "translated": 657,
-    "notTranslated": 127,
-    "added": [],
+    "translated": 656,
+    "notTranslated": 136,
+    "added": [
+      "Settings.Sync.Description",
+      "Settings.Sync.Info",
+      "Settings.Sync.Name",
+      "Synchronisation"
+    ],
     "removed": []
   }
 }

@@ -280,7 +280,7 @@ const NodesLogic = {
             }
         }
         if (ARG_STATS) {
-            await FilesLogic.write('./src/data/translationStats/index.json', JSON.stringify(result, null, 2), { flag: 'w' });
+            await FilesLogic.write('./src/data/translation-stats/index.json', JSON.stringify(result, null, 2), { flag: 'w' });
         }
         console.log('done.');
         process.exit(0);

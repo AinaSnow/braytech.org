@@ -28,6 +28,7 @@ import NotificationService from './components/Notifications/NotificationService'
 import NotificationProgress from './components/Notifications/NotificationProgress';
 import ServiceWorkerUpdate from './components/Notifications/ServiceWorkerUpdate';
 import RefreshService from './components/RefreshService';
+import SyncService from './components/SyncService';
 import ErrorBoundary from './components/ErrorBoundary';
 import { AppLoading, SuspenseLoading } from './components/Loading';
 
@@ -97,7 +98,6 @@ async function timed(name, promise) {
   return result;
 }
 
-// Girl, bye, modernizr
 function CSSFeatureDetects() {
   if (document.body.style.backdropFilter === undefined) {
     document.documentElement.classList.add('no-backdrop-filter');
@@ -127,6 +127,7 @@ class App extends React.Component {
       storedManifest: timed('getStoredManifest', this.getStoredManifest()),
       manifestIndex: timed('GetDestinyManifest', bungie.GetDestinyManifest({ errors: { hide: true } })),
       bungieSettings: timed('GetCommonSettings', bungie.GetCommonSettings({ errors: { hide: true } })),
+      // dimSettings: timed('GetDIMCommonSettings', dim.GetCommonSettings()),
       voluspaStatistics: timed('GetStatistics', voluspa.GetStatistics()),
     };
 
@@ -143,17 +144,27 @@ class App extends React.Component {
   // Upon App.js mount; bind window reisze handler,
   // check if client online, start fetching manifest
   async componentDidMount() {
+    // set viewport now
     this.handler_resizeViewport();
 
+    // start watching viewport
     window.addEventListener('resize', this.handler_resizeViewport);
 
+    // run feature detects
     CSSFeatureDetects();
 
+    // is the network available
     if (!window.navigator.onLine) {
       this.setState({ status: { code: 'navigator_offline' } });
+
       return;
     }
 
+    // fetch DIM settings
+    // const dimSettings = await this.startupRequests.dimSettings;
+    // if (dimSettings?.settings) this.props.setDimSettings(dimSettings.settings);
+
+    // setup the manifest
     try {
       await timed('setUpManifest', this.setUpManifest());
     } catch (e) {
@@ -217,10 +228,9 @@ class App extends React.Component {
     }
 
     tmpManifest.settings = bungieSettings && bungieSettings.ErrorCode === 1 && bungieSettings.Response;
-
-    this.availableLanguages = Object.keys(manifestIndex.Response.jsonWorldContentPaths);
-
-    if (process.env.NODE_ENV === 'development') this.availableLanguages.unshift('debug');
+    
+    tmpManifest.languages = Object.keys(manifestIndex.Response.jsonWorldContentPaths)
+    if (process.env.NODE_ENV === 'development') tmpManifest.languages.unshift('debug');
 
     tmpManifest.statistics = (await this.startupRequests.voluspaStatistics).Response?.data || {};
 
@@ -337,7 +347,7 @@ class App extends React.Component {
                         <Route path='/compare/:object?' exact component={Compare} />
 
                         <Route path='/commonality' exact component={Commonality} />
-                        <Route path='/settings' exact render={(route) => <Settings {...route} availableLanguages={this.availableLanguages} />} />
+                        <Route path='/settings/:category?' exact component={Settings} />
                         <Route path='/faq' exact component={FAQ} />
                         <Route path='/content-vault/:season([0-9]+)?/:slug?' exact component={ContentVault} />
                         <Route path='/solstice-of-heroes/:type?' exact component={SolsticeOfHeroes} />
@@ -354,6 +364,7 @@ class App extends React.Component {
                     a character, as the refresh will cause the member to
                     continually reload itself */}
                     <Route path='/character-select' children={(route) => !route.match && <RefreshService {...route} />} />
+                    <SyncService />
 
                     <Route component={Footer} />
                   </>
@@ -377,11 +388,14 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    setViewport: (value) => {
-      dispatch({ type: 'VIEWPORT_CHANGED', payload: value });
+    setViewport: (payload) => {
+      dispatch({ type: 'VIEWPORT_CHANGED', payload });
     },
-    setMemberByRoute: (value) => {
-      dispatch({ type: 'MEMBER_SET_BY_PROFILE_ROUTE', payload: value });
+    setMemberByRoute: (payload) => {
+      dispatch({ type: 'MEMBER_SET_BY_PROFILE_ROUTE', payload });
+    },
+    setDimSettings: (payload) => {
+      dispatch({ type: 'DIM_SETINGS_SET', payload });
     },
   };
 }

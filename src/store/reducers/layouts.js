@@ -343,7 +343,7 @@ export const defaultState = {
 
 export default function reducer(state = { ...defaultState, ...lsState }, action) {
   switch (action.type) {
-    case 'SET_LAYOUT':
+    case 'LAYOUTS_SET':
       state = {
         ...state,
         [action.payload.target]: action.payload.value
@@ -351,7 +351,7 @@ export default function reducer(state = { ...defaultState, ...lsState }, action)
 
       ls.set('setting.layouts', state);
       return state;
-    case 'RESET_LAYOUTS':
+    case 'LAYOUTS_RESET':
       if (action.payload.target) {
         state = {
           ...state,

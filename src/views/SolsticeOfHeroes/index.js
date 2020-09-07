@@ -7,12 +7,13 @@ import { t, BungieText, BraytechText } from '../../utils/i18n';
 import manifest from '../../utils/manifest';
 import { classTypeToString } from '../../utils/destinyConverters';
 
-import { BungieAuthButton } from '../../components/BungieAuth';
 import Items from '../../components/Items';
 import Records from '../../components/Records';
 import { Button, DestinyKey } from '../../components/UI/Button';
 import ProgressBar from '../../components/UI/ProgressBar';
-import { Common, Views, Events } from '../../svg';
+import Upsell from '../../components/UI/Upsell';
+
+import { Views, Events } from '../../svg';
 
 import './styles.css';
 
@@ -199,15 +200,7 @@ export default function SolsticeOfHeroes() {
           </div>
         </div>
         {!authed ? (
-          <div className='auth-upsell'>
-            <div className='wrap'>
-              <div className='icon'>
-                <Common.SeventhColumn />
-              </div>
-              <BraytechText className='text' value={t('Bungie.Auth.Upsell.Description')} />
-              <BungieAuthButton />
-            </div>
-          </div>
+          <Upsell auth />
         ) : null}
         <div className='buff'>
           <NavLinks />

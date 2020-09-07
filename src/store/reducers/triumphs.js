@@ -5,17 +5,31 @@ const defaultState = ls.get('setting.triumphs') || {
 };
 
 export default function reducer(state = defaultState, action) {
-  switch (action.type) {
-    case 'SET_TRACKED_TRIUMPHS':
-      ls.set('setting.triumphs', {
-        ...state,
-        tracked: action.payload,
-      });
-      return {
-        ...state,
-        tracked: action.payload,
-      };
-    default:
-      return state;
+  if (action.type === 'TRIUMPHS_TOGGLE_TRACK') {
+    const tracked = state.tracked.includes(action.payload) ? [...state.tracked].filter((hash) => action.payload !== hash) : [...state.tracked, action.payload];
+
+    ls.set('setting.triumphs', {
+      ...state,
+      tracked,
+    });
+
+    return {
+      ...state,
+      tracked,
+    };
+  } else if (action.type === 'TRIUMPHS_RESET_TRACKED') {
+    const tracked = [];
+
+    ls.set('setting.triumphs', {
+      ...state,
+      tracked,
+    });
+
+    return {
+      ...state,
+      tracked,
+    };
+  } else {
+    return state;
   }
 }

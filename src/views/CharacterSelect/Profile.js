@@ -37,7 +37,7 @@ function Profile(props) {
           </div>
         </div>
       </div>
-      <Characters member={props.member} location={props.location} onClickCharacter={props.onClickCharacter} />
+      <Characters member={props.member} onClickCharacter={props.onClickCharacter} />
     </div>
   );
 }

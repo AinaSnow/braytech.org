@@ -12,9 +12,6 @@ export default function Subclass({ itemHash, itemComponents }) {
   const { nodeCategories, nodes } = talentGrid(itemHash, activatedNodes(itemComponents?.talentGrids.talentGridHash || definitionItem.talentGrid?.talentGridHash, itemComponents?.talentGrids));
   const path = activatedPath(nodeCategories, nodes);
 
-  console.log(nodeCategories, nodes);
-  console.log(path);
-
   const flair = definitionItem.displayProperties?.description !== '' && definitionItem.displayProperties.description;
 
   const perkHashes = path.perkHashes.filter((perkHash) => manifest.DestinySandboxPerkDefinition[perkHash].isDisplayable);

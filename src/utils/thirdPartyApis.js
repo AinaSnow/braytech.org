@@ -1,4 +1,3 @@
-
 // Destiny Tracker
 export async function GetElo(options = { params: { mode: 84, membershipId: 0, season: 10 } }) {
   try {

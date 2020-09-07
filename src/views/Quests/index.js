@@ -607,7 +607,7 @@ function mapStateToProps(state, ownProps) {
 function mapDispatchToProps(dispatch) {
   return {
     rebindTooltips: () => {
-      dispatch({ type: 'REBIND_TOOLTIPS' });
+      dispatch({ type: 'TOOLTIPS_REBIND' });
     },
   };
 }

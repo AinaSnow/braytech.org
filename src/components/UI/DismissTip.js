@@ -11,7 +11,7 @@ function DismissTip(props) {
     value => e => {
       if (!value) return;
 
-      dispatch({ type: 'DISMISS_TIP', payload: value });
+      dispatch({ type: 'TIPS_DISMISS', payload: value });
     },
     [dispatch]
   );

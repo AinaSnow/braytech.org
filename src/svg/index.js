@@ -55,6 +55,7 @@ import { ReactComponent as Titan } from './common/titan.svg';
 import { ReactComponent as Hunter } from './common/hunter.svg';
 import { ReactComponent as Warlock } from './common/warlock.svg';
 import { ReactComponent as DOC } from './common/doc.svg';
+import { ReactComponent as Settings } from './common/settings.svg';
 import { ReactComponent as SeventhColumn } from './common/seventh-column.svg';
 import { ReactComponent as Info } from './common/info.svg';
 import { ReactComponent as Error } from './common/error.svg';
@@ -173,6 +174,7 @@ const Common = {
   Titan,
   Hunter,
   Warlock,
+  Settings,
   DOC,
   SeventhColumn,
   Info,

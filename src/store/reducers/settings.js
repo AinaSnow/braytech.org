@@ -1,4 +1,5 @@
 import { merge } from 'lodash';
+
 import ls from '../../utils/localStorage';
 
 const initial = {
@@ -9,6 +10,9 @@ const initial = {
     threeShadows: false,
     gay: false,
   },
+  developer: {
+    lists: false,
+  },
   itemVisibility: {
     hideCompletedRecords: false,
     hideCompletedChecklistItems: false,
@@ -18,6 +22,12 @@ const initial = {
     hideDudRecords: true,
     hideUnobtainableRecords: true,
     suppressVaultWarnings: false,
+  },
+  triumphs: {
+    tracked: [],
+  },
+  members: {
+    history: [],
   },
   maps: {
     debug: false,
@@ -43,21 +53,95 @@ const initial = {
       530600409: true, // Calcified fragments
     },
   },
-  developer: {
-    lists: false,
-  },
 };
-const history = merge({ ...initial }, ls.get('settings'));
 
-export default function reducer(state = history, action) {
-  switch (action.type) {
-    case 'SET_SETTING':
-      const adjusted = merge({ ...state }, action.payload);
+const defaults = merge({ ...initial }, ls.get('settings'));
 
-      ls.set('settings', adjusted);
+export default function reducer(state = defaults, action) {
+  // just for syncing, accepts shapes
+  if (action.type === 'SETTINGS_SYNC') {
+    const settings = merge(
+      {
+        ...state,
+      },
+      action.payload
+    );
 
-      return adjusted;
-    default:
-      return state;
+    return settings;
+  }
+  // accepts shapes
+  else if (action.type === 'SETTINGS_SET') {
+    const settings = merge(
+      {
+        ...state,
+      },
+      action.payload,
+      {
+        updated: new Date().toISOString(),
+      }
+    );
+
+    return settings;
+  }
+  // triumphs: track toggle
+  else if (action.type === 'SETTINGS_TRIUMPHS_TRACKED_TOGGLE') {
+    const settings = {
+      ...state,
+      updated: new Date().toISOString(),
+      triumphs: {
+        ...state.triumphs,
+        tracked: state.triumphs.tracked.includes(action.payload)
+          ? // untrack triumph
+            [...state.triumphs.tracked].filter((hash) => action.payload !== hash)
+          : // track triumph
+            [...state.triumphs.tracked, action.payload],
+      },
+    };
+
+    return settings;
+  }
+  // triumphs: reset
+  else if (action.type === 'SETTINGS_TRIUMPHS_TRACKED_RESET') {
+    const settings = {
+      ...state,
+      updated: new Date().toISOString(),
+      triumphs: {
+        ...state.triumphs,
+        tracked: [],
+      },
+    };
+
+    return settings;
+  }
+  // member history: push
+  else if (action.type === 'SETTINGS_MEMBERS_HISTORY_PUSH') {
+    const settings = {
+      ...state,
+      updated: new Date().toISOString(),
+      members: {
+        ...state.members,
+        history: [
+          ...state.members.history.slice(0, 9),
+          action.payload
+        ],
+      },
+    };
+
+    return settings;
+  }
+  // member history: reset
+  else if (action.type === 'SETTINGS_MEMBERS_HISTORY_RESET') {
+    const settings = {
+      ...state,
+      updated: new Date().toISOString(),
+      members: {
+        ...state.members,
+        history: [],
+      },
+    };
+
+    return settings;
+  } else {
+    return state;
   }
 }

@@ -188,7 +188,7 @@ export default function Index() {
             <div className='name'>Braytech</div>
             <div className='description'>{t('Landing.Header.Flair')}</div>
             <Link className='button cta' to='/now'>
-              <div className='text'>{t('Landing.Header.Action')}</div>
+              <div className='text'>{t('Upsell.Profile.Action')}</div>
               <i className='segoe-mdl-arrow-right' />
             </Link>
           </div>

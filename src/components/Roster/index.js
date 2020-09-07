@@ -431,7 +431,7 @@ function mapStateToProps(state, ownProps) {
 function mapDispatchToProps(dispatch) {
   return {
     rebindTooltips: (value) => {
-      dispatch({ type: 'REBIND_TOOLTIPS', payload: new Date().getTime() });
+      dispatch({ type: 'TOOLTIPS_REBIND', payload: new Date().getTime() });
     },
   };
 }

@@ -25,7 +25,7 @@ function updateScrollbars(theme) {
 }
 
 export default function reducer(state = initial, action) {
-  if (action.type === 'SET_THEME') {
+  if (action.type === 'THEME_SET') {
     const user = action.payload === 'system' ? false : action.payload;
     const active = !user ? (getSystemPreference() ? 'dark' : 'light') : user;
 
@@ -38,7 +38,7 @@ export default function reducer(state = initial, action) {
       user,
       active,
     };
-  } else if (action.type === 'SET_SCROLLBARS') {
+  } else if (action.type === 'THEME_SET_SCROLLBARS') {
     updateScrollbars(action.payload || state.user || state.system);
 
     return state;

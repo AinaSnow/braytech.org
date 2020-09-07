@@ -24,7 +24,7 @@ const equipItem = (member) => (item) => async (e) => {
     store.dispatch({ type: 'MEMBER_IS_STALE', payload: member });
   } catch (e) {
     store.dispatch({
-      type: 'PUSH_NOTIFICATION',
+      type: 'NOTIFICATIONS_PUSH',
       payload: {
         error: true,
         date: new Date().toISOString(),
@@ -126,7 +126,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     rebindTooltips: (value) => {
-      dispatch({ type: 'REBIND_TOOLTIPS', payload: new Date().getTime() });
+      dispatch({ type: 'TOOLTIPS_REBIND', payload: new Date().getTime() });
     },
   };
 }

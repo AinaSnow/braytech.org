@@ -24,7 +24,7 @@ const equipItem = (member) => (item) => async (e) => {
 
     store.dispatch({ type: 'MEMBER_IS_STALE', payload: member });
     store.dispatch({
-      type: 'PUSH_NOTIFICATION',
+      type: 'NOTIFICATIONS_PUSH',
       payload: {
         date: new Date().toISOString(),
         expiry: 86400000,
@@ -36,7 +36,7 @@ const equipItem = (member) => (item) => async (e) => {
     });
   } catch (e) {
     store.dispatch({
-      type: 'PUSH_NOTIFICATION',
+      type: 'NOTIFICATIONS_PUSH',
       payload: {
         error: true,
         date: new Date().toISOString(),

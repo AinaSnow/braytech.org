@@ -176,10 +176,10 @@ function mapDispatchToProps(dispatch) {
       dispatch({ type: 'REFRESH_STATE', payload });
     },
     pushNotification: (payload) => {
-      dispatch({ type: 'PUSH_NOTIFICATION', payload });
+      dispatch({ type: 'NOTIFICATIONS_PUSH', payload });
     },
     popNotification: (payload) => {
-      dispatch({ type: 'POP_NOTIFICATION', payload });
+      dispatch({ type: 'NOTIFICATIONS_POP', payload });
     },
   };
 }

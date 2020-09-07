@@ -234,7 +234,7 @@ async function getProgression(membershipType, membershipId, mode) {
     };
   }
 
-  const elo = mode === 84 && (await getElo(membershipId, 84, 10));
+  const elo = mode === 84 && (await getElo(membershipId, 84, 11));
 
   // in case the PGCR refers to a character that has since been deleted, as is the case with "5364501167"
   const characterId = Object.keys(response.Response.characterProgressions.data)[0];

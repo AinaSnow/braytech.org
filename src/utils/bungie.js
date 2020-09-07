@@ -1,5 +1,44 @@
 import store from '../store';
 import ls from './localStorage';
+import { dedupePromise } from './promises';
+
+export const BungieAuth = dedupePromise(async function BungieAuth() {
+  // get saved auth tokes
+  const tokens = ls.get('setting.auth');
+
+  if (tokens?.access?.value) {
+    // time now + 2 seconds, in ms
+    const now = new Date().getTime() + 2 * 1000;
+    // current token expiry, in ms
+    const then = tokens.access.expires;
+
+    // refresh tokens before making auth-full request
+    if (now > then) {
+      if (process.env.NODE_ENV === 'development') console.log('%cAuth tokens have expired...', 'font-style: italic');
+      const refreshRequest = await GetOAuthAccessToken(`grant_type=refresh_token&refresh_token=${tokens.refresh.value}`);
+
+      if (refreshRequest && refreshRequest.ErrorCode === 1) {
+        if (process.env.NODE_ENV === 'development') console.log('%cAuth tokens have been replenished.', 'font-style: italic', refreshRequest);
+
+        // use the token from the response for the original request
+        return refreshRequest.Response.access.value;
+      }
+      // token refreshRequest returned with an error...
+      // return that error to whoever asked for this
+      else {
+        if (process.env.NODE_ENV === 'development') console.log('%cAuth tokens could not be replenished!', 'font-style: italic');
+
+        return await refreshRequest;
+      }
+    } else {
+      if (process.env.NODE_ENV === 'development') console.log('%cAuth tokens are current.', 'font-style: italic');
+
+      return tokens;
+    }
+  } else {
+    return false;
+  }
+});
 
 async function apiRequest(path, options = {}) {
   const defaults = {
@@ -71,7 +110,7 @@ async function apiRequest(path, options = {}) {
     .catch((error) => {
       if (!options.errors.hide) {
         store.dispatch({
-          type: 'PUSH_NOTIFICATION',
+          type: 'NOTIFICATIONS_PUSH',
           payload: {
             error: true,
             date: new Date().toISOString(),
@@ -93,7 +132,7 @@ async function apiRequest(path, options = {}) {
   if ((response && response.ErrorCode && response.ErrorCode !== 1) || (response && response.error)) {
     if (!options.errors.hide) {
       store.dispatch({
-        type: 'PUSH_NOTIFICATION',
+        type: 'NOTIFICATIONS_PUSH',
         payload: {
           error: true,
           date: new Date().toISOString(),
@@ -112,7 +151,7 @@ async function apiRequest(path, options = {}) {
       console.log(`%cThere was an OAuth token error so I'm going to go ahead and reset your tokens for you.`, 'font-style: italic');
 
       store.dispatch({
-        type: 'RESET_AUTH',
+        type: 'AUTH_RESET',
       });
     }
 
@@ -143,7 +182,7 @@ async function apiRequest(path, options = {}) {
         };
 
         store.dispatch({
-          type: 'SET_AUTH',
+          type: 'AUTH_SET',
           payload: tokens,
         });
 
@@ -164,7 +203,7 @@ async function apiRequest(path, options = {}) {
   else if (request) {
     if (!options.errors.hide) {
       store.dispatch({
-        type: 'PUSH_NOTIFICATION',
+        type: 'NOTIFICATIONS_PUSH',
         payload: {
           error: true,
           date: new Date().toISOString(),

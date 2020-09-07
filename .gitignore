@@ -25,3 +25,6 @@ yarn-error.log*
 /temp
 /manifest
 /scripts/checklists/cache
+
+# secret stuff
+/src/data/banned-members/index.js

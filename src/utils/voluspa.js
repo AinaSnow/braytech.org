@@ -7,11 +7,66 @@ const defaults = {
 
 export function PostMember(payload) {
   try {
-    fetch('https://voluspa.braytech.org/Enqueue/Store', {
+    fetch('https://voluspa.braytech.org/Member', {
       ...defaults,
       method: 'POST',
       body: JSON.stringify(payload),
     });
+  } catch (e) {
+    return false;
+  }
+}
+
+export async function PostMemberSettings(payload) {
+  try {
+    const request = await fetch('https://voluspa.braytech.org/Member/Settings', {
+      ...defaults,
+      method: 'POST',
+      body: JSON.stringify(payload),
+    });
+
+    if (request.ok) {
+      const response = await request.json();
+
+      return response;
+    } else {
+      return false;
+    }
+  } catch (e) {
+    return false;
+  }
+}
+
+export async function GetMemberSettings({ params }) {
+  try {
+    const request = await fetch(`https://voluspa.braytech.org/Member/Settings?bnetMembershipId=${params.bnetMembershipId}`, defaults);
+
+    if (request.ok) {
+      const response = await request.json();
+
+      return response;
+    } else {
+      return false;
+    }
+  } catch (e) {
+    return false;
+  }
+}
+
+export async function DeleteMemberSettings({ params }) {
+  try {
+    const request = await fetch(`https://voluspa.braytech.org/Member/Settings?bnetMembershipId=${params.bnetMembershipId}`, {
+      ...defaults,
+      method: 'DELETE'
+    });
+
+    if (request.ok) {
+      const response = await request.json();
+
+      return response;
+    } else {
+      return false;
+    }
   } catch (e) {
     return false;
   }

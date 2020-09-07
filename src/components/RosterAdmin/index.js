@@ -602,13 +602,13 @@ function mapStateToProps(state, ownProps) {
 function mapDispatchToProps(dispatch) {
   return {
     pushNotification: (value) => {
-      dispatch({ type: 'PUSH_NOTIFICATION', payload: value });
+      dispatch({ type: 'NOTIFICATIONS_PUSH', payload: value });
     },
     markStale: (member) => {
       dispatch({ type: 'MEMBER_IS_STALE', payload: { membershipType: member.membershipType, membershipId: member.membershipId } });
     },
     rebindTooltips: (value) => {
-      dispatch({ type: 'REBIND_TOOLTIPS', payload: new Date().getTime() });
+      dispatch({ type: 'TOOLTIPS_REBIND', payload: new Date().getTime() });
     },
   };
 }

@@ -1,7 +1,8 @@
 import store from '../';
 import getMember from '../../utils/getMember';
 import getMemberDataShape from '../../utils/getMemberDataShape';
-import * as voluspa from '../../utils/voluspa';
+import { PostMember } from '../../utils/voluspa';
+import bannedMembers from '../../data/banned-members';
 
 const defaultState = {
   membershipType: false,
@@ -28,17 +29,32 @@ function getCharacterId(state, data) {
 // Wrapper function for loadMember that lets it run asynchronously, but
 // means we don't have to add `async` to our reducer (which is bad)
 function loadMemberAndReset(membershipType, membershipId, characterId) {
+  if (bannedMembers.includes(membershipId)) {
+    return {
+      membershipId,
+      membershipType,
+      characterId: false,
+      data: false,
+      prevData: false,
+      loading: false,
+      stale: false,
+      error: {
+        ErrorCode: 'member_banned',
+      },
+    };
+  }
+
   loadMember(membershipType, membershipId, characterId);
 
   return {
     membershipId,
     membershipType,
-    characterId: characterId || null,
+    characterId: characterId || false,
     data: false,
     prevData: false,
     loading: true,
-    error: false,
     stale: false,
+    error: false,
   };
 }
 
@@ -49,15 +65,9 @@ async function loadMember(membershipType, membershipId, characterId) {
   try {
     const data = await getMember(membershipType, membershipId);
 
-    // Required data is private/unavailable -> return error
-    if (data.profile && data.profile.ErrorCode === 1 && !data.profile.Response.profileProgression.data) {
-      store.dispatch({ type: 'MEMBER_LOAD_ERROR', payload: { membershipId, membershipType, error: { ErrorCode: 'private' } } });
-
-      return;
-    }
-
     // console.log('member reducer', data);
 
+    // profile API error
     if (!data.profile.ErrorCode || data.profile.ErrorCode !== 1) {
       store.dispatch({ type: 'MEMBER_LOAD_ERROR', payload: { membershipId, membershipType, error: { ...data.profile } } });
 
@@ -68,6 +78,22 @@ async function loadMember(membershipType, membershipId, characterId) {
       } else {
         throw Error('BUNGIE');
       }
+    }
+
+    // Required data is private/unavailable -> return error
+    if (data.profile && data.profile.ErrorCode === 1 && !data.profile.Response.profileProgression.data) {
+      store.dispatch({
+        type: 'MEMBER_LOAD_ERROR',
+        payload: {
+          membershipId,
+          membershipType,
+          error: {
+            ErrorCode: 'private',
+          },
+        },
+      });
+
+      return;
     }
 
     // Requested characterId was not found -> maybe it's been deleted
@@ -99,9 +125,16 @@ async function loadMember(membershipType, membershipId, characterId) {
       },
     });
 
-    voluspa.PostMember({ membershipId, membershipType });
+    PostMember({ membershipId, membershipType });
   } catch (error) {
-    store.dispatch({ type: 'MEMBER_LOAD_ERROR', payload: { membershipId, membershipType, error } });
+    store.dispatch({
+      type: 'MEMBER_LOAD_ERROR',
+      payload: {
+        membershipId,
+        membershipType,
+        error,
+      },
+    });
 
     return;
   }
@@ -163,9 +196,9 @@ export default function memberReducer(state = defaultState, action) {
       };
     case 'MEMBER_LOAD_ERROR':
       return {
-        ...state,
         characterId,
         data,
+        ...state,
         loading: false,
         error,
       };

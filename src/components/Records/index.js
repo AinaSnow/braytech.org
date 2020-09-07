@@ -1,11 +1,10 @@
-import React from 'react';
-import { compose } from 'redux';
-import { connect } from 'react-redux';
-import { withRouter } from 'react-router';
+import React, { useRef, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { useLocation } from 'react-router';
 import { Link } from 'react-router-dom';
-import { orderBy } from 'lodash';
 import cx from 'classnames';
 
+import actions from '../../store/actions';
 import { t, duration, timestampToDifference, BraytechText } from '../../utils/i18n';
 import manifest from '../../utils/manifest';
 import { commonality, isContentVaulted } from '../../utils/destinyUtils';
@@ -171,86 +170,79 @@ function recordIcon(hash) {
   return definitionRecord.displayProperties.icon || manifest.settings.destiny2CoreSettings.undiscoveredCollectibleImage;
 }
 
-class Records extends React.Component {
-  ref_scrollTo = React.createRef();
+function Records({ ordered, limit, showCompleted, showInvisible, ...props }) {
+  const dispatch = useDispatch();
+  const ref_scrollTo = useRef();
+  const location = useLocation();
+  const settings = useSelector((state) => state.settings);
+  const lists = useSelector((state) => state.lists);
+  const member = useSelector((state) => state.member);
 
-  componentDidMount() {
-    if (this.props.highlight && this.ref_scrollTo.current !== null) {
-      window.scrollTo({
-        top: this.ref_scrollTo.current.offsetTop + this.ref_scrollTo.current.offsetHeight / 2 - window.innerHeight / 2,
-      });
+  const highlight = +props.highlight || false;
+  const suppressVaultWarning = props.suppressVaultWarning || settings.itemVisibility.suppressVaultWarnings;
+  const hashes = props.hashes || [];
+
+  useEffect(() => {
+    if (highlight && ref_scrollTo.current !== null) {
+      ref_scrollTo.current.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' });
     }
+  }, []);
+
+  useEffect(() => {
+    dispatch(actions.tooltips.rebind());
+  }, [settings.itemVisibility.hideCompletedRecords]);
+
+  const handler_toggleTrack = (value) => (event) => {
+    dispatch(actions.triumphs.toggle(value));
   }
 
-  handler_toggleTrack = (e) => {
-    let tracked = this.props.triumphs.tracked;
-    const hashToTrack = +e.currentTarget.dataset.hash;
-    const target = tracked.indexOf(hashToTrack);
+  const handler_toggleLists = (value) => (event) => {
+    dispatch(actions.lists.toggle({ type: 'records', value }));
+  }
 
-    if (target > -1) {
-      tracked = tracked.filter((hash, index) => index !== target);
-    } else {
-      tracked.push(hashToTrack);
-    }
-
-    this.props.setTrackedTriumphs(tracked);
-  };
-
-  makeLink = (hash, isCollectionBadge) => {
+  function makeLink(hash, isCollectionBadge) {
     const triumphsPathname = selfLinkRecord(hash);
     const collectionsPathname = `/collections/badge/${isCollectionBadge?.badgeHash}`;
     const readPathname = selfLinkRead(hash);
 
-    if (this.props.readLink) {
+    if (props.readLink) {
       return {
-        pathname: !this.props.selfLinkFrom ? readPathname : triumphsPathname,
+        pathname: !props.selfLinkFrom ? readPathname : triumphsPathname,
         state: {
-          from: this.props.location.pathname,
+          from: location.pathname,
         },
       };
-    } else if (!this.props.selfLinkFrom && isCollectionBadge) {
+    } else if (!props.selfLinkFrom && isCollectionBadge) {
       return {
         pathname: collectionsPathname,
         state: {
-          from: removeMemberIds(this.props.location.pathname),
+          from: removeMemberIds(location.pathname),
         },
       };
-    } else if (this.props.selfLinkFrom) {
+    } else if (props.selfLinkFrom) {
       return {
         pathname: triumphsPathname,
         state: {
-          from: this.props.selfLinkFrom,
+          from: props.selfLinkFrom,
         },
       };
     } else {
       return false;
     }
-  };
+  }
 
-  render() {
-    const { settings, lists, member, triumphs, ordered, limit, selfLinkFrom, readLink, showCompleted, showInvisible } = this.props;
-    const highlight = +this.props.highlight || false;
-    const suppressVaultWarning = this.props.suppressVaultWarning || settings.itemVisibility.suppressVaultWarnings;
-    const recordsRequested = this.props.hashes || [];
-    const characterRecords = member.data.profile?.characterRecords.data;
-    const profileRecords = member.data.profile?.profileRecords.data.records;
-    const profileRecordsTracked = member.data.profile?.profileRecords.data.trackedRecordHash ? [member.data.profile.profileRecords.data.trackedRecordHash] : [];
-    const tracked = triumphs.tracked;
+  const characterRecords = member.data.profile?.characterRecords.data;
+  const profileRecords = member.data.profile?.profileRecords.data.records;
+  const profileRecordsTracked = member.data.profile?.profileRecords.data.trackedRecordHash ? [member.data.profile.profileRecords.data.trackedRecordHash] : [];
 
-    let recordsOutput = [];
-    recordsRequested.forEach((hash, h) => {
+  const output = hashes
+    .map((hash, h) => {
       const definitionRecord = manifest.DestinyRecordDefinition[hash];
 
-      if (!definitionRecord) return;
-
-      // console.log(definitionRecord.displayProperties.name);
+      if (!definitionRecord) return false;
 
       const recordScope = definitionRecord.scope || 0;
       const recordData = recordScope === 1 ? characterRecords?.[member.characterId]?.records[definitionRecord.hash] : profileRecords?.[definitionRecord.hash];
-
-      // if (definitionRecord.intervalInfo.intervalObjectives.length)
-
-      // if (definitionRecord.hash === 3996842932) console.log(recordData, enumerateRecordState(recordData.state));
 
       const recordState = {
         distance: 0,
@@ -430,21 +422,19 @@ class Records extends React.Component {
       const enumerableState = recordData && Number.isInteger(recordData.state) ? recordData.state : 4;
       const enumeratedState = enumerateRecordState(enumerableState);
 
-      // if (!showInvisible && settings.itemVisibility.hideInvisibleRecords && (enumeratedState.Invisible || enumeratedState.Obscured)) {
-      //   return;
-      // }
       if (!showInvisible && settings.itemVisibility.hideInvisibleRecords && enumeratedState.Invisible) {
-        return;
+        return false;
       }
 
       if (!showCompleted && settings.itemVisibility.hideCompletedRecords && enumeratedState.RecordRedeemed) {
-        return;
+        return false;
       }
 
-      const ref = highlight === definitionRecord.hash ? this.ref_scrollTo : undefined;
+      const ref = highlight === definitionRecord.hash ? ref_scrollTo : undefined;
+      const tracked = settings.triumphs.tracked.concat(profileRecordsTracked).includes(definitionRecord.hash) && !enumeratedState.RecordRedeemed && enumeratedState.ObjectiveNotCompleted;
 
       if (definitionRecord.redacted) {
-        recordsOutput.push({
+        return {
           completed: enumeratedState.RecordRedeemed,
           progressDistance: recordState.distance,
           hash: definitionRecord.hash,
@@ -454,8 +444,14 @@ class Records extends React.Component {
               ref={ref}
               className={cx('redacted', {
                 highlight: highlight === definitionRecord.hash,
+                tracked,
               })}
             >
+              {!enumeratedState.RecordRedeemed && enumeratedState.ObjectiveNotCompleted && !profileRecordsTracked.includes(definitionRecord.hash) ? (
+                <div className='track' onClick={handler_toggleTrack(definitionRecord.hash)} data-hash={definitionRecord.hash}>
+                  <Common.Tracking />
+                </div>
+              ) : null}
               <div className='properties'>
                 <div className='icon'>
                   <ObservedImage className='image icon' src={`https://www.bungie.net${manifest.settings.destiny2CoreSettings.undiscoveredCollectibleImage}`} />
@@ -467,9 +463,9 @@ class Records extends React.Component {
               </div>
             </li>
           ),
-        });
+        };
       } else if (!showInvisible && settings.itemVisibility.hideInvisibleRecords && enumeratedState.Obscured) {
-        recordsOutput.push({
+        return {
           completed: enumeratedState.RecordRedeemed,
           progressDistance: recordState.distance,
           hash: definitionRecord.hash,
@@ -479,8 +475,14 @@ class Records extends React.Component {
               ref={ref}
               className={cx('redacted', {
                 highlight: highlight === definitionRecord.hash,
+                tracked,
               })}
             >
+              {!enumeratedState.RecordRedeemed && enumeratedState.ObjectiveNotCompleted && !profileRecordsTracked.includes(definitionRecord.hash) ? (
+                <div className='track' onClick={handler_toggleTrack(definitionRecord.hash)} data-hash={definitionRecord.hash}>
+                  <Common.Tracking />
+                </div>
+              ) : null}
               <div className='properties'>
                 <div className='icon'>
                   <ObservedImage className='image icon' src={`https://www.bungie.net${manifest.settings.destiny2CoreSettings.undiscoveredCollectibleImage}`} />
@@ -511,11 +513,11 @@ class Records extends React.Component {
               </div>
             </li>
           ),
-        });
+        };
       } else {
         const isCollectionBadge = associationsCollectionsBadges.find((badge) => badge.recordHash === definitionRecord.hash);
 
-        const link = this.makeLink(hash, isCollectionBadge);
+        const link = makeLink(hash, isCollectionBadge);
 
         const rewards = definitionRecord.rewardItems
           ?.map((reward) => {
@@ -534,10 +536,11 @@ class Records extends React.Component {
 
         const isVaultedRecord = !suppressVaultWarning && isContentVaulted(definitionRecord.hash);
 
-        recordsOutput.push({
+        return {
           completed: enumeratedState.RecordRedeemed,
           progressDistance: recordState.distance,
           hash: definitionRecord.hash,
+          name: definitionRecord.displayProperties.name,
           element: (
             <li
               key={h}
@@ -547,16 +550,16 @@ class Records extends React.Component {
                 highlight: highlight === definitionRecord.hash,
                 completed: enumeratedState.RecordRedeemed,
                 unredeemed: !enumeratedState.RecordRedeemed && !enumeratedState.ObjectiveNotCompleted,
-                tracked: tracked.concat(profileRecordsTracked).includes(definitionRecord.hash) && !enumeratedState.RecordRedeemed && enumeratedState.ObjectiveNotCompleted,
+                tracked,
                 'no-description': !description,
                 'has-intervals': recordState.intervals.length,
                 selected: settings.developer.lists && lists.records.includes(definitionRecord.hash),
                 expired: !suppressVaultWarning && isVaultedRecord,
               })}
-              onClick={settings.developer.lists ? this.props.addToList({ type: 'records', value: definitionRecord.hash }) : undefined}
+              onClick={settings.developer.lists ? handler_toggleLists(definitionRecord.hash) : undefined}
             >
               {!enumeratedState.RecordRedeemed && enumeratedState.ObjectiveNotCompleted && !profileRecordsTracked.includes(definitionRecord.hash) ? (
-                <div className='track' onClick={this.handler_toggleTrack} data-hash={definitionRecord.hash}>
+                <div className='track' onClick={handler_toggleTrack(definitionRecord.hash)} data-hash={definitionRecord.hash}>
                   <Common.Tracking />
                 </div>
               ) : null}
@@ -591,7 +594,7 @@ class Records extends React.Component {
               {recordState.intervals.length ? <div className='objectives'>{recordState.intervalEl}</div> : recordState.objectives.length ? <div className='objectives'>{recordState.objectives.map((objective) => objective.el)}</div> : null}
               {rewards && rewards.length ? (
                 <ul className='list rewards collection-items'>
-                  <Collectibles selfLinkFrom={removeMemberIds(this.props.location.pathname)} hashes={rewards} suppressVaultWarning={this.props.suppressVaultWarning} showCompleted showInvisible showHidden />
+                  <Collectibles selfLinkFrom={removeMemberIds(location.pathname)} hashes={rewards} suppressVaultWarning={suppressVaultWarning} showCompleted showInvisible showHidden />
                 </ul>
               ) : null}
               {!suppressVaultWarning && isVaultedRecord && (
@@ -602,58 +605,39 @@ class Records extends React.Component {
                   })}
                 />
               )}
-              {!settings.developer.lists && link ? !selfLinkFrom && readLink ? <Link to={link} /> : <ProfileLink to={link} /> : null}
+              {!settings.developer.lists && link ? !props.selfLinkFrom && props.readLink ? <Link to={link} /> : <ProfileLink to={link} /> : null}
             </li>
           ),
-        });
+        };
       }
+    })
+    .filter((record) => record);
+
+  if (hashes.length > 0 && output.length === 0 && settings.itemVisibility.hideCompletedRecords && !showCompleted) {
+    output.push({
+      element: (
+        <li key='all-completed' className='all-completed'>
+          <div className='info'>{t('All acquired')}</div>
+        </li>
+      ),
     });
-
-    if (recordsRequested.length > 0 && recordsOutput.length === 0 && settings.itemVisibility.hideCompletedRecords && !showCompleted) {
-      recordsOutput.push({
-        element: (
-          <li key='all-completed' className='all-completed'>
-            <div className='info'>{t('All acquired')}</div>
-          </li>
-        ),
-      });
-    }
-
-    if (ordered === 'progress') {
-      recordsOutput = orderBy(recordsOutput, [(item) => item.progressDistance], ['desc']);
-    } else if (ordered) {
-      recordsOutput = orderBy(recordsOutput, [(item) => item.completed], ['asc']);
-    }
-
-    if (limit) {
-      recordsOutput = recordsOutput.slice(0, limit);
-    }
-
-    return recordsOutput.map((obj) => obj.element);
   }
-}
 
-function mapStateToProps(state) {
-  return {
-    settings: state.settings,
-    member: state.member,
-    triumphs: state.triumphs,
-    lists: state.lists,
-  };
-}
+  if (ordered === 'progress') {
+    output
+      .sort((a, b) => a.name - b.name)
+      .sort((a, b) => b.progressDistance - a.progressDistance)
+      .sort((a, b) => Number(a.completed) - Number(b.completed));
+  } else if (ordered) {
+    output.sort((a, b) => a.completed - b.completed);
+  }
 
-function mapDispatchToProps(dispatch) {
-  return {
-    setTrackedTriumphs: (value) => {
-      dispatch({ type: 'SET_TRACKED_TRIUMPHS', payload: value });
-    },
-    addToList: (payload) => (e) => {
-      dispatch({ type: 'ADD_TO_LIST', payload });
-    },
-  };
-}
+  if (limit) {
+    return output.slice(0, limit).map((record) => record.element);
+  }
 
-Records = compose(withRouter, connect(mapStateToProps, mapDispatchToProps))(Records);
+  return output.map((record) => record.element);
+}
 
 export { Records, selfLinkRecord, unredeemedRecords, recordDescription };
 

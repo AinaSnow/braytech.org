@@ -4,13 +4,12 @@ export default function reducer(
   },
   action
 ) {
-  switch (action.type) {
-    case 'REBIND_TOOLTIPS':
-      return {
-        ...state,
-        bindTime: new Date().getTime(),
-      };
-    default:
-      return state;
+  if (action.type === 'TOOLTIPS_REBIND') {
+    return {
+      ...state,
+      bindTime: new Date().getTime(),
+    };
+  } else {
+    return state;
   }
 }

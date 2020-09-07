@@ -785,7 +785,7 @@ function mapDispatchToProps(dispatch) {
   return {
     setLayout: value => {
       dispatch({
-        type: 'SET_LAYOUT',
+        type: 'LAYOUTS_SET',
         payload: {
           target: 'this-week',
           value
@@ -794,14 +794,14 @@ function mapDispatchToProps(dispatch) {
     },
     resetLayout: value => {
       dispatch({
-        type: 'RESET_LAYOUTS',
+        type: 'LAYOUTS_RESET',
         payload: {
           target: 'this-week'
         }
       });
     },
     pushNotification: value => {
-      dispatch({ type: 'PUSH_NOTIFICATION', payload: value });
+      dispatch({ type: 'NOTIFICATIONS_PUSH', payload: value });
     }
   };
 }

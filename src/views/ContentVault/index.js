@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { NavLink } from 'react-router-dom';
 import cx from 'classnames';
@@ -11,6 +11,7 @@ import { DestinyContentVault } from '../../utils/destinyEnums';
 import Collectibles from '../../components/Collectibles';
 import Records from '../../components/Records';
 import Button from '../../components/UI/Button';
+import Upsell from '../../components/UI/Upsell';
 
 import { Common } from '../../svg';
 
@@ -67,19 +68,24 @@ function ToggleCompletedLink() {
 
 export default function ContentVault(props) {
   const dispatch = useDispatch();
+  const member = useSelector(state => state.member);
+  const entries = useRef();
 
   const slug = props.match.params.slug;
 
   useEffect(() => {
+    window.scrollTo(0, 0);
+
     dispatch(actions.tooltips.rebind());
   }, []);
 
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, [slug]);
+  function scrollIntoView() {
+    if (entries.current) {
+      entries.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  }
 
   const data = DestinyContentVault[0];
-
   const selectedVault = (slug && data.vault.find((vault) => slug === vault.slug)) || data.vault[0];
 
   const collectibles =
@@ -121,6 +127,9 @@ export default function ContentVault(props) {
           </div>
           <BraytechText className='text' value={t('ContentVault.Header.Text')} />
         </div>
+        {!member.loading && !member.data ? (
+          <Upsell />
+        ) : null}
         <div className='buff'>
           <NavLinks />
           <div className='presentation-node'>
@@ -144,14 +153,13 @@ export default function ContentVault(props) {
                         <div className='text'>
                           <div className='name'>{vault.name}</div>
                         </div>
-                        <NavLink isActive={isActive} to={`/content-vault/${data.season}/${vault.slug}`} />
+                        <NavLink isActive={isActive} to={`/content-vault/${data.season}/${vault.slug}`} onClick={scrollIntoView} />
                       </li>
                     );
                   })}
                 </ul>
-                <BraytechText className='info' value={t('ContentVault.Info')} />
               </div>
-              <div className='entries'>
+              <div ref={entries} className='entries'>
                 {collectibles.length ? (
                   <>
                     <h4>{t('Collectibles')}</h4>

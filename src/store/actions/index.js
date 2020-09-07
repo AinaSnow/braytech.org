@@ -2,21 +2,40 @@ export default {
   settings: {
     set: function (payload) {
       return {
-        type: 'SET_SETTING',
+        type: 'SETTINGS_SET',
         payload,
+      };
+    },
+    sync: function (payload) {
+      return {
+        type: 'SETTINGS_SYNC',
+        payload,
+      };
+    },
+  },
+  sync: {
+    set: function (payload) {
+      return {
+        type: 'SYNC_SET',
+        payload,
+      };
+    },
+    reset: function () {
+      return {
+        type: 'SYNC_RESET',
       };
     },
   },
   auth: {
     set: function (payload) {
       return {
-        type: 'SET_AUTH',
+        type: 'AUTH_SET',
         payload,
       };
     },
     reset: function () {
       return {
-        type: 'RESET_AUTH',
+        type: 'AUTH_RESET',
       };
     },
   },
@@ -27,11 +46,34 @@ export default {
         payload,
       };
     },
+    setCharacterID: function (payload) {
+      return {
+        type: 'MEMBER_SET_CHARACTERID',
+        payload,
+      };
+    },
+    pushHistory: function (payload) {
+      return {
+        type: 'SETTINGS_MEMBERS_HISTORY_PUSH',
+        payload,
+      };
+    },
+    resetHistory: function (payload) {
+      return {
+        type: 'SETTINGS_MEMBERS_HISTORY_RESET',
+      };
+    },
   },
   theme: {
     scrollbars: function (payload) {
       return {
-        type: 'SET_SCROLLBARS',
+        type: 'THEME_SET_SCROLLBARS',
+        payload,
+      };
+    },
+    set: function (payload) {
+      return {
+        type: 'THEME_SET',
         payload,
       };
     },
@@ -39,21 +81,62 @@ export default {
   notifications: {
     push: function (payload) {
       return {
-        type: 'PUSH_NOTIFICATION',
+        type: 'NOTIFICATIONS_PUSH',
         payload,
       };
     },
     pop: function (payload) {
       return {
-        type: 'POP_NOTIFICATION',
+        type: 'NOTIFICATIONS_POP',
         payload,
+      };
+    },
+    reset: function () {
+      return {
+        type: 'NOTIFICATIONS_RESET',
       };
     },
   },
   tooltips: {
     rebind: function () {
       return {
-        type: 'REBIND_TOOLTIPS',
+        type: 'TOOLTIPS_REBIND',
+      };
+    },
+  },
+  tips: {
+    reset: function () {
+      return {
+        type: 'TIPS_RESET',
+      };
+    },
+  },
+  triumphs: {
+    toggle: function (payload) {
+      return {
+        type: 'SETTINGS_TRIUMPHS_TRACKED_TOGGLE',
+        payload,
+      };
+    },
+    reset: function () {
+      return {
+        type: 'SETTINGS_TRIUMPHS_TRACKED_RESET',
+      };
+    },
+  },
+  layouts: {
+    reset: function (payload) {
+      return {
+        type: 'LAYOUTS_RESET',
+        payload,
+      };
+    },
+  },
+  lists: {
+    toggle: function (payload) {
+      return {
+        type: 'LISTS_TOGGLE',
+        payload,
       };
     },
   },

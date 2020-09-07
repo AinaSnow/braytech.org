@@ -1,3 +1,10 @@
+.bungie-auth.loading {
+  display: grid;
+  justify-content: center;
+  align-content: center;
+  min-height: 500px;
+}
+
 .bungie-auth .text ~ .button {
   margin: 1rem 0 0;
 }
@@ -10,10 +17,10 @@
 .bungie-auth .member .details {
   position: absolute;  
   bottom: 2rem;
-  left: 1rem;
+  left: 2rem;
   display: grid;
   grid-template-columns: 48px auto;
-  grid-gap: 1rem;
+  gap: 1rem;
 }
 
 .bungie-auth .member .details .icon {
@@ -45,7 +52,7 @@
 
 .bungie-auth .member .displayName {
   font-size: 22px;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.3px;
   font-weight: 500;
   color: rgba(255, 255, 255, 1);
 }
@@ -147,8 +154,19 @@
 
 
 @media screen and (max-width: 600px) {
+
   .bungie-auth .member .details {
     bottom: 1rem;
+    left: 1rem;
+    grid-template-columns: 36px auto;
+  }
+  
+  .bungie-auth .member .displayName {
+    font-size: 18px;
+  }
+  
+  .bungie-auth .member .firstAccess {
+    font-size: 10px;
   }
 
   .bungie-auth .memberships {
@@ -156,6 +174,13 @@
   }
 }
 
+@media screen and (max-width: 420px) {
+
+  .bungie-auth .member {
+    display: none;
+  }
+
+}
 
 
 

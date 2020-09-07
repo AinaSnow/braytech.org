@@ -3,12 +3,12 @@ import ls from '../../utils/localStorage';
 const defaultState = ls.get('setting.auth') || false;
 
 export default function reducer(state = defaultState, action) {
-  if (action.type === 'SET_AUTH') {
+  if (action.type === 'AUTH_SET') {
     state = action.payload;
 
     ls.set('setting.auth', state);
     return state;
-  } else if (action.type === 'RESET_AUTH') {
+  } else if (action.type === 'AUTH_RESET') {
     state = false;
 
     ls.del('setting.auth');

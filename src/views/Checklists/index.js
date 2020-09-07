@@ -138,10 +138,10 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     set: (payload) => {
-      dispatch({ type: 'SET_SETTING', payload });
+      dispatch({ type: 'SETTINGS_SET', payload });
     },
     rebindTooltips: (value) => {
-      dispatch({ type: 'REBIND_TOOLTIPS', payload: new Date().getTime() });
+      dispatch({ type: 'TOOLTIPS_REBIND', payload: new Date().getTime() });
     }
   };
 }
