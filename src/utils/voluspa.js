@@ -39,7 +39,7 @@ export async function PostMemberSettings(payload) {
 
 export async function GetMemberSettings({ params }) {
   try {
-    const request = await fetch(`https://voluspa.braytech.org/Member/Settings?membershipId=${params.membershipId}`, defaults);
+    const request = await fetch(`https://voluspa.braytech.org/Member/Settings?bnetMembershipId=${params.bnetMembershipId}`, defaults);
 
     if (request.ok) {
       const response = await request.json();

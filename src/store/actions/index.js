@@ -11,13 +11,18 @@ export default {
         type: 'SETTINGS_SYNC',
         payload,
       };
-    }
+    },
   },
   sync: {
     set: function (payload) {
       return {
         type: 'SYNC_SET',
         payload,
+      };
+    },
+    reset: function () {
+      return {
+        type: 'SYNC_RESET',
       };
     },
   },
@@ -57,7 +62,7 @@ export default {
       return {
         type: 'SETTINGS_MEMBERS_HISTORY_RESET',
       };
-    }
+    },
   },
   theme: {
     scrollbars: function (payload) {

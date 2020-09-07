@@ -12,10 +12,12 @@ export default function SyncService() {
   const dispatch = useDispatch();
   const sync = useSelector((state) => state.sync);
   const { visual, developer, ...settings } = useSelector((state) => state.settings);
+  const auth = useSelector((state) => state.auth);
   const member = useSelector((state) => state.member);
   const isMounted = useIsMounted();
 
   const [isSetup, setIsSetup] = useState(false);
+  const isActive = member.membershipId && auth.destinyMemberships?.find((m) => m.membershipId === member.membershipId) && sync.enabled;
 
   // setup
   useEffect(() => {
@@ -25,25 +27,25 @@ export default function SyncService() {
   }, []);
 
   useEffect(() => {
-    if (isMounted.current && sync.enabled) {
+    if (isMounted.current && isActive) {
       download();
     }
   }, []);
 
   useInterval(() => {
-    if (isMounted.current && sync.enabled) {
+    if (isMounted.current && isActive) {
       download();
     }
   }, 1800 * 1000);
 
-  // if a user spams settings changes, 
+  // if a user spams settings changes,
   // we wait 500ms before setting a value, trigegring the effect
-  const debouncedSettingsUpdated = useDebounce(settings.updated, 500);
+  const debouncedSettingsUpdated = useDebounce(settings.updated, 2000);
 
   // sync changes
   useEffect(() => {
     // if sync is enabled, sync then save
-    if (isMounted.current && isSetup && sync.enabled && settings.updated > sync.updated) {
+    if (isMounted.current && isSetup && isActive && settings.updated > sync.updated) {
       update();
     }
     // just save
@@ -68,39 +70,46 @@ export default function SyncService() {
 
     const response = await GetMemberSettings({
       params: {
-        membershipId: member.membershipId,
+        bnetMembershipId: auth.bnetMembershipId,
       },
     });
 
     if (response?.ErrorCode === 1) {
-      const settings = JSON.parse(response.Response.settings);
 
-      if (settings) {
-        if (response.Response.updated > sync.updated) {
-          dispatch(actions.sync.set({ updated: response.Response.updated }));
-          dispatch(
-            actions.settings.sync({
+      const membership = response.Response.memberships.find(m => m.membershipId === member.membershipId);
+
+      if (membership) {
+        const settings = JSON.parse(membership.settings);
+
+        if (settings) {
+          if (membership.updated > sync.updated) {
+            dispatch(actions.sync.set({ updated: membership.updated }));
+            dispatch(
+              actions.settings.sync({
+                ...settings,
+                updated: membership.updated,
+              })
+            );
+  
+            ls.set('settings', {
               ...settings,
-              updated: response.Response.updated,
-            })
-          );
-
-          ls.set('settings', {
-            ...settings,
-            updated: response.Response.updated,
-          });
-
-          dispatchNotification({
-            displayProperties: {
-              name: 'Voluspa',
-              description: 'Settings downloaded successfully',
-              timeout: 4,
-            },
-          });
-
-          console.log(`%cSettings downloaded: last updated ${response.Response.updated}`, 'color:cyan');
+              updated: membership.updated,
+            });
+  
+            dispatchNotification({
+              displayProperties: {
+                name: 'Voluspa',
+                description: 'Settings downloaded successfully',
+                timeout: 4,
+              },
+            });
+  
+            console.log(`%cSettings downloaded: last updated ${membership.updated}`, 'color:cyan');
+          } else {
+            console.log(`%cSettings downloaded: current ${membership.updated}`, 'color:cyan');
+          }
         } else {
-          console.log(`%cSettings downloaded: current ${response.Response.updated}`, 'color:cyan');
+          console.log(`%cSettings downloaded: no relevant membership found.`, 'color:cyan');
         }
       }
     } else {

@@ -182,6 +182,7 @@ export function BungieAuth() {
 
   function handler_forget() {
     dispatch(actions.auth.reset());
+    dispatch(actions.sync.reset());
 
     setState({
       loading: false,
@@ -260,7 +261,7 @@ export function BungieAuth() {
     }
   }, []);
 
-  if (state.authorization_code) {
+  if (authorization_code) {
     return <Redirect to='/settings' />;
   }
 

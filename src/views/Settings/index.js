@@ -67,6 +67,7 @@ function Common() {
   const theme = useSelector((state) => state.theme);
   const sync = useSelector((state) => state.sync);
   const member = useSelector((state) => state.member);
+  const auth = useSelector((state) => state.auth);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -108,9 +109,14 @@ function Common() {
     }, 50);
   }
 
-  // (async function () {
-  //   console.log(await GetProfile({ params: { membershipId: member.membershipId } }))
-  // }())
+  function handler_toggleSync(event) {
+    dispatch(
+      actions.sync.set({
+        enabled: !sync.enabled,
+        bnetMembershipId: auth.bnetMembershipId,
+      })
+    );
+  }
 
   return (
     <div className='content common'>
@@ -138,7 +144,13 @@ function Common() {
         <div className='sub-header'>
           <div>{t('Synchronisation')}</div>
         </div>
-        last synced: {sync.updated}
+        <BraytechText className='info' value={t('Settings.Sync.Info')} />
+        <ul className='list settings'>
+          <li>
+            <Checkbox linked checked={sync.enabled} disabled={!auth || !member.membershipId} text={t('Settings.Sync.Name')} action={handler_toggleSync} />
+            <BraytechText className='info' value={t('Settings.Sync.Description')} />
+          </li>
+        </ul>
       </div>
       <div className='module'>
         <div className='sub-header'>

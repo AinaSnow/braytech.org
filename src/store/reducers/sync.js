@@ -1,11 +1,14 @@
 import ls from '../../utils/localStorage';
 
-const defaults = ls.get('settings.sync') || {
-  enabled: true,
+const defaults = {
+  enabled: false,
+  bnetMembershipId: undefined,
   updated: '2020-01-01T00:00:00Z',
 };
 
-export default function reducer(state = defaults, action) {
+const saved = ls.get('settings.sync');
+
+export default function reducer(state = saved || defaults, action) {
   if (action.type === 'SYNC_SET') {
     const sync = {
       ...state,
@@ -15,6 +18,10 @@ export default function reducer(state = defaults, action) {
     ls.set('settings.sync', sync);
 
     return sync;
+  } else if (action.type === 'SYNC_RESET') {
+    ls.del('settings.sync');
+
+    return defaults;
   } else {
     return state;
   }
