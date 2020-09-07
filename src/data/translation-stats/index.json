@@ -1,124 +1,150 @@
 {
   "de": {
     "translated": 784,
-    "notTranslated": 4,
+    "notTranslated": 8,
     "added": [
-      "Settings.Category.Advanced.Name",
-      "Settings.Category.Common.Name"
+      "Settings.Sync.Description",
+      "Settings.Sync.Info",
+      "Settings.Sync.Name",
+      "Synchronisation"
     ],
     "removed": []
   },
   "debug": {
-    "translated": 788,
+    "translated": 792,
     "notTranslated": 0,
     "added": [
-      "Settings.Category.Advanced.Name",
-      "Settings.Category.Common.Name"
+      "Settings.Sync.Description",
+      "Settings.Sync.Info",
+      "Settings.Sync.Name",
+      "Synchronisation"
     ],
     "removed": []
   },
   "en": {
-    "translated": 788,
+    "translated": 792,
     "notTranslated": 0,
     "added": [],
     "removed": []
   },
   "es-mx": {
-    "translated": 783,
-    "notTranslated": 5,
+    "translated": 788,
+    "notTranslated": 4,
     "added": [
-      "Settings.Category.Advanced.Name",
-      "Settings.Category.Common.Name"
+      "Settings.Sync.Description",
+      "Settings.Sync.Info",
+      "Settings.Sync.Name",
+      "Synchronisation"
     ],
     "removed": []
   },
   "es": {
-    "translated": 783,
-    "notTranslated": 5,
+    "translated": 788,
+    "notTranslated": 4,
     "added": [
-      "Settings.Category.Advanced.Name",
-      "Settings.Category.Common.Name"
+      "Settings.Sync.Description",
+      "Settings.Sync.Info",
+      "Settings.Sync.Name",
+      "Synchronisation"
     ],
     "removed": []
   },
   "fr": {
     "translated": 616,
-    "notTranslated": 172,
+    "notTranslated": 176,
     "added": [
-      "Settings.Category.Advanced.Name",
-      "Settings.Category.Common.Name"
+      "Settings.Sync.Description",
+      "Settings.Sync.Info",
+      "Settings.Sync.Name",
+      "Synchronisation"
     ],
     "removed": []
   },
   "it": {
     "translated": 786,
-    "notTranslated": 2,
+    "notTranslated": 6,
     "added": [
-      "Settings.Category.Advanced.Name",
-      "Settings.Category.Common.Name"
+      "Settings.Sync.Description",
+      "Settings.Sync.Info",
+      "Settings.Sync.Name",
+      "Synchronisation"
     ],
     "removed": []
   },
   "ja": {
     "translated": 564,
-    "notTranslated": 224,
+    "notTranslated": 228,
     "added": [
-      "Settings.Category.Advanced.Name",
-      "Settings.Category.Common.Name"
+      "Settings.Sync.Description",
+      "Settings.Sync.Info",
+      "Settings.Sync.Name",
+      "Synchronisation"
     ],
     "removed": []
   },
   "ko": {
     "translated": 492,
-    "notTranslated": 296,
+    "notTranslated": 300,
     "added": [
-      "Settings.Category.Advanced.Name",
-      "Settings.Category.Common.Name"
+      "Settings.Sync.Description",
+      "Settings.Sync.Info",
+      "Settings.Sync.Name",
+      "Synchronisation"
     ],
     "removed": []
   },
   "pl": {
     "translated": 485,
-    "notTranslated": 303,
+    "notTranslated": 307,
     "added": [
-      "Settings.Category.Advanced.Name",
-      "Settings.Category.Common.Name"
+      "Settings.Sync.Description",
+      "Settings.Sync.Info",
+      "Settings.Sync.Name",
+      "Synchronisation"
     ],
     "removed": []
   },
   "pt-br": {
     "translated": 754,
-    "notTranslated": 34,
+    "notTranslated": 38,
     "added": [
-      "Settings.Category.Advanced.Name",
-      "Settings.Category.Common.Name"
+      "Settings.Sync.Description",
+      "Settings.Sync.Info",
+      "Settings.Sync.Name",
+      "Synchronisation"
     ],
     "removed": []
   },
   "ru": {
     "translated": 786,
-    "notTranslated": 2,
+    "notTranslated": 6,
     "added": [
-      "Settings.Category.Advanced.Name",
-      "Settings.Category.Common.Name"
+      "Settings.Sync.Description",
+      "Settings.Sync.Info",
+      "Settings.Sync.Name",
+      "Synchronisation"
     ],
     "removed": []
   },
   "zh-chs": {
     "translated": 637,
-    "notTranslated": 151,
+    "notTranslated": 155,
     "added": [
-      "Settings.Category.Advanced.Name",
-      "Settings.Category.Common.Name"
+      "Settings.Sync.Description",
+      "Settings.Sync.Info",
+      "Settings.Sync.Name",
+      "Synchronisation"
     ],
     "removed": []
   },
   "zh-cht": {
     "translated": 656,
-    "notTranslated": 132,
+    "notTranslated": 136,
     "added": [
-      "Settings.Category.Advanced.Name",
-      "Settings.Category.Common.Name"
+      "Settings.Sync.Description",
+      "Settings.Sync.Info",
+      "Settings.Sync.Name",
+      "Synchronisation"
     ],
     "removed": []
   }

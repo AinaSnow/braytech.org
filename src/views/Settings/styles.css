@@ -43,6 +43,10 @@
   margin: calc(2rem + 20px) 0 20px;
 }
 
+#settings .sub-header ~ .text {
+  margin: 10px 0 10px;
+}
+
 #settings .module .list ~ .button {
   margin: 1rem 0 0;
 }

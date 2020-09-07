@@ -144,7 +144,7 @@ function Common() {
         <div className='sub-header'>
           <div>{t('Synchronisation')}</div>
         </div>
-        <BraytechText className='info' value={t('Settings.Sync.Info')} />
+        <BraytechText className='text' value={t('Settings.Sync.Info')} />
         <ul className='list settings'>
           <li>
             <Checkbox linked checked={sync.enabled} disabled={!auth || !member.membershipId} text={t('Settings.Sync.Name')} action={handler_toggleSync} />
