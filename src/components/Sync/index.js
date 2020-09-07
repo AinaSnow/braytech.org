@@ -209,6 +209,7 @@ export default function Sync() {
       </ul>
       <Button text='Delete synced settings' disabled={!sync.enabled || loading} action={handler_onClickDeleteSyncedSettings} />
       <BraytechText className='text' value='' />
+      {sync.updated}
     </>
   );
 }
