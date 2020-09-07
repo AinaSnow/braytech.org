@@ -1,22 +1,22 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams, NavLink } from 'react-router-dom';
 
 import { updateServiceWorker } from '../../serviceWorker';
+import actions from '../../store/actions';
 import i18n, { t, BraytechText, getLanguageInfo } from '../../utils/i18n';
-import ls from '../../utils/localStorage';
 import manifest from '../../utils/manifest';
 import { useIsMounted } from '../../utils/hooks';
 import translationStats from '../../data/translation-stats';
 
 import { BungieAuth } from '../../components/BungieAuth';
+import Sync from '../../components/Sync';
 import Checkbox from '../../components/UI/Checkbox';
 import Button from '../../components/UI/Button';
 
 import * as SVG from '../../svg';
 
 import './styles.css';
-import actions from '../../store/actions';
 
 function NavLinks() {
   return (
@@ -65,9 +65,6 @@ function Common() {
   const dispatch = useDispatch();
   const settings = useSelector((state) => state.settings);
   const theme = useSelector((state) => state.theme);
-  const sync = useSelector((state) => state.sync);
-  const member = useSelector((state) => state.member);
-  const auth = useSelector((state) => state.auth);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -109,15 +106,6 @@ function Common() {
     }, 50);
   }
 
-  function handler_toggleSync(event) {
-    dispatch(
-      actions.sync.set({
-        enabled: !sync.enabled,
-        bnetMembershipId: auth.bnetMembershipId,
-      })
-    );
-  }
-
   return (
     <div className='content common'>
       <div className='module'>
@@ -144,13 +132,7 @@ function Common() {
         <div className='sub-header'>
           <div>{t('Synchronisation')}</div>
         </div>
-        <BraytechText className='text' value={t('Settings.Sync.Info')} />
-        <ul className='list settings'>
-          <li>
-            <Checkbox linked checked={sync.enabled} disabled={!auth || !member.membershipId} text={t('Settings.Sync.Name')} action={handler_toggleSync} />
-            <BraytechText className='info' value={t('Settings.Sync.Description')} />
-          </li>
-        </ul>
+        <Sync />
       </div>
       <div className='module'>
         <div className='sub-header'>

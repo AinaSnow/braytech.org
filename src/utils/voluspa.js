@@ -53,6 +53,25 @@ export async function GetMemberSettings({ params }) {
   }
 }
 
+export async function DeleteMemberSettings({ params }) {
+  try {
+    const request = await fetch(`https://voluspa.braytech.org/Member/Settings?bnetMembershipId=${params.bnetMembershipId}`, {
+      ...defaults,
+      method: 'DELETE'
+    });
+
+    if (request.ok) {
+      const response = await request.json();
+
+      return response;
+    } else {
+      return false;
+    }
+  } catch (e) {
+    return false;
+  }
+}
+
 export async function PostPatreon(payload) {
   try {
     const request = await fetch('https://voluspa.braytech.org/Patreon/Set', {

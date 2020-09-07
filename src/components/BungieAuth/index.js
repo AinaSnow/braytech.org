@@ -161,6 +161,7 @@ export function PatreonAssociation({ destinyMemberships, primaryMembershipId, ..
 
 export function BungieAuth() {
   const auth = useSelector((state) => state.auth);
+  const member = useSelector((state) => state.member);
   const dispatch = useDispatch();
   const isMounted = useIsMounted();
 
@@ -232,14 +233,21 @@ export function BungieAuth() {
       const response = await bungie.GetMembershipDataForCurrentUser();
 
       if (isMounted.current) {
-        if (response && response.ErrorCode === 1) {
+        if (response?.ErrorCode === 1) {
           setState({
             loading: false,
             error: false,
             memberships: response.Response,
           });
-        } else if ((response && response.ErrorCode && response.ErrorCode !== 1) || (response && response.error)) {
-          // in case of 'invalid_grant' - not sure if i need this anymore
+
+          const crossSaveOverride = response.Response.destinyMemberships.find((m) => m.crossSaveOverride > 0);
+
+          // load a default membership
+          if (crossSaveOverride && !member.membershipId) {
+            dispatch(actions.member.load({ membershipType: crossSaveOverride.membershipType, membershipId: crossSaveOverride.membershipId }));
+          }
+        } else if (response?.ErrorCode !== 1 || response?.error) {
+          // in case of 'invalid_grant'
           handleErrors(response);
 
           setState({

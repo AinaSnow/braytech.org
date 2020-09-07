@@ -54,16 +54,6 @@ export default function SyncService() {
     }
   }, [debouncedSettingsUpdated]);
 
-  function dispatchNotification(payload) {
-    dispatch(
-      actions.notifications.push({
-        date: new Date().toISOString(),
-        expiry: 86400 * 1000,
-        ...payload,
-      })
-    );
-  }
-
   // download state
   const download = dedupePromise(async () => {
     console.log(`%cSettings downloading...`, 'color:cyan');
@@ -74,9 +64,9 @@ export default function SyncService() {
       },
     });
 
+    // settings available
     if (response?.ErrorCode === 1) {
-
-      const membership = response.Response.memberships.find(m => m.membershipId === member.membershipId);
+      const membership = response.Response.memberships.find((m) => m.membershipId === member.membershipId);
 
       if (membership) {
         const settings = JSON.parse(membership.settings);
@@ -90,20 +80,22 @@ export default function SyncService() {
                 updated: membership.updated,
               })
             );
-  
+
             ls.set('settings', {
               ...settings,
               updated: membership.updated,
             });
-  
-            dispatchNotification({
-              displayProperties: {
-                name: 'Voluspa',
-                description: 'Settings downloaded successfully',
-                timeout: 4,
-              },
-            });
-  
+
+            dispatch(
+              actions.notifications.push({
+                displayProperties: {
+                  name: 'Voluspa',
+                  description: 'Settings downloaded successfully',
+                  timeout: 4,
+                },
+              })
+            );
+
             console.log(`%cSettings downloaded: last updated ${membership.updated}`, 'color:cyan');
           } else {
             console.log(`%cSettings downloaded: current ${membership.updated}`, 'color:cyan');
@@ -112,17 +104,25 @@ export default function SyncService() {
           console.log(`%cSettings downloaded: no relevant membership found.`, 'color:cyan');
         }
       }
+    }
+    // no settings found
+    else if (response?.ErrorCode === 4) {
+      dispatch(actions.sync.reset());
+
+      console.log(`%cSettings downloaded: no settings found.`, 'color:cyan');
     } else {
       console.log(`%cSettings download failed.`, 'color:cyan');
       console.log(response);
-      dispatchNotification({
-        displayProperties: {
-          name: 'Voluspa',
-          description: 'Settings download failed',
-          timeout: 10,
-        },
-        error: true,
-      });
+      dispatch(
+        actions.notifications.push({
+          displayProperties: {
+            name: 'Voluspa',
+            description: 'Settings download failed',
+            timeout: 10,
+          },
+          error: true,
+        })
+      );
     }
   });
 
@@ -139,27 +139,31 @@ export default function SyncService() {
     if (response?.ErrorCode === 1) {
       dispatch(actions.sync.set({ updated: response.Response.updated }));
 
-      dispatchNotification({
-        displayProperties: {
-          name: 'Voluspa',
-          description: 'Settings synced successfully',
-          timeout: 4,
-        },
-      });
+      dispatch(
+        actions.notifications.push({
+          displayProperties: {
+            name: 'Voluspa',
+            description: 'Settings synced successfully',
+            timeout: 4,
+          },
+        })
+      );
 
       console.log(`%cSettings synced at: ${response.Response.updated}`, 'color:lime');
     } else {
       console.log(`%cSettings sync failed.`, 'color:lime');
       console.log(auth);
       console.log(response);
-      dispatchNotification({
-        displayProperties: {
-          name: 'Voluspa',
-          description: 'Settings sync fail',
-          timeout: 10,
-        },
-        error: true,
-      });
+      dispatch(
+        actions.notifications.push({
+          displayProperties: {
+            name: 'Voluspa',
+            description: 'Settings sync fail',
+            timeout: 10,
+          },
+          error: true,
+        })
+      );
     }
 
     ls.set('settings', settings);

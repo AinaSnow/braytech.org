@@ -24,10 +24,12 @@ function defaultState() {
 
 export default function reducer(state = defaultState(), action) {
   if (action.type === 'NOTIFICATIONS_PUSH') {
-    // assign a hash if there is none
-    if (!action.payload.hash) {
-      action.payload.hash = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
-    }
+    const payload = {
+      hash: Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15),
+      date: new Date().toISOString(),
+      expiry: 86400 * 1000,
+      ...action.payload,
+    };
 
     // check for duplicates
     if (state.trash.includes(action.payload.hash) || state.objects.find((n) => n.hash === action.payload.hash)) {
@@ -36,7 +38,7 @@ export default function reducer(state = defaultState(), action) {
 
     return {
       ...state,
-      objects: [...state.objects, action.payload],
+      objects: [...state.objects, payload],
     };
   } else if (action.type === 'NOTIFICATIONS_POP') {
     const trash = [...state.trash];
